@@ -30,18 +30,6 @@ public class Settings
         prefs.put(IMAGE_IMPORT_DIR, dir);
     }
 
-    public static String getScreenshotDir()
-    {
-        Preferences prefs = getPreferences();
-        return prefs.get(SCREENSHOT_DIR, null);
-    }
-
-    public static void setScreenshotDir(String dir)
-    {
-        Preferences prefs = getPreferences();
-        prefs.put(SCREENSHOT_DIR, dir);
-    }
-
     public static String getModelDir()
     {
         Preferences prefs = getPreferences();

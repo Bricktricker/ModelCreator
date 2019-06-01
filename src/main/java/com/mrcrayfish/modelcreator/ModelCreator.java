@@ -9,8 +9,6 @@ import com.mrcrayfish.modelcreator.element.ElementCellEntry;
 import com.mrcrayfish.modelcreator.element.ElementManager;
 import com.mrcrayfish.modelcreator.element.ElementManagerState;
 import com.mrcrayfish.modelcreator.panels.SidebarPanel;
-import com.mrcrayfish.modelcreator.screenshot.PendingScreenshot;
-import com.mrcrayfish.modelcreator.screenshot.Screenshot;
 import com.mrcrayfish.modelcreator.sidebar.Sidebar;
 import com.mrcrayfish.modelcreator.sidebar.UVSidebar;
 import com.mrcrayfish.modelcreator.texture.TextureAtlas;
@@ -55,9 +53,6 @@ public class ModelCreator extends JFrame
     private Camera camera;
     private SidebarPanel manager;
     private Element grabbed = null;
-
-    // Texture Loading Cache
-    private PendingScreenshot screenshot = null;
 
     private int lastMouseX, lastMouseY;
     private boolean grabbing = false;
@@ -348,19 +343,6 @@ public class ModelCreator extends JFrame
         this.draw();
 
         Display.update();
-
-        if(screenshot != null)
-        {
-            if(screenshot.getFile() != null)
-            {
-                Screenshot.getScreenshot(width, height, screenshot.getCallback(), screenshot.getFile());
-            }
-            else
-            {
-                Screenshot.getScreenshot(width, height, screenshot.getCallback());
-            }
-            screenshot = null;
-        }
     }
 
     private void handleKeyboardInput()
@@ -829,11 +811,6 @@ public class ModelCreator extends JFrame
             state += 8;
         }
         return state;
-    }
-
-    public void startScreenshot(PendingScreenshot screenshot)
-    {
-        this.screenshot = screenshot;
     }
 
     public void setSidebar(Sidebar s)
