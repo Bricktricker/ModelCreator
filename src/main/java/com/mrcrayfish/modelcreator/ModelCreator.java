@@ -1,7 +1,6 @@
 package com.mrcrayfish.modelcreator;
 
 import com.mrcrayfish.modelcreator.component.TextureManager;
-import com.mrcrayfish.modelcreator.dialog.WelcomeDialog;
 import com.mrcrayfish.modelcreator.display.CanvasRenderer;
 import com.mrcrayfish.modelcreator.display.render.StandardRenderer;
 import com.mrcrayfish.modelcreator.element.Element;
@@ -147,7 +146,7 @@ public class ModelCreator extends JFrame
         setVisible(true);
         setLocationRelativeTo(null);
 
-        SwingUtilities.invokeLater(() -> WelcomeDialog.show(ModelCreator.this));
+        //SwingUtilities.invokeLater(() -> WelcomeDialog.show(ModelCreator.this));
 
         createDisplay();
 

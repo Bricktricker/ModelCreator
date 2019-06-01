@@ -2,10 +2,10 @@ package com.mrcrayfish.modelcreator;
 
 import java.util.prefs.Preferences;
 
+//TODO: Add a save option
 public class Settings
 {
     private static final String IMAGE_IMPORT_DIR = "image_import_dir";
-    private static final String SCREENSHOT_DIR = "screenshot_dir";
     private static final String MODEL_DIR = "model_dir";
     private static final String JSON_DIR = "json_dir";
     private static final String EXPORT_JSON_DIR = "export_json_dir";

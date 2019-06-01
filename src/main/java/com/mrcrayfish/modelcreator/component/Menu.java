@@ -44,8 +44,16 @@ public class Menu extends JMenuBar
     private JMenu menuRotate;
     private JMenuItem itemRotateClockwise;
     private JMenuItem itemRotateCounterClockwise;
+    
+    /* Block */
+    private JMenu menuBlock;
+    private JMenuItem itemProperties;
+    private JMenuItem itemTransation;
+    private JMenuItem itemLoot;
+    private JMenuItem itemBlockState;
+    private JMenuItem itemCollision; //Collision-BB
 
-    /* Extras */
+    /* More */
     private JMenu menuMore;
     private JMenuItem itemExtractAssets;
     private JMenu menuDeveloper;
@@ -95,6 +103,16 @@ public class Menu extends JMenuBar
                 itemRotateClockwise = createMenuItem("90\u00B0 Clockwise", "Rotates all elements clockwise by 90\u00B0", KeyEvent.VK_C, Icons.rotate_clockwise, KeyEvent.VK_RIGHT, Keyboard.KEY_RIGHT, InputEvent.CTRL_MASK);
                 itemRotateCounterClockwise = createMenuItem("90\u00B0 Counter Clockwise", "Rotates all elements counter clockwise by 90\u00B0", KeyEvent.VK_C, Icons.rotate_counter_clockwise, KeyEvent.VK_LEFT, Keyboard.KEY_LEFT, InputEvent.CTRL_MASK);
             }
+        }
+        
+        menuBlock = new JMenu("Block");
+        {
+        	//TODO: update key bindings
+        	itemProperties = createMenuItem("Block Properties", "Set the block properties", KeyEvent.VK_P, Icons.edit, 0, 0, InputEvent.CTRL_MASK);
+        	itemTransation = createMenuItem("Block Translation", "Set the block translations", KeyEvent.VK_T, Icons.edit, 0, 0, InputEvent.CTRL_MASK);
+        	itemLoot = createMenuItem("Block drops", "Set the block loot", KeyEvent.VK_L, Icons.edit, 0, 0, InputEvent.CTRL_MASK);
+        	itemBlockState = createMenuItem("Block States", "Set the block states", KeyEvent.VK_S, Icons.edit, 0, 0, InputEvent.CTRL_MASK);
+        	itemCollision = createMenuItem("Block collision", "Set the block collision box", KeyEvent.VK_C, Icons.edit, 0, 0, InputEvent.CTRL_MASK);
         }
 
         menuMore = new JMenu("More");
@@ -157,6 +175,14 @@ public class Menu extends JMenuBar
         menuModel.addSeparator();
         menuModel.add(menuRotate);
         this.add(menuModel);
+        
+        /* Menu Block */
+        menuBlock.add(itemProperties);
+        menuBlock.add(itemTransation);
+        menuBlock.add(itemLoot);
+        menuBlock.add(itemBlockState);
+        menuBlock.add(itemCollision);
+        this.add(menuBlock);
 
         /* Menu More Sub Menus */
         menuDeveloper.add(itemJavaCode);
@@ -204,6 +230,16 @@ public class Menu extends JMenuBar
         itemRotateClockwise.addActionListener(a -> Actions.rotateModel(creator.getElementManager(), true));
 
         itemRotateCounterClockwise.addActionListener(a -> Actions.rotateModel(creator.getElementManager(), false));
+        
+        itemProperties.addActionListener(a -> System.out.println("itemProperties"));
+        
+        itemTransation.addActionListener(a -> System.out.println("itemTransation"));
+        
+        itemLoot.addActionListener(a -> System.out.println("itemLoot"));
+        
+        itemBlockState.addActionListener(a -> System.out.println("itemBlockState"));
+        
+        itemCollision.addActionListener(a -> System.out.println("itemCollision"));
 
         itemGitHub.addActionListener(a -> Util.openUrl(Constants.URL_GITHUB));
 
@@ -275,6 +311,7 @@ public class Menu extends JMenuBar
 
     public static void newProject(ModelCreator creator)
     {
+    	//TODO: ask for a block-ID and asset-ID
         int returnVal = JOptionPane.showConfirmDialog(creator, "You current work will be cleared, are you sure?", "Note", JOptionPane.YES_NO_OPTION);
         if(returnVal == JOptionPane.YES_OPTION)
         {

@@ -41,6 +41,10 @@ public class Start
         {
             e.printStackTrace();
         }
+        
+        //TODO: Check if assets are extracted/available
+        
+        
 
         new ModelCreator(Constants.NAME + " v" + Constants.VERSION);
     }
