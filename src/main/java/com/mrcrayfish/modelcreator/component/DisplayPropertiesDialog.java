@@ -3,7 +3,6 @@ package com.mrcrayfish.modelcreator.component;
 import com.mrcrayfish.modelcreator.ModelCreator;
 import com.mrcrayfish.modelcreator.display.CanvasRenderer;
 import com.mrcrayfish.modelcreator.display.DisplayProperties;
-import com.mrcrayfish.modelcreator.element.ElementManager;
 import com.mrcrayfish.modelcreator.panels.DisplayEntryPanel;
 import com.mrcrayfish.modelcreator.util.ComponentUtil;
 
@@ -15,7 +14,9 @@ import java.awt.*;
  */
 public class DisplayPropertiesDialog extends JDialog
 {
-    private ModelCreator creator;
+	private static final long serialVersionUID = -3783764432695158262L;
+
+	private ModelCreator creator;
 
     private JTabbedPane tabbedPane;
 

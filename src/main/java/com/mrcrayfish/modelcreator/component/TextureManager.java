@@ -23,7 +23,9 @@ import java.util.List;
  */
 public class TextureManager extends JDialog
 {
-    public static final Object LOCK = new Object();
+	private static final long serialVersionUID = 816271251722659174L;
+
+	public static final Object LOCK = new Object();
 
     public static final int CANCELLED = 1;
     public static final int APPLIED = 1;

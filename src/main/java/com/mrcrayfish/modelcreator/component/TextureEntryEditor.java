@@ -23,7 +23,9 @@ import java.util.Locale;
  */
 public class TextureEntryEditor extends JDialog
 {
-    private TextureEntry entry;
+	private static final long serialVersionUID = 2200860736610402922L;
+
+	private TextureEntry entry;
 
     private JLabel icon;
     private JTextField textFieldKey;

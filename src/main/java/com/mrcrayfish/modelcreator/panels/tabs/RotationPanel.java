@@ -17,7 +17,9 @@ import java.util.Hashtable;
 
 public class RotationPanel extends JPanel implements IElementUpdater
 {
-    private ElementManager manager;
+	private static final long serialVersionUID = -8614682240849450181L;
+
+	private ElementManager manager;
 
     private OriginPanel panelOrigin;
     private JPanel axisPanel;

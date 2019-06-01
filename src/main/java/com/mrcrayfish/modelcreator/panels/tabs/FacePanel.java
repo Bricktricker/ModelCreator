@@ -4,7 +4,6 @@ import com.mrcrayfish.modelcreator.ModelCreator;
 import com.mrcrayfish.modelcreator.StateManager;
 import com.mrcrayfish.modelcreator.element.Element;
 import com.mrcrayfish.modelcreator.element.ElementManager;
-import com.mrcrayfish.modelcreator.element.Face;
 import com.mrcrayfish.modelcreator.panels.FaceExtrasPanel;
 import com.mrcrayfish.modelcreator.panels.IElementUpdater;
 import com.mrcrayfish.modelcreator.panels.TexturePanel;
@@ -18,7 +17,9 @@ import java.util.Hashtable;
 
 public class FacePanel extends JPanel implements IElementUpdater
 {
-    private ElementManager manager;
+	private static final long serialVersionUID = 1426896318514100975L;
+
+	private ElementManager manager;
 
     private JPanel menuPanel;
     private JComboBox<String> menuList;

@@ -4,7 +4,6 @@ import com.mrcrayfish.modelcreator.Icons;
 import com.mrcrayfish.modelcreator.ModelCreator;
 import com.mrcrayfish.modelcreator.StateManager;
 import com.mrcrayfish.modelcreator.component.*;
-import com.mrcrayfish.modelcreator.component.Menu;
 import com.mrcrayfish.modelcreator.display.DisplayProperties;
 import com.mrcrayfish.modelcreator.element.*;
 import com.mrcrayfish.modelcreator.panels.tabs.ElementPanel;
@@ -23,7 +22,9 @@ import java.util.List;
 
 public class SidebarPanel extends JPanel implements ElementManager
 {
-    private ModelCreator creator;
+	private static final long serialVersionUID = 4014017975936078487L;
+
+	private ModelCreator creator;
 
     // Swing Variables
     private SpringLayout layout;

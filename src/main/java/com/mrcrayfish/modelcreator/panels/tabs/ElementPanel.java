@@ -8,9 +8,15 @@ import com.mrcrayfish.modelcreator.panels.*;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ *Panel for the "element" tab on the right
+ *Here you can set the size and position of the cube
+ */
 public class ElementPanel extends JPanel implements IElementUpdater
 {
-    private ElementManager manager;
+	private static final long serialVersionUID = 2345409972608231073L;
+
+	private ElementManager manager;
 
     private SizePanel panelSize;
     private PositionPanel panelPosition;

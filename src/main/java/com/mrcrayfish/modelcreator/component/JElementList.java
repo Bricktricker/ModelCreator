@@ -12,7 +12,8 @@ import java.awt.event.MouseEvent;
  */
 public class JElementList extends JList<ElementCellEntry>
 {
-    private boolean processInput;
+	private static final long serialVersionUID = -4363979473871036950L;
+	private boolean processInput;
 
     @Override
     protected void processMouseEvent(MouseEvent e)

@@ -1,13 +1,8 @@
 package com.mrcrayfish.modelcreator.component;
 
 import com.mrcrayfish.modelcreator.*;
-import com.mrcrayfish.modelcreator.display.CanvasRenderer;
 import com.mrcrayfish.modelcreator.display.DisplayProperties;
 import com.mrcrayfish.modelcreator.element.Face;
-import com.mrcrayfish.modelcreator.panels.DisplayEntryPanel;
-import com.mrcrayfish.modelcreator.screenshot.PendingScreenshot;
-import com.mrcrayfish.modelcreator.screenshot.Screenshot;
-import com.mrcrayfish.modelcreator.screenshot.Uploader;
 import com.mrcrayfish.modelcreator.util.ComponentUtil;
 import com.mrcrayfish.modelcreator.util.KeyboardUtil;
 import com.mrcrayfish.modelcreator.util.Util;
@@ -17,15 +12,15 @@ import javax.swing.*;
 import javax.swing.event.MenuEvent;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
-import java.awt.datatransfer.StringSelection;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.Set;
 
 public class Menu extends JMenuBar
 {
-    private ModelCreator creator;
+	private static final long serialVersionUID = -146313069497706475L;
+
+	private ModelCreator creator;
 
     /* File */
     private JMenu menuFile;
@@ -33,7 +28,6 @@ public class Menu extends JMenuBar
     private JMenuItem itemLoad;
     private JMenuItem itemSave;
     private JMenuItem itemImport;
-    private JMenuItem itemExport;
     private JMenuItem itemSettings;
     private JMenuItem itemExit;
 
@@ -50,14 +44,6 @@ public class Menu extends JMenuBar
     private JMenu menuRotate;
     private JMenuItem itemRotateClockwise;
     private JMenuItem itemRotateCounterClockwise;
-
-    /* Share */
-    private JMenu menuScreenshot;
-    private JMenuItem itemSaveToDisk;
-    private JMenuItem itemShareFacebook;
-    private JMenuItem itemShareTwitter;
-    private JMenuItem itemShareReddit;
-    private JMenuItem itemImgurLink;
 
     /* Extras */
     private JMenu menuMore;
@@ -87,7 +73,6 @@ public class Menu extends JMenuBar
             itemLoad = createMenuItem("Load Project...", "Load Project from File", KeyEvent.VK_S, Icons.load, KeyEvent.VK_O, Keyboard.KEY_O, InputEvent.CTRL_MASK);
             itemSave = createMenuItem("Save Project...", "Save Project to File", KeyEvent.VK_S, Icons.disk, KeyEvent.VK_S, Keyboard.KEY_S, InputEvent.CTRL_MASK);
             itemImport = createMenuItem("Import JSON...", "Import Model from JSON", KeyEvent.VK_I, Icons.import_);
-            itemExport = createMenuItem("Export JSON...", "Export Model to JSON", KeyEvent.VK_E, Icons.export);
             itemSettings = createMenuItem("Settings", "Change the settings of the Model Creator", KeyEvent.VK_S, Icons.settings, KeyEvent.VK_S, Keyboard.KEY_S, InputEvent.CTRL_MASK + InputEvent.ALT_MASK);
             itemExit = createMenuItem("Exit", "Exit Application", KeyEvent.VK_E, Icons.exit);
         }
@@ -110,15 +95,6 @@ public class Menu extends JMenuBar
                 itemRotateClockwise = createMenuItem("90\u00B0 Clockwise", "Rotates all elements clockwise by 90\u00B0", KeyEvent.VK_C, Icons.rotate_clockwise, KeyEvent.VK_RIGHT, Keyboard.KEY_RIGHT, InputEvent.CTRL_MASK);
                 itemRotateCounterClockwise = createMenuItem("90\u00B0 Counter Clockwise", "Rotates all elements counter clockwise by 90\u00B0", KeyEvent.VK_C, Icons.rotate_counter_clockwise, KeyEvent.VK_LEFT, Keyboard.KEY_LEFT, InputEvent.CTRL_MASK);
             }
-        }
-
-        menuScreenshot = new JMenu("Screenshot");
-        {
-            itemSaveToDisk = createMenuItem("Save to Disk...", "Save screenshot to disk.", KeyEvent.VK_D, Icons.disk);
-            itemShareFacebook = createMenuItem("Share to Facebook", "Share a screenshot of your model Facebook.", KeyEvent.VK_S, Icons.facebook);
-            itemShareTwitter = createMenuItem("Share to Twitter", "Share a screenshot of your model to Twitter.", KeyEvent.VK_S, Icons.twitter);
-            itemShareReddit = createMenuItem("Share to Minecraft Subreddit", "Share a screenshot of your model to Minecraft Reddit.", KeyEvent.VK_S, Icons.reddit);
-            itemImgurLink = createMenuItem("Get Imgur Link", "Get an Imgur link of your screenshot to share.", KeyEvent.VK_I, Icons.imgur);
         }
 
         menuMore = new JMenu("More");
@@ -150,7 +126,6 @@ public class Menu extends JMenuBar
         menuFile.add(itemSave);
         menuFile.addSeparator();
         menuFile.add(itemImport);
-        menuFile.add(itemExport);
         menuFile.addSeparator();
         menuFile.add(itemSettings);
         menuFile.addSeparator();
@@ -183,14 +158,6 @@ public class Menu extends JMenuBar
         menuModel.add(menuRotate);
         this.add(menuModel);
 
-        /* Menu Screenshots */
-        menuScreenshot.add(itemSaveToDisk);
-        menuScreenshot.add(itemShareFacebook);
-        menuScreenshot.add(itemShareTwitter);
-        menuScreenshot.add(itemShareReddit);
-        menuScreenshot.add(itemImgurLink);
-        this.add(menuScreenshot);
-
         /* Menu More Sub Menus */
         menuDeveloper.add(itemJavaCode);
         menuExamples.add(itemModelCauldron);
@@ -217,8 +184,6 @@ public class Menu extends JMenuBar
 
         itemImport.addActionListener(a -> showImportJson(creator));
 
-        itemExport.addActionListener(a -> showExportJson(creator));
-
         itemJavaCode.addActionListener(a -> showExportJavaCode(creator, a));
 
         itemSettings.addActionListener(a -> showSettings(creator));
@@ -239,134 +204,6 @@ public class Menu extends JMenuBar
         itemRotateClockwise.addActionListener(a -> Actions.rotateModel(creator.getElementManager(), true));
 
         itemRotateCounterClockwise.addActionListener(a -> Actions.rotateModel(creator.getElementManager(), false));
-
-        itemSaveToDisk.addActionListener(a ->
-        {
-            JFileChooser chooser = new JFileChooser();
-            chooser.setDialogTitle("Output Directory");
-            chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-            chooser.setApproveButtonText("Save");
-
-            FileNameExtensionFilter filter = new FileNameExtensionFilter("PNG (.png)", "png");
-            chooser.setFileFilter(filter);
-
-            String dir = Settings.getScreenshotDir();
-
-            if(dir != null)
-            {
-                chooser.setCurrentDirectory(new File(dir));
-            }
-
-            int returnVal = chooser.showSaveDialog(null);
-            if(returnVal == JFileChooser.APPROVE_OPTION)
-            {
-                if(chooser.getSelectedFile().exists())
-                {
-                    returnVal = JOptionPane.showConfirmDialog(null, "A file already exists with that name, are you sure you want to override?", "Warning", JOptionPane.YES_NO_OPTION);
-                }
-                if(returnVal != JOptionPane.NO_OPTION && returnVal != JOptionPane.CLOSED_OPTION)
-                {
-                    File location = chooser.getSelectedFile().getParentFile();
-                    Settings.setScreenshotDir(location.toString());
-
-                    String filePath = chooser.getSelectedFile().getAbsolutePath();
-                    if(!filePath.endsWith(".png"))
-                    {
-                        chooser.setSelectedFile(new File(filePath + ".png"));
-                    }
-                    creator.setSidebar(null);
-                    creator.startScreenshot(new PendingScreenshot(chooser.getSelectedFile(), null));
-                }
-            }
-        });
-
-        itemShareFacebook.addActionListener(a ->
-        {
-            creator.setSidebar(null);
-            creator.startScreenshot(new PendingScreenshot(null, file ->
-            {
-                try
-                {
-                    String url = Uploader.upload(file);
-                    Screenshot.shareToFacebook(url);
-                }
-                catch(Exception e)
-                {
-                    e.printStackTrace();
-                }
-            }));
-        });
-
-        itemShareTwitter.addActionListener(a ->
-        {
-            creator.setSidebar(null);
-            creator.startScreenshot(new PendingScreenshot(null, file ->
-            {
-                try
-                {
-                    String url = Uploader.upload(file);
-                    Screenshot.shareToTwitter(url);
-                }
-                catch(Exception e)
-                {
-                    e.printStackTrace();
-                }
-            }));
-        });
-
-        itemShareReddit.addActionListener(a ->
-        {
-            creator.setSidebar(null);
-            creator.startScreenshot(new PendingScreenshot(null, file ->
-            {
-                try
-                {
-                    String url = Uploader.upload(file);
-                    Screenshot.shareToReddit(url);
-                }
-                catch(Exception e)
-                {
-                    e.printStackTrace();
-                }
-            }));
-        });
-
-        itemImgurLink.addActionListener(a ->
-        {
-            creator.setSidebar(null);
-            creator.startScreenshot(new PendingScreenshot(null, file -> SwingUtilities.invokeLater(() ->
-            {
-                try
-                {
-                    String url = Uploader.upload(file);
-
-                    JOptionPane message = new JOptionPane();
-                    String title;
-
-                    if(url != null && !url.equals("null"))
-                    {
-                        StringSelection text = new StringSelection(url);
-                        Toolkit.getDefaultToolkit().getSystemClipboard().setContents(text, null);
-                        title = "Success";
-                        message.setMessage("<html><b>" + url + "</b> has been copied to your clipboard.</html>");
-                    }
-                    else
-                    {
-                        title = "Error";
-                        message.setMessage("Failed to upload screenshot. Check your internet connection then try again.");
-                    }
-
-                    JDialog dialog = message.createDialog(this, title);
-                    dialog.setLocationRelativeTo(null);
-                    dialog.setModal(false);
-                    dialog.setVisible(true);
-                }
-                catch(Exception e)
-                {
-                    e.printStackTrace();
-                }
-            })));
-        });
 
         itemGitHub.addActionListener(a -> Util.openUrl(Constants.URL_GITHUB));
 
@@ -690,7 +527,9 @@ public class Menu extends JMenuBar
         JButton btnCancel = new JButton("Cancel");
         btnCancel.addActionListener(new AbstractAction()
         {
-            @Override
+			private static final long serialVersionUID = -23993140236291660L;
+
+			@Override
             public void actionPerformed(ActionEvent e)
             {
                 dialog.dispose();

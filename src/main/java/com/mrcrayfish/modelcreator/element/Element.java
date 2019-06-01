@@ -4,7 +4,6 @@ import com.mrcrayfish.modelcreator.ModelCreator;
 import com.mrcrayfish.modelcreator.object.FaceDimension;
 import com.mrcrayfish.modelcreator.sidebar.UVSidebar;
 import com.mrcrayfish.modelcreator.texture.TextureEntry;
-import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.Sphere;
 

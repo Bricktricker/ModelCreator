@@ -8,7 +8,9 @@ import java.awt.*;
  */
 public class ElementCellRenderer extends DefaultListCellRenderer
 {
-    @Override
+	private static final long serialVersionUID = -662253886566066896L;
+
+	@Override
     public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus)
     {
         ElementCellEntry entry = (ElementCellEntry) value;

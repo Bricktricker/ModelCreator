@@ -14,7 +14,6 @@ import com.mrcrayfish.modelcreator.screenshot.Screenshot;
 import com.mrcrayfish.modelcreator.sidebar.Sidebar;
 import com.mrcrayfish.modelcreator.sidebar.UVSidebar;
 import com.mrcrayfish.modelcreator.texture.TextureAtlas;
-import com.mrcrayfish.modelcreator.texture.TextureEntry;
 import com.mrcrayfish.modelcreator.util.FontManager;
 import com.mrcrayfish.modelcreator.util.KeyboardUtil;
 import org.lwjgl.LWJGLException;
@@ -42,7 +41,9 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class ModelCreator extends JFrame
 {
-    public static final Color BACKGROUND = new Color(227, 227, 234);
+	private static final long serialVersionUID = -2548122641354481970L;
+
+	public static final Color BACKGROUND = new Color(227, 227, 234);
 
     // Canvas Variables
     private final static AtomicReference<Dimension> newCanvasSize = new AtomicReference<>();
