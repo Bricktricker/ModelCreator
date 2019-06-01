@@ -29,7 +29,7 @@ public class SidebarPanel extends JPanel implements ElementManager
     // Swing Variables
     private SpringLayout layout;
     private DefaultListModel<ElementCellEntry> model = new DefaultListModel<>();
-    private JList<ElementCellEntry> list = new JElementList();
+    private JList<ElementCellEntry> list = new JElementList(); //Cubes outliner
     private JScrollPane scrollPane;
     private JPanel btnContainer;
     private JButton btnAdd = new JButton();

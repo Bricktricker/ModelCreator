@@ -1,6 +1,7 @@
 package com.mrcrayfish.modelcreator.component;
 
 import com.mrcrayfish.modelcreator.*;
+import com.mrcrayfish.modelcreator.block.BlockManager;
 import com.mrcrayfish.modelcreator.display.DisplayProperties;
 import com.mrcrayfish.modelcreator.element.Face;
 import com.mrcrayfish.modelcreator.util.ComponentUtil;
@@ -311,12 +312,12 @@ public class Menu extends JMenuBar
 
     public static void newProject(ModelCreator creator)
     {
-    	//TODO: ask for a block-ID and asset-ID
         int returnVal = JOptionPane.showConfirmDialog(creator, "You current work will be cleared, are you sure?", "Note", JOptionPane.YES_NO_OPTION);
         if(returnVal == JOptionPane.YES_OPTION)
         {
             TextureManager.clear();
             StateManager.clear();
+            BlockManager.clear();
             creator.getElementManager().reset();
             creator.getElementManager().updateValues();
             DisplayPropertiesDialog.update(creator);
@@ -900,6 +901,7 @@ public class Menu extends JMenuBar
                 Settings.setImageEditor(getDirectoryFromSelector(imageEditorPanel));
                 Settings.setImageEditorArgs(textFieldArguments.getText());
                 Settings.setCardinalPoints(checkBoxCardinalPoints.isSelected());
+                Settings.saveSettings();
             }
         });
 
