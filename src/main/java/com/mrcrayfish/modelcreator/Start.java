@@ -42,6 +42,8 @@ public class Start
             e.printStackTrace();
         }
         
+        Settings.load();
+        
         //TODO: Check if assets are extracted/available
         
         

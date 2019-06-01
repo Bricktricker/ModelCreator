@@ -1,10 +1,16 @@
 package com.mrcrayfish.modelcreator;
 
-import java.util.prefs.Preferences;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Properties;
 
-//TODO: Add a save option
 public class Settings
 {
+	private static Properties settings;
+	
+	private static final String SETTINGS_PATH = "settings.properties";
+	
     private static final String IMAGE_IMPORT_DIR = "image_import_dir";
     private static final String MODEL_DIR = "model_dir";
     private static final String JSON_DIR = "json_dir";
@@ -20,68 +26,57 @@ public class Settings
 
     public static String getImageImportDir()
     {
-        Preferences prefs = getPreferences();
-        return prefs.get(IMAGE_IMPORT_DIR, null);
+        return settings.getProperty(IMAGE_IMPORT_DIR, null);
     }
 
     public static void setImageImportDir(String dir)
     {
-        Preferences prefs = getPreferences();
-        prefs.put(IMAGE_IMPORT_DIR, dir);
+    	settings.put(IMAGE_IMPORT_DIR, dir);
     }
 
     public static String getModelDir()
     {
-        Preferences prefs = getPreferences();
-        return prefs.get(MODEL_DIR, null);
+        return settings.getProperty(MODEL_DIR, null);
     }
 
     public static void setModelDir(String dir)
     {
-        Preferences prefs = getPreferences();
-        prefs.put(MODEL_DIR, dir);
+    	settings.put(MODEL_DIR, dir);
     }
 
     public static String getJSONDir()
     {
-        Preferences prefs = getPreferences();
-        return prefs.get(JSON_DIR, null);
+        return settings.getProperty(JSON_DIR, null);
     }
 
     public static void setJSONDir(String dir)
     {
-        Preferences prefs = getPreferences();
-        prefs.put(JSON_DIR, dir);
+    	settings.put(JSON_DIR, dir);
     }
 
     public static String getExportJSONDir()
     {
-        Preferences prefs = getPreferences();
-        return prefs.get(EXPORT_JSON_DIR, null);
+        return settings.getProperty(EXPORT_JSON_DIR, null);
     }
 
     public static void setExportJSONDir(String dir)
     {
-        Preferences prefs = getPreferences();
-        prefs.put(EXPORT_JSON_DIR, dir);
+    	settings.put(EXPORT_JSON_DIR, dir);
     }
 
     public static String getAssetsDir()
     {
-        Preferences prefs = getPreferences();
-        return prefs.get(ASSESTS_DIR, null);
+        return settings.getProperty(ASSESTS_DIR, null);
     }
 
     public static void setAssetsDir(String dir)
     {
-        Preferences prefs = getPreferences();
-        prefs.put(ASSESTS_DIR, dir);
+    	settings.put(ASSESTS_DIR, dir);
     }
 
     public static int getUndoLimit()
     {
-        Preferences prefs = getPreferences();
-        String s = prefs.get(UNDO_LIMIT, null);
+        String s = settings.getProperty(UNDO_LIMIT, null);
         try
         {
             return Math.max(1, Integer.parseInt(s));
@@ -94,27 +89,23 @@ public class Settings
 
     public static void setUndoLimit(int limit)
     {
-        Preferences prefs = getPreferences();
-        prefs.put(UNDO_LIMIT, Integer.toString(Math.max(1, limit)));
+    	settings.put(UNDO_LIMIT, Integer.toString(Math.max(1, limit)));
     }
 
     public static boolean getCardinalPoints()
     {
-        Preferences prefs = getPreferences();
-        String s = prefs.get(RENDER_CARDINAL_POINTS, "true");
+        String s = settings.getProperty(RENDER_CARDINAL_POINTS, "true");
         return Boolean.parseBoolean(s);
     }
 
     public static void setCardinalPoints(boolean renderCardinalPoints)
     {
-        Preferences prefs = getPreferences();
-        prefs.put(RENDER_CARDINAL_POINTS, Boolean.toString(renderCardinalPoints));
+    	settings.put(RENDER_CARDINAL_POINTS, Boolean.toString(renderCardinalPoints));
     }
 
     public static int[] getFaceColors()
     {
-        Preferences prefs = getPreferences();
-        String s = prefs.get(FACE_COLORS, "");
+        String s = settings.getProperty(FACE_COLORS, "");
         String[] values = s.split(",");
         if(values.length == 6)
         {
@@ -138,36 +129,47 @@ public class Settings
             builder.append(",");
         }
         builder.setLength(builder.length() - 1);
-        Preferences prefs = getPreferences();
-        prefs.put(FACE_COLORS, builder.toString());
+        settings.put(FACE_COLORS, builder.toString());
     }
 
     public static String getImageEditor()
     {
-        Preferences prefs = getPreferences();
-        return prefs.get(IMAGE_EDITOR, null);
+        return settings.getProperty(IMAGE_EDITOR, null);
     }
 
     public static void setImageEditor(String file)
     {
-        Preferences prefs = getPreferences();
-        prefs.put(IMAGE_EDITOR, file);
+    	settings.put(IMAGE_EDITOR, file);
     }
 
     public static String getImageEditorArgs()
     {
-        Preferences prefs = getPreferences();
-        return prefs.get(IMAGE_EDITOR_ARGS, "\"%s\"");
+        return settings.getProperty(IMAGE_EDITOR_ARGS, "\"%s\"");
     }
 
     public static void setImageEditorArgs(String args)
     {
-        Preferences prefs = getPreferences();
-        prefs.put(IMAGE_EDITOR_ARGS, args);
+    	settings.put(IMAGE_EDITOR_ARGS, args);
     }
-
-    private static Preferences getPreferences()
-    {
-        return Preferences.userNodeForPackage(Settings.class);
+    
+    public static boolean saveSettings() {
+    	try(FileOutputStream fos = new FileOutputStream(SETTINGS_PATH))
+    	{
+    		settings.store(fos, "");
+    	}catch(IOException e) {
+    		return false;
+    	}
+    	return true;
+    }
+    
+    public static boolean load() {
+    	settings = new Properties();
+    	try(FileInputStream ifr = new FileInputStream(SETTINGS_PATH))
+    	{
+    		settings.load(ifr);
+    	}catch(IOException e) {
+    		return false;
+    	}
+    	return true;
     }
 }
