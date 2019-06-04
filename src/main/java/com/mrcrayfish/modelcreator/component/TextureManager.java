@@ -218,20 +218,6 @@ public class TextureManager extends JDialog
         {
             chooser.setCurrentDirectory(lastLocation);
         }
-        else
-        {
-            try
-            {
-                if(Settings.getAssetsDir() != null)
-                {
-                    chooser.setCurrentDirectory(new File(Settings.getAssetsDir()));
-                }
-            }
-            catch(Exception e)
-            {
-                e.printStackTrace();
-            }
-        }
 
         FileNameExtensionFilter filter = new FileNameExtensionFilter("PNG Images", "png");
         chooser.setFileFilter(filter);

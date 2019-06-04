@@ -215,6 +215,8 @@ public class Importer
         }
 
         /* Try loading textures from assets directory */
+        /*
+         * TODO: Add this loading back
         if(Settings.getAssetsDir() != null)
         {
             String path = Settings.getAssetsDir() + File.separator + texturePath.toRelativePath();
@@ -224,7 +226,8 @@ public class Importer
                 return TextureManager.addImage(id, texturePath, textureFile);
             }
         }
-
+        */
+        System.err.println("Could not load texture!");
         return null;
     }
 

@@ -3,6 +3,9 @@ package com.mrcrayfish.modelcreator;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 
 public class Settings
@@ -17,7 +20,7 @@ public class Settings
     private static final String EXPORT_JSON_DIR = "export_json_dir";
     private static final String UNDO_LIMIT = "undo_limit";
     private static final String RENDER_CARDINAL_POINTS = "cardinal_points";
-    private static final String ASSESTS_DIR = "assets_dir";
+    private static final String EXTRACTED_ASSETS = "extracted_assets";
     private static final String FACE_COLORS = "face_colors";
     private static final String IMAGE_EDITOR = "image_editor";
     private static final String IMAGE_EDITOR_ARGS = "image_editor_args";
@@ -31,7 +34,11 @@ public class Settings
 
     public static void setImageImportDir(String dir)
     {
-    	settings.put(IMAGE_IMPORT_DIR, dir);
+    	if(isNullOrEmpty(dir)) {
+    		settings.remove(dir);
+    	}else {
+    		settings.put(IMAGE_IMPORT_DIR, dir);	
+    	}
     }
 
     public static String getModelDir()
@@ -41,7 +48,11 @@ public class Settings
 
     public static void setModelDir(String dir)
     {
-    	settings.put(MODEL_DIR, dir);
+    	if(isNullOrEmpty(dir)) {
+    		settings.remove(dir);
+    	}else {
+    		settings.put(MODEL_DIR, dir);	
+    	}
     }
 
     public static String getJSONDir()
@@ -51,7 +62,11 @@ public class Settings
 
     public static void setJSONDir(String dir)
     {
-    	settings.put(JSON_DIR, dir);
+    	if(isNullOrEmpty(dir)) {
+    		settings.remove(dir);
+    	}else {
+    		settings.put(JSON_DIR, dir);	
+    	}
     }
 
     public static String getExportJSONDir()
@@ -61,17 +76,39 @@ public class Settings
 
     public static void setExportJSONDir(String dir)
     {
-    	settings.put(EXPORT_JSON_DIR, dir);
+    	if(isNullOrEmpty(dir)) {
+    		settings.remove(dir);
+    	}else {
+    		settings.put(EXPORT_JSON_DIR, dir);	
+    	}
     }
-
-    public static String getAssetsDir()
-    {
-        return settings.getProperty(ASSESTS_DIR, null);
+    
+    public static List<String> getExtractedAssets() {
+    	String concatedVersions = settings.getProperty(EXTRACTED_ASSETS);
+    	if(isNullOrEmpty(concatedVersions)) {
+    		return new ArrayList<>();
+    	}
+    	String[] versions = concatedVersions.split("|");
+    	return Arrays.asList(versions);
     }
-
-    public static void setAssetsDir(String dir)
-    {
-    	settings.put(ASSESTS_DIR, dir);
+    
+    public static void setExtractedAssets(List<String> versions) {
+    	if(versions == null || versions.isEmpty()) {
+    		settings.remove(EXTRACTED_ASSETS);
+    		return;
+    	}
+    	
+    	String concatedVersions = "";
+    	for(String v : versions) {
+    		concatedVersions += v + '|';
+    	}
+    	settings.put(EXTRACTED_ASSETS, concatedVersions);
+    }
+    
+    public static void addExtractedAsset(String version) {
+    	List<String> extractedVersions = getExtractedAssets();
+    	extractedVersions.add(version);
+    	setExtractedAssets(extractedVersions);
     }
 
     public static int getUndoLimit()
@@ -139,7 +176,11 @@ public class Settings
 
     public static void setImageEditor(String file)
     {
-    	settings.put(IMAGE_EDITOR, file);
+    	if(isNullOrEmpty(file)) {
+    		settings.remove(file);
+    	}else {
+    		settings.put(IMAGE_EDITOR, file);	
+    	}
     }
 
     public static String getImageEditorArgs()
@@ -149,7 +190,11 @@ public class Settings
 
     public static void setImageEditorArgs(String args)
     {
-    	settings.put(IMAGE_EDITOR_ARGS, args);
+    	if(isNullOrEmpty(args)) {
+    		settings.remove(args);
+    	}else {
+    		settings.put(IMAGE_EDITOR_ARGS, args);	
+    	}
     }
     
     public static boolean saveSettings() {
@@ -171,5 +216,9 @@ public class Settings
     		return false;
     	}
     	return true;
+    }
+    
+    private static boolean isNullOrEmpty(String s) {
+    	return s == null || s.isEmpty();
     }
 }

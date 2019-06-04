@@ -2,6 +2,7 @@ package com.mrcrayfish.modelcreator.util;
 
 import com.google.gson.Gson;
 import com.mrcrayfish.modelcreator.ProjectManager;
+import com.mrcrayfish.modelcreator.Settings;
 import com.mrcrayfish.modelcreator.element.ElementManager;
 
 import javax.imageio.ImageIO;
@@ -147,21 +148,33 @@ public class Util
 
     public static void extractMinecraftAssets(String version, Window window)
     {
-        JFileChooser chooser = new JFileChooser();
-        chooser.setDialogTitle("Extract Destination");
-        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        chooser.setApproveButtonText("Select");
-        int returnVal = chooser.showOpenDialog(window);
-        if(returnVal == JFileChooser.APPROVE_OPTION)
-        {
-            File file = chooser.getSelectedFile();
-            if(file.isDirectory())
-            {
-                File extractionFolder = new File(file, version);
-                File jar = new File(getMinecraftDirectory(), "versions/" + version + "/" + version + ".jar");
-                extractZipFiles(jar, zipEntry -> zipEntry.getName().startsWith("assets/"), window, extractionFolder);
-            }
-        }
+    	File destination = new File("resources", version);
+    	if(!destination.mkdirs()) {
+    		System.err.println("Could not create folders");
+    		return;
+    	}
+    	File jar = new File(getMinecraftDirectory(), "versions/" + version + "/" + version + ".jar");
+    	Predicate<ZipEntry> conditions = zipEntry -> {
+    		boolean isAssetRoot = zipEntry.getName().endsWith("mcassetsroot");
+    		if(isAssetRoot)
+    			return false;
+  
+    		boolean isAsset = zipEntry.getName().startsWith("assets/");
+    		if(!isAsset)
+    			return false;
+    		
+    		final String[] allowedDirs = {"blockstates", "models", "textures"};
+    		for(String s : allowedDirs) {
+    			if(zipEntry.getName().contains(s))
+    				return true;
+    		}
+    		
+    		return false;
+    	};
+    	extractZipFiles(jar, conditions, window, destination);
+    	//TODO: These are also saved, when the extraction aborts.
+    	Settings.addExtractedAsset(version);
+    	Settings.saveSettings();
     }
 
     private static void extractZipFiles(File zipFile, Predicate<ZipEntry> conditions, Window window, File extractionFolder)
@@ -210,9 +223,8 @@ public class Util
         new Thread(() ->
         {
             List<ZipEntry> entries = new ArrayList<>();
-            try
+            try(ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFile)))
             {
-                ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFile));
                 ZipEntry ze;
                 while((ze = zis.getNextEntry()) != null)
                 {
@@ -244,9 +256,8 @@ public class Util
                 return;
             }
 
-            try
+            try(ZipFile f = new ZipFile(zipFile))
             {
-                ZipFile f = new ZipFile(zipFile);
                 for(int i = 0; i < entries.size(); i++)
                 {
                     if(cancelled[0])

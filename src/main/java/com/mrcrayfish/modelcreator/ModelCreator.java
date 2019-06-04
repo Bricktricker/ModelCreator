@@ -1,5 +1,6 @@
 package com.mrcrayfish.modelcreator;
 
+import com.mrcrayfish.modelcreator.component.Menu;
 import com.mrcrayfish.modelcreator.component.TextureManager;
 import com.mrcrayfish.modelcreator.display.CanvasRenderer;
 import com.mrcrayfish.modelcreator.display.render.StandardRenderer;
@@ -147,6 +148,11 @@ public class ModelCreator extends JFrame
         setLocationRelativeTo(null);
 
         //SwingUtilities.invokeLater(() -> WelcomeDialog.show(ModelCreator.this));
+        SwingUtilities.invokeLater(() -> {
+        	if(Settings.getExtractedAssets().isEmpty()) {
+        		Menu.showExtractAssets(this);
+        	}
+        }); 
 
         createDisplay();
 
@@ -249,7 +255,6 @@ public class ModelCreator extends JFrame
             Display.setVSyncEnabled(true);
             Display.setInitialBackground(0.92F, 0.92F, 0.93F);
             Display.setParent(canvas);
-
         }
         catch(LWJGLException e)
         {

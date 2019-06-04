@@ -50,6 +50,7 @@ public class Menu extends JMenuBar
     private JMenu menuBlock;
     private JMenuItem itemProperties;
     private JMenuItem itemTransation;
+    private JMenuItem itemCrafting;
     private JMenuItem itemLoot;
     private JMenuItem itemBlockState;
     private JMenuItem itemCollision; //Collision-BB
@@ -111,6 +112,7 @@ public class Menu extends JMenuBar
         	//TODO: update key bindings
         	itemProperties = createMenuItem("Block Properties", "Set the block properties", KeyEvent.VK_P, Icons.edit, 0, 0, InputEvent.CTRL_MASK);
         	itemTransation = createMenuItem("Block Translation", "Set the block translations", KeyEvent.VK_T, Icons.edit, 0, 0, InputEvent.CTRL_MASK);
+        	itemCrafting = createMenuItem("Crafting", "Set the crafting recipe", KeyEvent.VK_C, Icons.edit);
         	itemLoot = createMenuItem("Block drops", "Set the block loot", KeyEvent.VK_L, Icons.edit, 0, 0, InputEvent.CTRL_MASK);
         	itemBlockState = createMenuItem("Block States", "Set the block states", KeyEvent.VK_S, Icons.edit, 0, 0, InputEvent.CTRL_MASK);
         	itemCollision = createMenuItem("Block collision", "Set the block collision box", KeyEvent.VK_C, Icons.edit, 0, 0, InputEvent.CTRL_MASK);
@@ -180,6 +182,7 @@ public class Menu extends JMenuBar
         /* Menu Block */
         menuBlock.add(itemProperties);
         menuBlock.add(itemTransation);
+        menuBlock.add(itemCrafting);
         menuBlock.add(itemLoot);
         menuBlock.add(itemBlockState);
         menuBlock.add(itemCollision);
@@ -235,6 +238,8 @@ public class Menu extends JMenuBar
         itemProperties.addActionListener(a -> System.out.println("itemProperties"));
         
         itemTransation.addActionListener(a -> System.out.println("itemTransation"));
+        
+        itemCrafting.addActionListener(a -> System.out.println("itemCrafting"));
         
         itemLoot.addActionListener(a -> System.out.println("itemLoot"));
         
@@ -827,7 +832,8 @@ public class Menu extends JMenuBar
         JSeparator separator = new JSeparator();
         generalPanel.add(separator);
 
-        String assetsPath = Settings.getAssetsDir() != null ? Settings.getAssetsDir() : "";
+        //TODO: make this not hardcoded, Setting may not needed anymore??
+        String assetsPath = "resources"; //Settings.getAssetsDir() != null ? Settings.getAssetsDir() : "";
         JPanel texturePathPanel = createDirectorySelector("Assets Path", dialog, assetsPath);
         generalPanel.add(texturePathPanel);
 
@@ -895,7 +901,7 @@ public class Menu extends JMenuBar
             @Override
             public void windowClosed(WindowEvent e)
             {
-                Settings.setAssetsDir(getDirectoryFromSelector(texturePathPanel));
+                //Settings.setAssetsDir(getDirectoryFromSelector(texturePathPanel));
                 Settings.setUndoLimit((int) undoLimitSpinner.getValue());
                 Settings.setFaceColors(Face.getFaceColors());
                 Settings.setImageEditor(getDirectoryFromSelector(imageEditorPanel));
