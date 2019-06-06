@@ -86,6 +86,10 @@ public class BlockProperties
 	
 	        JTextField assetText = new JTextField();
 	        assetText.setPreferredSize(new Dimension(100, 24));
+	        assetText.getDocument().addDocumentListener(new TextFieldListener(assetID -> {
+	        	//TODO: check correct format
+	        	BlockManager.assetID = assetID;
+	        }));
 	        assetPanel.add(assetText);
 	
 	        JPanel javaPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -96,6 +100,10 @@ public class BlockProperties
 	
 	        JTextField javaText = new JTextField();
 	        javaText.setPreferredSize(new Dimension(100, 24));
+	        javaText.getDocument().addDocumentListener(new TextFieldListener(javaID -> {
+	        	//TODO: check correct format
+	        	BlockManager.javaID = javaID;
+	        }));
 	        javaPanel.add(javaText);
         }
         
@@ -163,6 +171,11 @@ public class BlockProperties
 	        };
 	        lightSlider.addChangeListener(clLight);
 	        clLight.stateChanged(null);
+        }
+        
+        //Set Material and SoundType
+        {
+        	
         }
         
         generalSpringLayout.putConstraint(SpringLayout.WEST, idsPanel, 5, SpringLayout.WEST, generalPanel);
