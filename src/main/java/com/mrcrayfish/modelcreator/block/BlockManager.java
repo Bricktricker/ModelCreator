@@ -17,12 +17,16 @@ public class BlockManager
 	public static String assetID = "";
 	public static String javaID = "";
 	public static BlockProperties properties = new BlockProperties();
+	public static String usedMcVersion = "";
+	
+	//May move to someware else?
 	public static List<String> soundTypes;
 	public static List<String> materials;
 	
 	public static void clear() {
 		assetID = "";
 		javaID = "";
+		usedMcVersion = "";
 		properties = new BlockProperties();
 	}
 	

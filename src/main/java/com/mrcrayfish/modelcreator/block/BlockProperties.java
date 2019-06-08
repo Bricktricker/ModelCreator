@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -17,14 +18,15 @@ import javax.swing.WindowConstants;
 import javax.swing.event.ChangeListener;
 
 import com.mrcrayfish.modelcreator.ModelCreator;
+import com.mrcrayfish.modelcreator.Settings;
 
 public class BlockProperties
 {
 	private float hardness;
 	private float resistance;
 	private float lightLevel;
-	//private Material material;
-	//private SoundType sound;
+	private String material;
+	private String sound;
 	
 	public BlockProperties() {
 		hardness = 0.8F;
@@ -62,19 +64,39 @@ public class BlockProperties
 		this.lightLevel = lightLevel;
 	}
 	
+	public String getMaterial()
+	{
+		return material;
+	}
+
+	public void setMaterial(String material)
+	{
+		this.material = material;
+	}
+
+	public String getSound()
+	{
+		return sound;
+	}
+
+	public void setSound(String sound)
+	{
+		this.sound = sound;
+	}
+
 	public static void show(ModelCreator creator) {
 		JDialog dialog = new JDialog(creator, "Properties", Dialog.ModalityType.APPLICATION_MODAL);
 		
 		JPanel panel = new JPanel(new BorderLayout());
-        panel.setPreferredSize(new Dimension(500, 300));
+        panel.setPreferredSize(new Dimension(500, 250));
         dialog.add(panel);
         
         SpringLayout generalSpringLayout = new SpringLayout();
         JPanel generalPanel = new JPanel(generalSpringLayout);
         panel.add(generalPanel);
         
-        //Settings to set the block asset- and java ID
-        JPanel idsPanel = new JPanel(new GridLayout(1, 2));
+        //Settings to set the block asset- and java ID and used MC version
+        JPanel idsPanel = new JPanel(new GridLayout(1, 3));
         {
         	generalPanel.add(idsPanel);
         	
@@ -105,6 +127,21 @@ public class BlockProperties
 	        	BlockManager.javaID = javaID;
 	        }));
 	        javaPanel.add(javaText);
+	        
+	        //MC version
+	        JPanel mcVersionPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+	        idsPanel.add(mcVersionPanel);
+	        
+	        JLabel versionLabel = new JLabel("MC");
+	        mcVersionPanel.add(versionLabel);
+	        
+	        JComboBox<String> comboBoxVersions = new JComboBox<>();
+	        comboBoxVersions.setPreferredSize(new Dimension(100, 24));
+        	Settings.getExtractedAssets().forEach(comboBoxVersions::addItem);
+        	comboBoxVersions.addActionListener(a -> {
+        		BlockManager.usedMcVersion = (String)comboBoxVersions.getSelectedItem();
+        	});
+        	mcVersionPanel.add(comboBoxVersions);
         }
         
         JSeparator separator = new JSeparator();
@@ -173,9 +210,45 @@ public class BlockProperties
 	        clLight.stateChanged(null);
         }
         
+        JSeparator separator2 = new JSeparator();
+        generalPanel.add(separator2);
+        
         //Set Material and SoundType
+        JPanel soundMatPanel = new JPanel(new GridLayout(1, 2));
         {
+        	generalPanel.add(soundMatPanel);
         	
+        	//Material
+        	JPanel materialPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        	soundMatPanel.add(materialPanel);
+        	JLabel materialLabel = new JLabel("Block material");
+        	materialPanel.add(materialLabel);
+        	
+        	JComboBox<String> comboBoxMaterials = new JComboBox<>();
+        	comboBoxMaterials.setPreferredSize(new Dimension(150, 24));
+        	comboBoxMaterials.addItem("");
+        	BlockManager.materials.forEach(comboBoxMaterials::addItem);
+        	comboBoxMaterials.addActionListener(a -> {
+        		String material = (String)comboBoxMaterials.getSelectedItem();
+        		BlockManager.properties.material = material;
+        	});
+        	materialPanel.add(comboBoxMaterials);
+        	
+        	//Sound
+        	JPanel soundPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        	soundMatPanel.add(soundPanel);
+        	JLabel soundLabel = new JLabel("Block sound");
+        	soundPanel.add(soundLabel);
+        	
+        	JComboBox<String> comboBoxSounds = new JComboBox<>();
+        	comboBoxSounds.setPreferredSize(new Dimension(150, 24));
+        	comboBoxSounds.addItem("");
+        	BlockManager.soundTypes.forEach(comboBoxSounds::addItem);
+        	comboBoxSounds.addActionListener(a -> {
+        		String sound = (String)comboBoxSounds.getSelectedItem();
+        		BlockManager.properties.sound = sound;
+        	});
+        	soundPanel.add(comboBoxSounds);
         }
         
         generalSpringLayout.putConstraint(SpringLayout.WEST, idsPanel, 5, SpringLayout.WEST, generalPanel);
@@ -187,6 +260,12 @@ public class BlockProperties
         generalSpringLayout.putConstraint(SpringLayout.WEST, blockPropertiesPanel, 10, SpringLayout.WEST, generalPanel);
         generalSpringLayout.putConstraint(SpringLayout.EAST, blockPropertiesPanel, -10, SpringLayout.EAST, generalPanel);
         generalSpringLayout.putConstraint(SpringLayout.NORTH, blockPropertiesPanel, 10, SpringLayout.SOUTH, separator);
+        generalSpringLayout.putConstraint(SpringLayout.WEST, separator2, 0, SpringLayout.WEST, generalPanel);
+        generalSpringLayout.putConstraint(SpringLayout.EAST, separator2, 0, SpringLayout.EAST, generalPanel);
+        generalSpringLayout.putConstraint(SpringLayout.NORTH, separator2, 5, SpringLayout.SOUTH, blockPropertiesPanel);
+        generalSpringLayout.putConstraint(SpringLayout.WEST, soundMatPanel, 10, SpringLayout.WEST, generalPanel);
+        generalSpringLayout.putConstraint(SpringLayout.EAST, soundMatPanel, -10, SpringLayout.EAST, generalPanel);
+        generalSpringLayout.putConstraint(SpringLayout.NORTH, soundMatPanel, 10, SpringLayout.SOUTH, separator2);
 		
         dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         dialog.requestFocus();

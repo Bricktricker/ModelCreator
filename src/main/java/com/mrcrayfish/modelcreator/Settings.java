@@ -88,7 +88,7 @@ public class Settings
     	if(isNullOrEmpty(concatedVersions)) {
     		return new ArrayList<>();
     	}
-    	String[] versions = concatedVersions.split("|");
+    	String[] versions = concatedVersions.split("\\|");
     	return Arrays.asList(versions);
     }
     

@@ -1,5 +1,6 @@
 package com.mrcrayfish.modelcreator;
 
+import com.mrcrayfish.modelcreator.block.BlockManager;
 import com.mrcrayfish.modelcreator.component.Menu;
 import com.mrcrayfish.modelcreator.component.TextureManager;
 import com.mrcrayfish.modelcreator.display.CanvasRenderer;
@@ -26,6 +27,7 @@ import org.lwjgl.util.glu.GLU;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.FileNotFoundException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.IntBuffer;
@@ -165,6 +167,12 @@ public class ModelCreator extends JFrame
 
     private void initComponents()
     {
+    	try{
+			BlockManager.loadResources();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+    	
         Icons.init(this.getClass());
         setupMenuBar();
 
