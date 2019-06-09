@@ -141,6 +141,12 @@ public class BlockProperties
         	comboBoxVersions.addActionListener(a -> {
         		BlockManager.usedMcVersion = (String)comboBoxVersions.getSelectedItem();
         	});
+        	if(BlockManager.usedMcVersion.isEmpty()) {
+        		BlockManager.usedMcVersion = (String)comboBoxVersions.getSelectedItem();
+        	}else {
+        		String selectedVersion = BlockManager.usedMcVersion;
+        		comboBoxVersions.setSelectedItem(selectedVersion);
+        	}
         	mcVersionPanel.add(comboBoxVersions);
         }
         

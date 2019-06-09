@@ -23,7 +23,7 @@ import com.mrcrayfish.modelcreator.block.Resources.LangPair;
 
 public class BlockTranslation
 {
-	public Map<String, Translation> translations;
+	private Map<String, Translation> translations;
 	
 	public BlockTranslation() {
 		translations = new HashMap<>();
@@ -31,7 +31,7 @@ public class BlockTranslation
 	
 	public void addTranslation(String language, String name, String tooltip) {
 		assert(language != null && !language.isEmpty());
-		if(tooltip.isEmpty()) {
+		if(tooltip != null && tooltip.isEmpty()) {
 			addTranslation(language, name, null);
 			return;
 		}
@@ -45,6 +45,10 @@ public class BlockTranslation
 	
 	public Translation getTranslation(String language) {
 		return this.translations.get(language);
+	}
+	
+	public Map<String, Translation> getAllTranslations() {
+		return translations;
 	}
 	
 	public static class Translation {
@@ -87,6 +91,7 @@ public class BlockTranslation
         	comboBoxLangs.addItem(new LangPair("", ""));
         	Resources.languages.forEach(comboBoxLangs::addItem);
         	comboBoxLangs.addActionListener(a -> {
+        		if(comboBoxLangs.getSelectedIndex() == 0) return;
         		LangPair lang = (LangPair)comboBoxLangs.getSelectedItem();
         		Translation trans = BlockManager.translation.getTranslation(lang.key);
         		if(trans == null) {
