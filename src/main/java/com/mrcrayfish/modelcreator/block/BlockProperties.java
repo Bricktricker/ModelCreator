@@ -227,7 +227,7 @@ public class BlockProperties
         	JComboBox<String> comboBoxMaterials = new JComboBox<>();
         	comboBoxMaterials.setPreferredSize(new Dimension(150, 24));
         	comboBoxMaterials.addItem("");
-        	BlockManager.materials.forEach(comboBoxMaterials::addItem);
+        	Resources.materials.forEach(comboBoxMaterials::addItem);
         	comboBoxMaterials.addActionListener(a -> {
         		String material = (String)comboBoxMaterials.getSelectedItem();
         		BlockManager.properties.material = material;
@@ -243,7 +243,7 @@ public class BlockProperties
         	JComboBox<String> comboBoxSounds = new JComboBox<>();
         	comboBoxSounds.setPreferredSize(new Dimension(150, 24));
         	comboBoxSounds.addItem("");
-        	BlockManager.soundTypes.forEach(comboBoxSounds::addItem);
+        	Resources.soundTypes.forEach(comboBoxSounds::addItem);
         	comboBoxSounds.addActionListener(a -> {
         		String sound = (String)comboBoxSounds.getSelectedItem();
         		BlockManager.properties.sound = sound;

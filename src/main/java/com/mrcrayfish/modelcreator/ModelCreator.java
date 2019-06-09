@@ -1,6 +1,6 @@
 package com.mrcrayfish.modelcreator;
 
-import com.mrcrayfish.modelcreator.block.BlockManager;
+import com.mrcrayfish.modelcreator.block.Resources;
 import com.mrcrayfish.modelcreator.component.Menu;
 import com.mrcrayfish.modelcreator.component.TextureManager;
 import com.mrcrayfish.modelcreator.display.CanvasRenderer;
@@ -168,7 +168,7 @@ public class ModelCreator extends JFrame
     private void initComponents()
     {
     	try{
-			BlockManager.loadResources();
+			Resources.loadResources();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}

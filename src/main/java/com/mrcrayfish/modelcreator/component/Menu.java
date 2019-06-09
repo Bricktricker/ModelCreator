@@ -3,6 +3,7 @@ package com.mrcrayfish.modelcreator.component;
 import com.mrcrayfish.modelcreator.*;
 import com.mrcrayfish.modelcreator.block.BlockManager;
 import com.mrcrayfish.modelcreator.block.BlockProperties;
+import com.mrcrayfish.modelcreator.block.BlockTranslation;
 import com.mrcrayfish.modelcreator.display.DisplayProperties;
 import com.mrcrayfish.modelcreator.element.Face;
 import com.mrcrayfish.modelcreator.util.ComponentUtil;
@@ -238,7 +239,7 @@ public class Menu extends JMenuBar
         
         itemProperties.addActionListener(a -> BlockProperties.show(creator));
         
-        itemTransation.addActionListener(a -> System.out.println("itemTransation"));
+        itemTransation.addActionListener(a -> BlockTranslation.show(creator));
         
         itemCrafting.addActionListener(a -> System.out.println("itemCrafting"));
         
