@@ -136,7 +136,7 @@ public class Util
             fos.close();
             is.close();
 
-            ProjectManager.loadProject(manager, file.getAbsolutePath());
+            ProjectManager.loadProject(manager, file);
 
             file.delete();
         }

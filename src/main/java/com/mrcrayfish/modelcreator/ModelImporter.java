@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.mrcrayfish.modelcreator.block.BlockManager;
 import com.mrcrayfish.modelcreator.component.TextureManager;
 import com.mrcrayfish.modelcreator.display.DisplayProperties;
 import com.mrcrayfish.modelcreator.element.Element;
@@ -20,88 +21,86 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
-public class Importer
+public class ModelImporter
 {
     private Map<String, String> textureMap = new HashMap<>();
     private String[] faceNames = {"north", "east", "south", "west", "up", "down"};
     private String[] displayNames = {"gui", "ground", "fixed", "head", "firstperson_righthand", "firstperson_lefthand", "thirdperson_righthand", "thirdperson_lefthand"};
 
     // Input File
-    private String inputPath;
+    private String modelData;
 
     // Model Variables
     private ElementManager manager;
+    
+    //Folder where all minecraft models are stored
+    private File assetFolder;
 
-    public Importer(ElementManager manager, String outputPath)
+    public ModelImporter(ElementManager manager, String modelData)
     {
         this.manager = manager;
-        this.inputPath = outputPath;
+        this.modelData = modelData;
+        this.assetFolder = new File("resources/" + BlockManager.usedMcVersion, "assets/minecraft");
     }
 
     public void importFromJSON()
     {
-        File path = new File(inputPath);
-
-        if(path.exists() && path.isFile())
-        {
-            FileReader fr;
-            BufferedReader reader;
-            try
-            {
-                fr = new FileReader(path);
-                reader = new BufferedReader(fr);
-                readComponents(reader, manager, path.getParentFile());
-                reader.close();
-                fr.close();
-            }
-            catch(IOException e)
-            {
-                e.printStackTrace();
-            }
-        }
+    	try
+    	{
+			readComponents(manager);
+		} catch (IOException e)
+		{
+			e.printStackTrace();
+		}
     }
 
-    private void readComponents(BufferedReader reader, ElementManager manager, File dir) throws IOException
+    private void readComponents(ElementManager manager) throws IOException
     {
         manager.clearElements();
         manager.setParticle(null);
         manager.setDisplayProperties(DisplayProperties.MODEL_CREATOR_BLOCK);
 
         JsonParser parser = new JsonParser();
-        JsonElement read = parser.parse(reader);
-
-        if(read.isJsonObject())
+        JsonElement read = parser.parse(this.modelData);
+        readComponents(manager, read);
+    }
+    
+    private void readComponents(ElementManager manager, JsonElement read) throws IOException {
+    	if(read.isJsonObject())
         {
             JsonObject obj = read.getAsJsonObject();
 
             if(obj.has("parent") && obj.get("parent").isJsonPrimitive())
             {
                 String parent = obj.get("parent").getAsString();
-                File file = new File(dir, parent + ".json");
+                if(parent.contains(":")) {
+                	String namespace = parent.split(":")[0];
+                	if(!namespace.equals("minecraft")) {
+                		System.err.println("Can not load models from non-minecraft namespace");
+                		return;
+                	}
+                }
+                File file = new File(this.assetFolder, "models/" + parent + ".json");
                 if(!file.exists())
                 {
                     parent = parent.substring(parent.lastIndexOf('/') + 1, parent.length());
-                    file = new File(dir, parent + ".json");
+                    file = new File(this.assetFolder, "models/" + parent + ".json");
                 }
 
                 if(file.exists())
                 {
                     // load textures
-                    loadTextures(dir, obj);
+                    //loadTextures(new File(this.assetFolder, "textures"), obj);
 
                     // Load Parent
-                    FileReader fr = new FileReader(file);
-                    reader = new BufferedReader(fr);
-                    readComponents(reader, manager, file.getParentFile());
-                    reader.close();
-                    fr.close();
+                    readExternalModel(manager, file);
                 }
 
-                return;
+                //return; //WHY??
             }
 
             // load textures
-            loadTextures(dir, obj);
+            //loadTextures(new File(this.assetFolder, "textures"), obj);
 
             // load display properties
             if(obj.has("display") && obj.get("display").isJsonObject())
@@ -129,6 +128,19 @@ public class Importer
                 manager.setAmbientOcc(obj.get("ambientocclusion").getAsBoolean());
             }
         }
+    }
+    
+    private void readExternalModel(ElementManager manager, File file) throws IOException {
+    	try(FileReader fr = new FileReader(file))
+    	{
+    		BufferedReader reader = new BufferedReader(fr);
+            
+            JsonParser parser = new JsonParser();
+            JsonElement read = parser.parse(reader);
+            
+            readComponents(manager, read);
+            reader.close();
+    	}
     }
 
     private void loadTextures(File file, JsonObject obj)

@@ -14,10 +14,12 @@ import org.lwjgl.input.Keyboard;
 import javax.swing.*;
 import javax.swing.event.MenuEvent;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.awt.*;
 
 public class Menu extends JMenuBar
 {
@@ -334,7 +336,84 @@ public class Menu extends JMenuBar
 
     public static void loadProject(ModelCreator creator)
     {
-        JFileChooser chooser = new JFileChooser();
+    	if(creator.getElementManager().getElementCount() > 0) {
+            int returnVal = JOptionPane.showConfirmDialog(null, "Your current project will be cleared, are you sure you want to continue?", "Warning", JOptionPane.YES_NO_OPTION);
+            if(returnVal == JOptionPane.NO_OPTION)
+            	return;
+    	}
+    	
+    	List<String> projectNames = new ArrayList<>();
+    	File dir = new File(Settings.getProjectsDir());
+    	File[] projects = dir.listFiles();
+    	for(File project : projects) {
+    		if(project.isFile()) {
+    			String name = project.getName().split("\\.")[0];
+    			projectNames.add(name);
+    		}
+    	}
+    	
+    	//DEBUG
+    	projectNames.add("Block1");
+    	projectNames.add("Block2");
+    	projectNames.add("Block3");
+    	
+    	//Show project selection
+    	JDialog dialog = new JDialog(creator, "Load project", Dialog.ModalityType.APPLICATION_MODAL);
+        dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+
+        SpringLayout layout = new SpringLayout();
+        JPanel panel = new JPanel(layout);
+        panel.setPreferredSize(new Dimension(300, 150));
+        dialog.add(panel);
+
+        JLabel labelInfo = new JLabel("<html>Select the project you want to load</html>");
+        panel.add(labelInfo);
+
+        JLabel labelProject = new JLabel("Project");
+        panel.add(labelProject);
+
+        JComboBox<String> comboBoxProjects = new JComboBox<>();
+        comboBoxProjects.setPreferredSize(new Dimension(40, 24));
+        projectNames.forEach(comboBoxProjects::addItem);
+        panel.add(comboBoxProjects);
+
+        JButton btnLoad = new JButton("Load");
+        btnLoad.setIcon(Icons.extract);
+        btnLoad.setPreferredSize(new Dimension(80, 24));
+        btnLoad.addActionListener(e ->
+        {
+            int selection = comboBoxProjects.getSelectedIndex();
+            File project = projects[selection];
+            TextureManager.clear();
+            StateManager.clear();
+            BlockManager.clear();
+            ProjectManager.loadProject(creator.getElementManager(), project);
+            DisplayPropertiesDialog.update(creator);
+            StateManager.pushState(creator.getElementManager());
+            //TODO: close load panel
+            
+        });
+        panel.add(btnLoad);
+
+        layout.putConstraint(SpringLayout.NORTH, labelInfo, 10, SpringLayout.NORTH, panel);
+        layout.putConstraint(SpringLayout.EAST, labelInfo, -10, SpringLayout.EAST, panel);
+        layout.putConstraint(SpringLayout.WEST, labelInfo, 10, SpringLayout.WEST, panel);
+
+        layout.putConstraint(SpringLayout.NORTH, labelProject, 2, SpringLayout.NORTH, comboBoxProjects);
+        layout.putConstraint(SpringLayout.WEST, labelProject, 10, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, comboBoxProjects, 15, SpringLayout.SOUTH, labelInfo);
+        layout.putConstraint(SpringLayout.WEST, comboBoxProjects, 10, SpringLayout.EAST, labelProject);
+        layout.putConstraint(SpringLayout.EAST, comboBoxProjects, -10, SpringLayout.EAST, panel);
+        layout.putConstraint(SpringLayout.SOUTH, btnLoad, -10, SpringLayout.SOUTH, panel);
+        layout.putConstraint(SpringLayout.EAST, btnLoad, -10, SpringLayout.EAST, panel);
+
+        dialog.pack();
+        dialog.setResizable(false);
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
+    	
+    	/*
+    	JFileChooser chooser = new JFileChooser();
         chooser.setDialogTitle("Load Project");
         chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         chooser.setApproveButtonText("Load");
@@ -363,11 +442,13 @@ public class Menu extends JMenuBar
 
                 TextureManager.clear();
                 StateManager.clear();
+                BlockManager.clear();
                 ProjectManager.loadProject(creator.getElementManager(), chooser.getSelectedFile().getAbsolutePath());
                 DisplayPropertiesDialog.update(creator);
                 StateManager.pushState(creator.getElementManager());
             }
         }
+        */
     }
 
     public static void saveProject(ModelCreator creator)
@@ -421,12 +502,15 @@ public class Menu extends JMenuBar
             }
             if(returnVal != JOptionPane.NO_OPTION && returnVal != JOptionPane.CLOSED_OPTION)
             {
+            	//TODO: Add loading from JSON file
+            	System.err.println("Loading json file is currently not supported!!");
+            	
                 File location = chooser.getSelectedFile().getParentFile();
                 Settings.setJSONDir(location.toString());
 
                 TextureManager.clear();
                 StateManager.clear();
-                Importer importer = new Importer(creator.getElementManager(), chooser.getSelectedFile().getAbsolutePath());
+                ModelImporter importer = new ModelImporter(creator.getElementManager(), chooser.getSelectedFile().getAbsolutePath());
                 importer.importFromJSON();
                 StateManager.pushState(creator.getElementManager());
             }
