@@ -1,5 +1,6 @@
 settings.properties
 /resources/
+/projects/
 
 # Windows image file caches
 Thumbs.db

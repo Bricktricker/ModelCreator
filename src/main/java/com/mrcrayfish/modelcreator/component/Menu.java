@@ -342,7 +342,7 @@ public class Menu extends JMenuBar
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Model (.model)", "model");
         chooser.setFileFilter(filter);
 
-        String dir = Settings.getModelDir();
+        String dir = null; //Settings.getModelDir();
 
         if(dir != null)
         {
@@ -359,7 +359,7 @@ public class Menu extends JMenuBar
             if(returnVal != JOptionPane.NO_OPTION && returnVal != JOptionPane.CLOSED_OPTION)
             {
                 File location = chooser.getSelectedFile().getParentFile();
-                Settings.setModelDir(location.toString());
+                //Settings.setModelDir(location.toString());
 
                 TextureManager.clear();
                 StateManager.clear();
@@ -372,40 +372,18 @@ public class Menu extends JMenuBar
 
     public static void saveProject(ModelCreator creator)
     {
-        JFileChooser chooser = new JFileChooser();
-        chooser.setDialogTitle("Save Project");
-        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        chooser.setApproveButtonText("Save");
-
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Model (.model)", "model");
-        chooser.setFileFilter(filter);
-        String dir = Settings.getModelDir();
-
-        if(dir != null)
-        {
-            chooser.setCurrentDirectory(new File(dir));
-        }
-
-        int returnVal = chooser.showSaveDialog(null);
-        if(returnVal == JFileChooser.APPROVE_OPTION)
-        {
-            if(chooser.getSelectedFile().exists())
-            {
-                returnVal = JOptionPane.showConfirmDialog(null, "A file already exists with that name, are you sure you want to override?", "Warning", JOptionPane.YES_NO_OPTION);
-            }
-            if(returnVal != JOptionPane.NO_OPTION && returnVal != JOptionPane.CLOSED_OPTION)
-            {
-                File location = chooser.getSelectedFile().getParentFile();
-                Settings.setModelDir(location.toString());
-
-                String filePath = chooser.getSelectedFile().getAbsolutePath();
-                if(!filePath.endsWith(".model"))
-                {
-                    filePath += ".model";
-                }
-                ProjectManager.saveProject(creator.getElementManager(), filePath);
-            }
-        }
+        //Check if javaID and assetID are set
+    	if(BlockManager.assetID.isEmpty() || BlockManager.javaID.isEmpty()) {
+    		System.err.println("AssetID or javaID empty");
+    		//TODO: show warning
+    		return;
+    	}
+    	
+    	File dir = new File(Settings.getProjectsDir());
+    	dir.mkdirs();
+    	File filePath = new File(dir, BlockManager.javaID + ".block");
+    	ProjectManager.saveProject(creator.getElementManager(), filePath);
+    	//TODO: show some sort of success window?
     }
 
     public static void optimizeModel(ModelCreator creator)

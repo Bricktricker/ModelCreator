@@ -15,7 +15,7 @@ public class Settings
 	private static final String SETTINGS_PATH = "settings.properties";
 	
     private static final String IMAGE_IMPORT_DIR = "image_import_dir";
-    private static final String MODEL_DIR = "model_dir";
+    private static final String PROJECTS_DIR = "projects_dir";
     private static final String JSON_DIR = "json_dir";
     private static final String EXPORT_JSON_DIR = "export_json_dir";
     private static final String UNDO_LIMIT = "undo_limit";
@@ -41,17 +41,17 @@ public class Settings
     	}
     }
 
-    public static String getModelDir()
+    public static String getProjectsDir()
     {
-        return settings.getProperty(MODEL_DIR, null);
+        return settings.getProperty(PROJECTS_DIR, "projects");
     }
 
-    public static void setModelDir(String dir)
+    public static void setProjectsDir(String dir)
     {
     	if(isNullOrEmpty(dir)) {
     		settings.remove(dir);
     	}else {
-    		settings.put(MODEL_DIR, dir);	
+    		settings.put(PROJECTS_DIR, dir);	
     	}
     }
 

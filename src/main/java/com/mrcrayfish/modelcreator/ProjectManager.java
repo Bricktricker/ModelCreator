@@ -1,5 +1,7 @@
 package com.mrcrayfish.modelcreator;
 
+import com.google.gson.JsonObject;
+import com.mrcrayfish.modelcreator.block.BlockManager;
 import com.mrcrayfish.modelcreator.component.TextureManager;
 import com.mrcrayfish.modelcreator.element.Element;
 import com.mrcrayfish.modelcreator.element.ElementManager;
@@ -7,6 +9,7 @@ import com.mrcrayfish.modelcreator.element.Face;
 import com.mrcrayfish.modelcreator.texture.TextureEntry;
 
 import javax.imageio.ImageIO;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
@@ -107,17 +110,19 @@ public class ProjectManager
         return null;
     }
 
-    public static void saveProject(ElementManager manager, String name)
+    public static void saveProject(ElementManager manager, File name)
     {
         try
         {
             FileOutputStream fos = new FileOutputStream(name);
             ZipOutputStream zos = new ZipOutputStream(fos);
 
-            File file = getSaveFile(manager);
-            addToZipFile(file, zos, "model.json");
-            file.delete();
+            //Model
+            File model = getModelFile(manager);
+            addToZipFile(model, zos, "model.json");
+            model.delete();
 
+            //Textures
             for(TextureEntry entry : getAllTextures(manager))
             {
                 File temp = File.createTempFile(entry.getName(), "");
@@ -127,18 +132,9 @@ public class ProjectManager
                 temp.delete();
             }
 
-            //TODO make output animation properties
-            /*for(String metaLocation : getMetaLocations(manager))
-            {
-                if(metaLocation != null)
-                {
-                    File texture = new File(metaLocation);
-                    if(texture.exists())
-                    {
-                        addToZipFile(texture, zos, "textures/", texture.getName());
-                    }
-                }
-            }*/
+            //Block properties
+            String blockJson = getBlockFile();
+            addToZipFile(blockJson, zos, "block.json");
 
             zos.close();
             fos.close();
@@ -165,17 +161,65 @@ public class ProjectManager
         return textureEntries;
     }
 
-    private static File getSaveFile(ElementManager manager) throws IOException
+    private static File getModelFile(ElementManager manager) throws IOException
     {
         ExporterModel exporter = new ExporterModel(manager);
         exporter.setOptimize(false);
         exporter.setIncludeNonTexturedFaces(true);
         return exporter.writeFile(File.createTempFile("model.json", ""));
     }
+    
+    private static String getBlockFile() {
+    	JsonObject rootObj = new JsonObject();
+    	
+    	//Construct json object
+    	{
+    		//Basic data
+        	JsonObject basic = new JsonObject();
+        	basic.addProperty("assetID", BlockManager.assetID);
+        	basic.addProperty("javaID", BlockManager.javaID);
+        	basic.addProperty("mcVersion", BlockManager.usedMcVersion);
+        	rootObj.add("basic", basic);
+        	
+        	//Block properties
+        	JsonObject properties = new JsonObject();
+        	properties.addProperty("hardness", BlockManager.properties.getHardness());
+        	properties.addProperty("resistance", BlockManager.properties.getResistance());
+        	properties.addProperty("lightLevel", BlockManager.properties.getLightLevel());
+        	
+        	String material = BlockManager.properties.getMaterial();
+        	if(material != null && !material.isEmpty())
+        		properties.addProperty("material", material);
+        	
+        	String sound = BlockManager.properties.getSound();
+        	if(sound != null && !sound.isEmpty())
+        		properties.addProperty("sound", sound);
+        	
+        	rootObj.add("properties", properties);
+        	
+        	//Block translations
+        	JsonObject translation = new JsonObject();
+        	BlockManager.translation.getAllTranslations().forEach((key, t) -> {
+        		JsonObject trans = new JsonObject();
+        		trans.addProperty("name", t.name);
+        		if(t.tooltip != null)
+        			trans.addProperty("tooltip", t.tooltip);
+        		translation.add(key, trans);
+        	});
+        	rootObj.add("translation", translation);
+    	}
+    	
+    	return rootObj.toString();
+    }
 
     private static void addToZipFile(File file, ZipOutputStream zos, String name) throws IOException
     {
         addToZipFile(file, zos, "", name);
+    }
+    
+    private static void addToZipFile(String data, ZipOutputStream zos, String name) throws IOException
+    {
+        addToZipFile(data, zos, "", name);
     }
 
     private static void addToZipFile(File file, ZipOutputStream zos, String folder, String name) throws IOException
@@ -193,6 +237,14 @@ public class ProjectManager
 
         zos.closeEntry();
         fis.close();
+    }
+    
+    private static void addToZipFile(String data, ZipOutputStream zos, String folder, String name) throws IOException
+    {
+        ZipEntry zipEntry = new ZipEntry(folder + name);
+        zos.putNextEntry(zipEntry);
+        zos.write(data.getBytes());
+        zos.closeEntry();
     }
 
     private static class Project
@@ -225,31 +277,5 @@ public class ProjectManager
             return model;
         }
 
-        public File getTextures()
-        {
-            return textures;
-        }
-    }
-
-    private static class ProjectTexture
-    {
-        private File texture;
-        private File meta;
-
-        public ProjectTexture(File texture, File meta)
-        {
-            this.texture = texture;
-            this.meta = meta;
-        }
-
-        public File getTexture()
-        {
-            return texture;
-        }
-
-        public File getMeta()
-        {
-            return meta;
-        }
     }
 }
