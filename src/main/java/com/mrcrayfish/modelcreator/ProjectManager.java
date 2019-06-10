@@ -1,5 +1,6 @@
 package com.mrcrayfish.modelcreator;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -106,14 +107,30 @@ public class ProjectManager
             model.delete();
 
             //Textures
+            JsonArray textureRoot = new JsonArray();
             for(TextureEntry entry : getAllTextures(manager))
             {
-                File temp = File.createTempFile(entry.getName(), "");
-                BufferedImage image = entry.getSource();
-                ImageIO.write(image, "PNG", temp);
-                addToZipFile(temp, zos, "assets/" + entry.getModId() + "/textures/" + entry.getDirectory() + "/", entry.getName() + ".png");
-                temp.delete();
+            	JsonObject textureJson = new JsonObject();
+        		textureJson.addProperty("directory", entry.getDirectory());
+        		textureJson.addProperty("texture", entry.getName());
+        		
+            	if(entry.getModId().equals("minecraft")) {
+            		textureJson.addProperty("vanillaTexture", true);
+            	}else {
+            		textureJson.addProperty("vanillaTexture", false);
+            		textureJson.addProperty("modid", entry.getModId());
+            		
+            		//Save image in project zip
+            		BufferedImage image = entry.getSource();
+            		ZipEntry zipEntry = new ZipEntry(entry.getName());
+                    zos.putNextEntry(zipEntry);
+                    ImageIO.write(image, "PNG", zos);
+                    zos.closeEntry();
+            	}
+            	textureRoot.add(textureJson);
             }
+            String textureStr = textureRoot.toString();
+            addToZipFile(textureStr, zos, "textures.json");
 
             //Block properties
             String blockJson = getBlockFile();

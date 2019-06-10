@@ -352,11 +352,6 @@ public class Menu extends JMenuBar
     		}
     	}
     	
-    	//DEBUG
-    	projectNames.add("Block1");
-    	projectNames.add("Block2");
-    	projectNames.add("Block3");
-    	
     	//Show project selection
     	JDialog dialog = new JDialog(creator, "Load project", Dialog.ModalityType.APPLICATION_MODAL);
         dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -390,7 +385,7 @@ public class Menu extends JMenuBar
             ProjectManager.loadProject(creator.getElementManager(), project);
             DisplayPropertiesDialog.update(creator);
             StateManager.pushState(creator.getElementManager());
-            //TODO: close load panel
+            dialog.dispose();
             
         });
         panel.add(btnLoad);
@@ -411,44 +406,6 @@ public class Menu extends JMenuBar
         dialog.setResizable(false);
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
-    	
-    	/*
-    	JFileChooser chooser = new JFileChooser();
-        chooser.setDialogTitle("Load Project");
-        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        chooser.setApproveButtonText("Load");
-
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Model (.model)", "model");
-        chooser.setFileFilter(filter);
-
-        String dir = null; //Settings.getModelDir();
-
-        if(dir != null)
-        {
-            chooser.setCurrentDirectory(new File(dir));
-        }
-
-        int returnVal = chooser.showOpenDialog(null);
-        if(returnVal == JFileChooser.APPROVE_OPTION)
-        {
-            if(creator.getElementManager().getElementCount() > 0)
-            {
-                returnVal = JOptionPane.showConfirmDialog(null, "Your current project will be cleared, are you sure you want to continue?", "Warning", JOptionPane.YES_NO_OPTION);
-            }
-            if(returnVal != JOptionPane.NO_OPTION && returnVal != JOptionPane.CLOSED_OPTION)
-            {
-                File location = chooser.getSelectedFile().getParentFile();
-                //Settings.setModelDir(location.toString());
-
-                TextureManager.clear();
-                StateManager.clear();
-                BlockManager.clear();
-                ProjectManager.loadProject(creator.getElementManager(), chooser.getSelectedFile().getAbsolutePath());
-                DisplayPropertiesDialog.update(creator);
-                StateManager.pushState(creator.getElementManager());
-            }
-        }
-        */
     }
 
     public static void saveProject(ModelCreator creator)
@@ -462,7 +419,7 @@ public class Menu extends JMenuBar
     	
     	File dir = new File(Settings.getProjectsDir());
     	dir.mkdirs();
-    	File filePath = new File(dir, BlockManager.javaID + ".block");
+    	File filePath = new File(dir, BlockManager.assetID + ".block");
     	ProjectManager.saveProject(creator.getElementManager(), filePath);
     	//TODO: show some sort of success window?
     }
