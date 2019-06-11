@@ -24,6 +24,7 @@ public class Settings
     private static final String FACE_COLORS = "face_colors";
     private static final String IMAGE_EDITOR = "image_editor";
     private static final String IMAGE_EDITOR_ARGS = "image_editor_args";
+    private static final String USED_MC_VERSION = "used_mc_version";
 
     public static final int[] DEFAULT_FACE_COLORS = {16711680, 65280, 255, 16776960, 16711935, 65535};
 
@@ -35,7 +36,7 @@ public class Settings
     public static void setImageImportDir(String dir)
     {
     	if(isNullOrEmpty(dir)) {
-    		settings.remove(dir);
+    		settings.remove(IMAGE_IMPORT_DIR);
     	}else {
     		settings.put(IMAGE_IMPORT_DIR, dir);	
     	}
@@ -49,7 +50,7 @@ public class Settings
     public static void setProjectsDir(String dir)
     {
     	if(isNullOrEmpty(dir)) {
-    		settings.remove(dir);
+    		settings.remove(PROJECTS_DIR);
     	}else {
     		settings.put(PROJECTS_DIR, dir);	
     	}
@@ -63,7 +64,7 @@ public class Settings
     public static void setJSONDir(String dir)
     {
     	if(isNullOrEmpty(dir)) {
-    		settings.remove(dir);
+    		settings.remove(JSON_DIR);
     	}else {
     		settings.put(JSON_DIR, dir);	
     	}
@@ -77,7 +78,7 @@ public class Settings
     public static void setExportJSONDir(String dir)
     {
     	if(isNullOrEmpty(dir)) {
-    		settings.remove(dir);
+    		settings.remove(EXPORT_JSON_DIR);
     	}else {
     		settings.put(EXPORT_JSON_DIR, dir);	
     	}
@@ -107,6 +108,9 @@ public class Settings
     
     public static void addExtractedAsset(String version) {
     	List<String> extractedVersions = getExtractedAssets();
+    	if(extractedVersions.isEmpty()) {
+    		setUsedMcVersion(version);
+    	}
     	extractedVersions.add(version);
     	setExtractedAssets(extractedVersions);
     }
@@ -177,7 +181,7 @@ public class Settings
     public static void setImageEditor(String file)
     {
     	if(isNullOrEmpty(file)) {
-    		settings.remove(file);
+    		settings.remove(IMAGE_EDITOR);
     	}else {
     		settings.put(IMAGE_EDITOR, file);	
     	}
@@ -191,9 +195,21 @@ public class Settings
     public static void setImageEditorArgs(String args)
     {
     	if(isNullOrEmpty(args)) {
-    		settings.remove(args);
+    		settings.remove(IMAGE_EDITOR_ARGS);
     	}else {
     		settings.put(IMAGE_EDITOR_ARGS, args);	
+    	}
+    }
+    
+    public static String getUsedMcVersion() {
+    	return settings.getProperty(USED_MC_VERSION);
+    }
+    
+    public static void setUsedMcVersion(String version) {
+    	if(isNullOrEmpty(version)) {
+    		settings.remove(USED_MC_VERSION);
+    	}else {
+    		settings.put(USED_MC_VERSION, version);	
     	}
     }
     
@@ -215,6 +231,13 @@ public class Settings
     	}catch(IOException e) {
     		return false;
     	}
+    	
+    	if(getUsedMcVersion() == null) {
+    		List<String> extractedAssets = getExtractedAssets();
+    		if(!extractedAssets.isEmpty())
+    			setUsedMcVersion(extractedAssets.get(0));
+    	}
+    	
     	return true;
     }
     

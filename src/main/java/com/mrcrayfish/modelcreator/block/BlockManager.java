@@ -11,7 +11,6 @@ public class BlockManager
 	public static void clear() {
 		assetID = "";
 		javaID = "";
-		usedMcVersion = "";
 		properties = new BlockProperties();
 		translation = new BlockTranslation();
 	}

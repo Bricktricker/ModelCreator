@@ -2,6 +2,8 @@ package com.mrcrayfish.modelcreator.util;
 
 import java.io.File;
 
+import com.mrcrayfish.modelcreator.block.BlockManager;
+
 /**
  * Author: MrCrayfish
  */
@@ -36,5 +38,17 @@ public class AssetsUtil
             previous = parent;
         }
         return previous != null && Util.hasFolder(previous, "textures") ? previous.getName() : "minecraft";
+    }
+    
+    public static String getAssetFolder() {
+    	return "resources/" + BlockManager.usedMcVersion;
+    }
+    
+    public static String getModelPath(String model) {
+    	return getAssetFolder() + "/models/" + model + ".json";
+    }
+    
+    public static String getTexturePath(String texture) {
+    	return getAssetFolder() + "/textures/" + texture + ".png";
     }
 }

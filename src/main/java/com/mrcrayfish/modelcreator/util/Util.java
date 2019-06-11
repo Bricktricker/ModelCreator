@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.function.Predicate;
+import java.util.function.Function;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
@@ -154,22 +154,28 @@ public class Util
     		return;
     	}
     	File jar = new File(getMinecraftDirectory(), "versions/" + version + "/" + version + ".jar");
-    	Predicate<ZipEntry> conditions = zipEntry -> {
-    		boolean isAssetRoot = zipEntry.getName().endsWith("mcassetsroot");
+    	Function<ZipEntry, String> conditions = zipEntry -> {
+    		String entryName = zipEntry.getName();
+    		boolean isAssetRoot = entryName.endsWith("mcassetsroot");
     		if(isAssetRoot)
-    			return false;
+    			return null;
   
-    		boolean isAsset = zipEntry.getName().startsWith("assets/");
+    		boolean isAsset = entryName.startsWith("assets/");
     		if(!isAsset)
-    			return false;
+    			return null;
     		
     		final String[] allowedDirs = {"blockstates", "models", "textures"};
     		for(String s : allowedDirs) {
-    			if(zipEntry.getName().contains(s))
-    				return true;
+    			if(entryName.contains(s)) {
+    				assert(entryName.startsWith("assets/minecraft"));
+    				String newName = zipEntry.getName().replace("assets/minecraft", "");
+    				if(newName.startsWith("/"))
+    					newName = newName.substring(1);
+    				return newName;
+    			}
     		}
     		
-    		return false;
+    		return null;
     	};
     	extractZipFiles(jar, conditions, window, destination);
     	//TODO: These are also saved, when the extraction aborts.
@@ -177,7 +183,7 @@ public class Util
     	Settings.saveSettings();
     }
 
-    private static void extractZipFiles(File zipFile, Predicate<ZipEntry> conditions, Window window, File extractionFolder)
+    private static void extractZipFiles(File zipFile, Function<ZipEntry, String> conditions, Window window, File extractionFolder)
     {
         final boolean[] cancelled = {false};
 
@@ -232,7 +238,7 @@ public class Util
                     {
                         return;
                     }
-                    if(conditions != null && !conditions.test(ze))
+                    if(conditions.apply(ze) == null)
                     {
                         continue;
                     }
@@ -270,7 +276,7 @@ public class Util
 
                     InputStream is = f.getInputStream(entry);
 
-                    File file = new File(extractionFolder, entry.getName());
+                    File file = new File(extractionFolder, conditions.apply(entry));
                     file.getParentFile().mkdirs();
                     file.createNewFile();
 

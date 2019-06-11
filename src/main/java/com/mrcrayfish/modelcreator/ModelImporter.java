@@ -4,13 +4,13 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.mrcrayfish.modelcreator.block.BlockManager;
 import com.mrcrayfish.modelcreator.component.TextureManager;
 import com.mrcrayfish.modelcreator.display.DisplayProperties;
 import com.mrcrayfish.modelcreator.element.Element;
 import com.mrcrayfish.modelcreator.element.ElementManager;
 import com.mrcrayfish.modelcreator.element.Face;
 import com.mrcrayfish.modelcreator.texture.TextureEntry;
+import com.mrcrayfish.modelcreator.util.AssetsUtil;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -32,15 +32,11 @@ public class ModelImporter
 
     // Model Variables
     private ElementManager manager;
-    
-    //Folder where all minecraft models are stored
-    private File assetFolder;
 
     public ModelImporter(ElementManager manager, String modelData)
     {
         this.manager = manager;
         this.modelData = modelData;
-        this.assetFolder = new File("resources/" + BlockManager.usedMcVersion, "assets/minecraft");
     }
 
     public void importFromJSON()
@@ -80,11 +76,11 @@ public class ModelImporter
                 		return;
                 	}
                 }
-                File file = new File(this.assetFolder, "models/" + parent + ".json");
+                File file = new File(AssetsUtil.getModelPath(parent));
                 if(!file.exists())
                 {
                     parent = parent.substring(parent.lastIndexOf('/') + 1, parent.length());
-                    file = new File(this.assetFolder, "models/" + parent + ".json");
+                    file = new File(AssetsUtil.getModelPath(parent));
                 }
 
                 if(file.exists())
@@ -175,7 +171,7 @@ public class ModelImporter
     private TextureEntry loadTexture(String id, String texture)
     {
         TexturePath texturePath = new TexturePath(texture);
-        File textureFile = new File("resources" + File.separator + BlockManager.usedMcVersion, "assets" + File.separator + texturePath.getModId() + File.separator + "textures" + File.separator + texturePath.getPath());
+        File textureFile = new File(AssetsUtil.getTexturePath(texturePath.getPath()));
         if(textureFile.exists()) {
         	return TextureManager.addImage(id, texturePath, textureFile);	
         }
