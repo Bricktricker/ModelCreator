@@ -18,7 +18,6 @@ import javax.swing.WindowConstants;
 import javax.swing.event.ChangeListener;
 
 import com.mrcrayfish.modelcreator.ModelCreator;
-import com.mrcrayfish.modelcreator.Settings;
 
 public class BlockProperties
 {
@@ -91,12 +90,13 @@ public class BlockProperties
         panel.setPreferredSize(new Dimension(500, 250));
         dialog.add(panel);
         
+        //TODO: add "Save" button
         SpringLayout generalSpringLayout = new SpringLayout();
         JPanel generalPanel = new JPanel(generalSpringLayout);
         panel.add(generalPanel);
         
-        //Settings to set the block asset- and java ID and used MC version
-        JPanel idsPanel = new JPanel(new GridLayout(1, 3));
+        //Settings to set the block asset- and java ID
+        JPanel idsPanel = new JPanel(new GridLayout(1, 2));
         {
         	generalPanel.add(idsPanel);
         	
@@ -127,27 +127,6 @@ public class BlockProperties
 	        	BlockManager.javaID = javaID;
 	        }));
 	        javaPanel.add(javaText);
-	        
-	        //MC version
-	        JPanel mcVersionPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-	        idsPanel.add(mcVersionPanel);
-	        
-	        JLabel versionLabel = new JLabel("MC");
-	        mcVersionPanel.add(versionLabel);
-	        
-	        JComboBox<String> comboBoxVersions = new JComboBox<>();
-	        comboBoxVersions.setPreferredSize(new Dimension(100, 24));
-        	Settings.getExtractedAssets().forEach(comboBoxVersions::addItem);
-        	comboBoxVersions.addActionListener(a -> {
-        		BlockManager.usedMcVersion = (String)comboBoxVersions.getSelectedItem();
-        	});
-        	if(BlockManager.usedMcVersion.isEmpty()) {
-        		BlockManager.usedMcVersion = (String)comboBoxVersions.getSelectedItem();
-        	}else {
-        		String selectedVersion = BlockManager.usedMcVersion;
-        		comboBoxVersions.setSelectedItem(selectedVersion);
-        	}
-        	mcVersionPanel.add(comboBoxVersions);
         }
         
         JSeparator separator = new JSeparator();

@@ -71,7 +71,6 @@ public class ProjectManager
          JsonObject basic = block.get("basic").getAsJsonObject();
          BlockManager.assetID = basic.get("assetID").getAsString();
          BlockManager.javaID = basic.get("javaID").getAsString();
-         BlockManager.usedMcVersion = basic.get("mcVersion").getAsString();
          
          //Properties
          JsonObject properties = block.get("properties").getAsJsonObject();
@@ -208,7 +207,6 @@ public class ProjectManager
         	JsonObject basic = new JsonObject();
         	basic.addProperty("assetID", BlockManager.assetID);
         	basic.addProperty("javaID", BlockManager.javaID);
-        	basic.addProperty("mcVersion", BlockManager.usedMcVersion);
         	rootObj.add("basic", basic);
         	
         	//Block properties

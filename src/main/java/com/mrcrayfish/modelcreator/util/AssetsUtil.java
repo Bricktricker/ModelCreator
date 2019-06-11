@@ -2,7 +2,7 @@ package com.mrcrayfish.modelcreator.util;
 
 import java.io.File;
 
-import com.mrcrayfish.modelcreator.block.BlockManager;
+import com.mrcrayfish.modelcreator.Settings;
 
 /**
  * Author: MrCrayfish
@@ -41,7 +41,7 @@ public class AssetsUtil
     }
     
     public static String getAssetFolder() {
-    	return "resources/" + BlockManager.usedMcVersion;
+    	return "resources/" + Settings.getUsedMcVersion();
     }
     
     public static String getModelPath(String model) {

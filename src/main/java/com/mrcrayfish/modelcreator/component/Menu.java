@@ -856,6 +856,25 @@ public class Menu extends JMenuBar
 
         JCheckBox checkBoxCardinalPoints = ComponentUtil.createCheckBox("Show Cardinal Points", "", Settings.getCardinalPoints());
         optionsPanel.add(checkBoxCardinalPoints);
+        
+        //used Mc version
+        JPanel mcVersionPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        optionsPanel.add(mcVersionPanel);
+        JLabel versionLabel = new JLabel("MC");
+        mcVersionPanel.add(versionLabel);
+        JComboBox<String> comboBoxVersions = new JComboBox<>();
+        comboBoxVersions.setPreferredSize(new Dimension(100, 24));
+    	Settings.getExtractedAssets().forEach(comboBoxVersions::addItem);
+    	comboBoxVersions.addActionListener(a -> {
+    		String newVersion = (String)comboBoxVersions.getSelectedItem();
+    		Settings.setUsedMcVersion(newVersion);
+    	});
+    	if(Settings.getUsedMcVersion() != null) {
+    		String selectedVersion = Settings.getUsedMcVersion();
+    		if(!selectedVersion.isEmpty())
+    			comboBoxVersions.setSelectedItem(selectedVersion);
+    	}
+    	mcVersionPanel.add(comboBoxVersions);
 
         JSeparator separator = new JSeparator();
         generalPanel.add(separator);
