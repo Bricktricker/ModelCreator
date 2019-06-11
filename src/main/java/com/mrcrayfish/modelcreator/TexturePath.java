@@ -34,6 +34,12 @@ public class TexturePath
         this.directory = AssetsUtil.getTextureDirectory(file);
         this.name = file.getName().substring(0, file.getName().indexOf("."));
     }
+    
+    public TexturePath(String modid, String directory, String name) {
+    	this.modId = modid;
+    	this.directory = directory;
+    	this.name = name;
+    }
 
     public String getModId()
     {
@@ -48,6 +54,10 @@ public class TexturePath
     public String getName()
     {
         return name;
+    }
+    
+    public String getPath() {
+    	return directory + File.separator + name + ".png";
     }
 
     @Override

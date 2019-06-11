@@ -90,7 +90,7 @@ public class ModelImporter
                 if(file.exists())
                 {
                     // load textures
-                    //loadTextures(new File(this.assetFolder, "textures"), obj);
+                    loadTextures(obj);
 
                     // Load Parent
                     readExternalModel(manager, file);
@@ -100,7 +100,7 @@ public class ModelImporter
             }
 
             // load textures
-            //loadTextures(new File(this.assetFolder, "textures"), obj);
+            loadTextures(obj);
 
             // load display properties
             if(obj.has("display") && obj.get("display").isJsonObject())
@@ -143,7 +143,7 @@ public class ModelImporter
     	}
     }
 
-    private void loadTextures(File file, JsonObject obj)
+    private void loadTextures(JsonObject obj)
     {
         if(obj.has("textures") && obj.get("textures").isJsonObject())
         {
@@ -159,12 +159,12 @@ public class ModelImporter
                     {
                         if(key.equals("particle"))
                         {
-                            manager.setParticle(this.loadTexture(file, key, value));
+                            manager.setParticle(this.loadTexture(key, value));
                         }
                         else if(!value.startsWith("#"))
                         {
                             textureMap.put(key, value);
-                            this.loadTexture(file, key, value);
+                            this.loadTexture(key, value);
                         }
                     }
                 }
@@ -172,75 +172,17 @@ public class ModelImporter
         }
     }
 
-    private TextureEntry loadTexture(File project, String id, String texture)
+    private TextureEntry loadTexture(String id, String texture)
     {
         TexturePath texturePath = new TexturePath(texture);
-
-        /* Try loading textures as project format */
-        if(project != null)
-        {
-            File path = new File(project, "textures");
-            if(path.exists() && path.isDirectory())
-            {
-                File textureFile = new File(path, texturePath.getName() + ".png");
-                if(textureFile.exists() && textureFile.isFile())
-                {
-                    return TextureManager.addImage(id, texturePath, textureFile);
-                }
-            }
-
-            /* V2 of project file format uses assets folder */
-            File assets = new File(project, "assets");
-            if(assets.exists() && assets.isDirectory())
-            {
-                File textureFile = new File(assets, texturePath.toRelativePath());
-                if(textureFile.exists() && textureFile.isFile())
-                {
-                    return TextureManager.addImage(id, texturePath, textureFile);
-                }
-            }
+        File textureFile = new File("resources" + File.separator + BlockManager.usedMcVersion, "assets" + File.separator + texturePath.getModId() + File.separator + "textures" + File.separator + texturePath.getPath());
+        if(textureFile.exists()) {
+        	return TextureManager.addImage(id, texturePath, textureFile);	
         }
-
-        /* Try loading textures as if it was from assets */
-        File parent = project;
-        if(parent != null)
-        {
-            while((parent = parent.getParentFile()) != null)
-            {
-                if(parent.getName().equals("assets"))
-                {
-                    File textureFile = new File(parent, texturePath.toRelativePath());
-                    if(textureFile.exists() && textureFile.isFile())
-                    {
-                        return TextureManager.addImage(id, texturePath, textureFile);
-                    }
-                }
-                else if(parent.getName().equals(texturePath.getModId()))
-                {
-                    File textureFile = new File(parent, "textures" + File.separator + texturePath.getDirectory() + File.separator + texturePath.getName() + ".png");
-                    if(textureFile.exists() && textureFile.isFile())
-                    {
-                        return TextureManager.addImage(id, texturePath, textureFile);
-                    }
-                }
-            }
-        }
-
-        /* Try loading textures from assets directory */
-        /*
-         * TODO: Add this loading back
-        if(Settings.getAssetsDir() != null)
-        {
-            String path = Settings.getAssetsDir() + File.separator + texturePath.toRelativePath();
-            File textureFile = new File(path);
-            if(textureFile.exists())
-            {
-                return TextureManager.addImage(id, texturePath, textureFile);
-            }
-        }
-        */
-        System.err.println("Could not load texture!");
-        return null;
+        //non vanilla texture, should be already loaded
+        TextureEntry entry = TextureManager.getTexture(id);
+        assert(entry != null);
+        return entry;
     }
 
     private void readDisplayProperties(JsonObject obj, ElementManager manager)

@@ -19,7 +19,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -34,10 +38,11 @@ public class ProjectManager
         manager.clearElements();
         manager.setParticle(null);
         
-        try(ZipInputStream zip = new ZipInputStream(new FileInputStream(projectFile)))
+        try(ZipInputStream zis = new ZipInputStream(new FileInputStream(projectFile)))
         {
-        	Project project = new Project(zip);
+        	Project project = new Project(zis);
         	loadBlockData(project.getBlockData());
+        	loadImages(project);
         	ModelImporter importer = new ModelImporter(manager, project.getModelData());
         	importer.importFromJSON();
         } catch (IOException e)
@@ -93,6 +98,30 @@ public class ProjectManager
         	 BlockManager.translation.addTranslation(langKey, name, tooltip);
          });
     }
+    
+    public static void loadImages(Project project) throws IOException {
+    	String texturesData = project.getTextures();
+    	if(texturesData == null || texturesData.isEmpty())
+    		return;
+    	
+    	JsonParser parser = new JsonParser();
+    	JsonElement parsed = parser.parse(texturesData);
+    	
+    	JsonArray textures = parsed.getAsJsonArray();
+    	for(JsonElement e : textures) {
+    		JsonObject texture = e.getAsJsonObject();
+    		String directory = texture.get("directory").getAsString();
+			String mcTexture = texture.get("texture").getAsString();
+    		String modid = texture.get("modid").getAsString();
+    		String key = texture.get("key").getAsString();
+    		
+    		//TODO: delete texture from temp folder
+    		TexturePath texturepath = new TexturePath(modid, directory, mcTexture);
+    		Path textureFile = Files.createTempFile(mcTexture, "");
+    		Files.write(textureFile, project.getFileData(mcTexture));
+    		TextureManager.addImage(key, texturepath, textureFile.toFile());
+    	}
+    }
 
     public static void saveProject(ElementManager manager, File name)
     {
@@ -110,27 +139,28 @@ public class ProjectManager
             JsonArray textureRoot = new JsonArray();
             for(TextureEntry entry : getAllTextures(manager))
             {
+            	if(entry.getModId().equals("minecraft"))
+            		continue;
+            	
             	JsonObject textureJson = new JsonObject();
         		textureJson.addProperty("directory", entry.getDirectory());
         		textureJson.addProperty("texture", entry.getName());
+        		textureJson.addProperty("modid", entry.getModId());
+        		textureJson.addProperty("key", entry.getKey());
         		
-            	if(entry.getModId().equals("minecraft")) {
-            		textureJson.addProperty("vanillaTexture", true);
-            	}else {
-            		textureJson.addProperty("vanillaTexture", false);
-            		textureJson.addProperty("modid", entry.getModId());
-            		
-            		//Save image in project zip
-            		BufferedImage image = entry.getSource();
-            		ZipEntry zipEntry = new ZipEntry(entry.getName());
-                    zos.putNextEntry(zipEntry);
-                    ImageIO.write(image, "PNG", zos);
-                    zos.closeEntry();
-            	}
+        		//Save image in project zip
+        		BufferedImage image = entry.getSource();
+        		ZipEntry zipEntry = new ZipEntry(entry.getName());
+                zos.putNextEntry(zipEntry);
+                ImageIO.write(image, "PNG", zos);
+                zos.closeEntry();
+        		
             	textureRoot.add(textureJson);
             }
-            String textureStr = textureRoot.toString();
-            addToZipFile(textureStr, zos, "textures.json");
+            if(textureRoot.size() != 0) {
+            	String textureStr = textureRoot.toString();
+                addToZipFile(textureStr, zos, "textures.json");
+            }
 
             //Block properties
             String blockJson = getBlockFile();
@@ -249,21 +279,16 @@ public class ProjectManager
 
     private static class Project
     {
-        private String modelData;
-        private String blockData;
+        private Map<String, byte[]> fileBuffer;
 
         public Project(ZipInputStream zis) throws IOException
         {
+        	this.fileBuffer = new HashMap<>();
             ZipEntry entry;
             while((entry = zis.getNextEntry()) != null) {
             	String name = entry.getName();
-            	if(name.equals("model.json")) {
-            		this.modelData = readFile(zis);
-            	}else if(name.equals("block.json")) {
-            		this.blockData = readFile(zis);
-            	}else {
-            		System.err.println("Unknown file " + name);
-            	}
+            	byte[] data = readFile(zis);
+            	this.fileBuffer.put(name, data); 
             	zis.closeEntry();
             }
             
@@ -271,14 +296,25 @@ public class ProjectManager
 
         public String getModelData()
         {
-            return modelData;
+        	byte[] data = this.fileBuffer.get("model.json");
+        	return data == null ? null : new String(data);
         }
         
         public String getBlockData() {
-        	return blockData;
+        	byte[] data = this.fileBuffer.get("block.json");
+        	return data == null ? null : new String(data);
         }
         
-        private String readFile(ZipInputStream zis) throws IOException {
+        public String getTextures() {
+        	byte[] data = this.fileBuffer.get("textures.json");
+        	return data == null ? null : new String(data);
+        }
+        
+        public byte[] getFileData(String file) {
+        	return this.fileBuffer.get(file);
+        }
+        
+        private byte[] readFile(ZipInputStream zis) throws IOException {
         	ByteArrayOutputStream baos = new ByteArrayOutputStream();
         	byte[] bytes = new byte[1024];
         	int length;
@@ -286,7 +322,7 @@ public class ProjectManager
         		baos.write(bytes, 0, length);
         	}
         	
-        	return new String(baos.toByteArray());
+        	return baos.toByteArray();
         }
 
     }

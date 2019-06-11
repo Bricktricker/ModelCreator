@@ -17,6 +17,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.*;
@@ -344,7 +345,7 @@ public class Menu extends JMenuBar
     	
     	List<String> projectNames = new ArrayList<>();
     	File dir = new File(Settings.getProjectsDir());
-    	File[] projects = dir.listFiles();
+    	File[] projects = dir.listFiles(file -> file.getName().endsWith(".block"));
     	for(File project : projects) {
     		if(project.isFile()) {
     			String name = project.getName().split("\\.")[0];
@@ -459,16 +460,22 @@ public class Menu extends JMenuBar
             }
             if(returnVal != JOptionPane.NO_OPTION && returnVal != JOptionPane.CLOSED_OPTION)
             {
-            	//TODO: Add loading from JSON file
-            	System.err.println("Loading json file is currently not supported!!");
-            	
                 File location = chooser.getSelectedFile().getParentFile();
                 Settings.setJSONDir(location.toString());
 
                 TextureManager.clear();
                 StateManager.clear();
-                ModelImporter importer = new ModelImporter(creator.getElementManager(), chooser.getSelectedFile().getAbsolutePath());
-                importer.importFromJSON();
+                try
+				{
+					String modelJson = new String(Files.readAllBytes(chooser.getSelectedFile().toPath()));
+					ModelImporter importer = new ModelImporter(creator.getElementManager(), modelJson);
+	                importer.importFromJSON();
+				} catch (IOException e)
+				{
+					//TODO: notify user
+					e.printStackTrace();
+					return;
+				}
                 StateManager.pushState(creator.getElementManager());
             }
             creator.getElementManager().updateValues();
