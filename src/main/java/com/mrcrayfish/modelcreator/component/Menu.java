@@ -411,7 +411,16 @@ public class Menu extends JMenuBar
 
     public static void saveProject(ModelCreator creator)
     {
-        //Check if javaID and assetID are set
+    	String name = JOptionPane.showInputDialog("Enter project name");
+    	if(name == null || name.isEmpty()) {
+    		JOptionPane.showMessageDialog(null, "Invalid project name", "Error", JOptionPane.ERROR_MESSAGE);
+    		return;
+    	}
+    	//TODO: check for valid filename
+    	
+    	//TODO: save the name, remove assetID and javaID;
+    	
+    	//Check if javaID and assetID are set
     	if(BlockManager.assetID.isEmpty() || BlockManager.javaID.isEmpty()) {
     		System.err.println("AssetID or javaID empty");
     		//TODO: show warning
@@ -462,7 +471,8 @@ public class Menu extends JMenuBar
             {
                 File location = chooser.getSelectedFile().getParentFile();
                 Settings.setJSONDir(location.toString());
-
+                
+                BlockManager.clear();
                 TextureManager.clear();
                 StateManager.clear();
                 try
@@ -472,7 +482,7 @@ public class Menu extends JMenuBar
 	                importer.importFromJSON();
 				} catch (IOException e)
 				{
-					//TODO: notify user
+					JOptionPane.showMessageDialog(null, "Could not load model.\n" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 					e.printStackTrace();
 					return;
 				}

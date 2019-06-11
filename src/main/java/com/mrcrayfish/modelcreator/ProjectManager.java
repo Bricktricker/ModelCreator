@@ -34,7 +34,6 @@ public class ProjectManager
 
     public static void loadProject(ElementManager manager, File projectFile)
     {
-        TextureManager.clear();
         manager.clearElements();
         manager.setParticle(null);
         
