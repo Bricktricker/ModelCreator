@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
@@ -87,13 +88,20 @@ public class BlockProperties
 		JDialog dialog = new JDialog(creator, "Properties", Dialog.ModalityType.APPLICATION_MODAL);
 		
 		JPanel panel = new JPanel(new BorderLayout());
-        panel.setPreferredSize(new Dimension(500, 250));
+        panel.setPreferredSize(new Dimension(500, 300));
         dialog.add(panel);
         
-        //TODO: add "Save" button
         SpringLayout generalSpringLayout = new SpringLayout();
         JPanel generalPanel = new JPanel(generalSpringLayout);
         panel.add(generalPanel);
+        
+        final JTextField assetText = new JTextField();
+        final JTextField javaText = new JTextField();
+        final JSlider hardnessSlider = new JSlider();
+        final JSlider resistanceSlider = new JSlider();
+        final JSlider lightSlider = new JSlider();
+        final JComboBox<String> comboBoxMaterials = new JComboBox<>();
+        final JComboBox<String> comboBoxSounds = new JComboBox<>();
         
         //Settings to set the block asset- and java ID
         JPanel idsPanel = new JPanel(new GridLayout(1, 2));
@@ -106,11 +114,9 @@ public class BlockProperties
 	        JLabel labelUndoLimit = new JLabel("Asset-ID");
 	        assetPanel.add(labelUndoLimit);
 	
-	        JTextField assetText = new JTextField();
 	        assetText.setPreferredSize(new Dimension(100, 24));
 	        assetText.getDocument().addDocumentListener(new TextFieldListener(assetID -> {
 	        	//TODO: check correct format
-	        	BlockManager.assetID = assetID;
 	        }));
 	        assetPanel.add(assetText);
 	
@@ -120,11 +126,9 @@ public class BlockProperties
 	        JLabel labelJavaText = new JLabel("Java-ID");
 	        javaPanel.add(labelJavaText);
 	
-	        JTextField javaText = new JTextField();
 	        javaText.setPreferredSize(new Dimension(100, 24));
 	        javaText.getDocument().addDocumentListener(new TextFieldListener(javaID -> {
 	        	//TODO: check correct format
-	        	BlockManager.javaID = javaID;
 	        }));
 	        javaPanel.add(javaText);
         }
@@ -140,10 +144,16 @@ public class BlockProperties
         	//Hardness
         	JPanel hardnessPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         	blockPropertiesPanel.add(hardnessPanel);
+        	
         	JLabel hardnessLabel = new JLabel("Hardness");
         	hardnessPanel.add(hardnessLabel);
-        	JSlider hardnessSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, (int)(BlockManager.properties.getHardness() * 100));
+        	
+        	hardnessSlider.setOrientation(JSlider.HORIZONTAL);
+        	hardnessSlider.setMinimum(0);
+        	hardnessSlider.setMaximum(100);
+        	hardnessSlider.setValue((int)(BlockManager.properties.getHardness() * 100));
         	hardnessPanel.add(hardnessSlider);
+        	
         	JTextField hardnessText = new JTextField();
         	hardnessText.setPreferredSize(new Dimension(30, 24));
 	        hardnessText.setEditable(false);
@@ -151,7 +161,6 @@ public class BlockProperties
 	        ChangeListener clHardness = a -> {
 	        	float value = hardnessSlider.getValue() / 100F;
 	        	hardnessText.setText(String.valueOf(value));
-	        	BlockManager.properties.setHardness(value);
 	        };
 	        hardnessSlider.addChangeListener(clHardness);
 	        clHardness.stateChanged(null);
@@ -159,10 +168,16 @@ public class BlockProperties
         	//Resistance
 	        JPanel resistancePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         	blockPropertiesPanel.add(resistancePanel);
+        	
         	JLabel resistanceLabel = new JLabel("Resistance");
         	resistancePanel.add(resistanceLabel);
-        	JSlider resistanceSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, (int)(BlockManager.properties.getResistance() * 100));
+        	
+        	resistanceSlider.setOrientation(JSlider.HORIZONTAL);
+        	resistanceSlider.setMinimum(0);
+        	resistanceSlider.setMaximum(100);
+        	resistanceSlider.setValue((int)(BlockManager.properties.getResistance() * 100));
         	resistancePanel.add(resistanceSlider);
+        	
         	JTextField resistanceText = new JTextField();
         	resistanceText.setPreferredSize(new Dimension(30, 24));
         	resistanceText.setEditable(false);
@@ -170,7 +185,6 @@ public class BlockProperties
 	        ChangeListener clResistance = a -> {
 	        	float value = resistanceSlider.getValue() / 100F;
 	        	resistanceText.setText(String.valueOf(value));
-	        	BlockManager.properties.setResistance(value);
 	        };
 	        resistanceSlider.addChangeListener(clResistance);
 	        clResistance.stateChanged(null);
@@ -178,10 +192,16 @@ public class BlockProperties
 	        //Lightlevel
 	        JPanel lightPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         	blockPropertiesPanel.add(lightPanel);
+        	
         	JLabel lightLabel = new JLabel("Light level");
         	lightPanel.add(lightLabel);
-        	JSlider lightSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, (int)(BlockManager.properties.getLightLevel() * 100));
+        	
+        	lightSlider.setOrientation(JSlider.HORIZONTAL);
+        	lightSlider.setMinimum(0);
+        	lightSlider.setMaximum(100);
+        	lightSlider.setValue((int)(BlockManager.properties.getLightLevel() * 100));
         	lightPanel.add(lightSlider);
+        	
         	JTextField lightText = new JTextField();
         	lightText.setPreferredSize(new Dimension(30, 24));
         	lightText.setEditable(false);
@@ -189,7 +209,6 @@ public class BlockProperties
 	        ChangeListener clLight = a -> {
 	        	float value = lightSlider.getValue() / 100F;
 	        	lightText.setText(String.valueOf(value));
-	        	BlockManager.properties.setResistance(value);
 	        };
 	        lightSlider.addChangeListener(clLight);
 	        clLight.stateChanged(null);
@@ -209,14 +228,9 @@ public class BlockProperties
         	JLabel materialLabel = new JLabel("Block material");
         	materialPanel.add(materialLabel);
         	
-        	JComboBox<String> comboBoxMaterials = new JComboBox<>();
         	comboBoxMaterials.setPreferredSize(new Dimension(150, 24));
         	comboBoxMaterials.addItem("");
         	Resources.materials.forEach(comboBoxMaterials::addItem);
-        	comboBoxMaterials.addActionListener(a -> {
-        		String material = (String)comboBoxMaterials.getSelectedItem();
-        		BlockManager.properties.material = material;
-        	});
         	materialPanel.add(comboBoxMaterials);
         	
         	//Sound
@@ -225,16 +239,36 @@ public class BlockProperties
         	JLabel soundLabel = new JLabel("Block sound");
         	soundPanel.add(soundLabel);
         	
-        	JComboBox<String> comboBoxSounds = new JComboBox<>();
         	comboBoxSounds.setPreferredSize(new Dimension(150, 24));
         	comboBoxSounds.addItem("");
         	Resources.soundTypes.forEach(comboBoxSounds::addItem);
-        	comboBoxSounds.addActionListener(a -> {
-        		String sound = (String)comboBoxSounds.getSelectedItem();
-        		BlockManager.properties.sound = sound;
-        	});
         	soundPanel.add(comboBoxSounds);
         }
+        
+        //Save Button
+        JPanel savePanel = new JPanel(new GridLayout(0, 1));
+        generalPanel.add(savePanel);
+    	JButton saveButton = new JButton("Save");
+        saveButton.setPreferredSize(new Dimension(80, 24));
+        saveButton.addActionListener(e ->
+        {
+        	String assetStr = assetText.getText();
+        	String javaStr = javaText.getText();
+        	float hardness = hardnessSlider.getValue() / (float)hardnessSlider.getMaximum();
+        	float resistance = resistanceSlider.getValue() / (float)resistanceSlider.getMaximum();
+        	float lightLevel = lightSlider.getValue() / (float)lightSlider.getMaximum();
+        	String material = (String)comboBoxMaterials.getSelectedItem();
+        	String sound = (String)comboBoxSounds.getSelectedItem();
+        	
+        	BlockManager.assetID = assetStr;
+        	BlockManager.javaID = javaStr;
+        	BlockManager.properties.setHardness(hardness);
+        	BlockManager.properties.setResistance(resistance);
+        	BlockManager.properties.setLightLevel(lightLevel);
+        	BlockManager.properties.setMaterial(material);
+        	BlockManager.properties.setSound(sound);
+        });
+        savePanel.add(saveButton);
         
         generalSpringLayout.putConstraint(SpringLayout.WEST, idsPanel, 5, SpringLayout.WEST, generalPanel);
         generalSpringLayout.putConstraint(SpringLayout.NORTH, idsPanel, 5, SpringLayout.NORTH, generalPanel);
@@ -250,7 +284,10 @@ public class BlockProperties
         generalSpringLayout.putConstraint(SpringLayout.NORTH, separator2, 5, SpringLayout.SOUTH, blockPropertiesPanel);
         generalSpringLayout.putConstraint(SpringLayout.WEST, soundMatPanel, 10, SpringLayout.WEST, generalPanel);
         generalSpringLayout.putConstraint(SpringLayout.EAST, soundMatPanel, -10, SpringLayout.EAST, generalPanel);
-        generalSpringLayout.putConstraint(SpringLayout.NORTH, soundMatPanel, 10, SpringLayout.SOUTH, separator2);
+        generalSpringLayout.putConstraint(SpringLayout.NORTH, soundMatPanel, 10, SpringLayout.SOUTH, separator2); 
+        generalSpringLayout.putConstraint(SpringLayout.WEST, savePanel, 10, SpringLayout.WEST, generalPanel);
+        generalSpringLayout.putConstraint(SpringLayout.EAST, savePanel, -10, SpringLayout.EAST, generalPanel);
+        generalSpringLayout.putConstraint(SpringLayout.NORTH, savePanel, 10, SpringLayout.SOUTH, soundMatPanel);
 		
         dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         dialog.requestFocus();
