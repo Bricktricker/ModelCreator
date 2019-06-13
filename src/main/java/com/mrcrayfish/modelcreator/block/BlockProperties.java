@@ -88,53 +88,18 @@ public class BlockProperties
 		JDialog dialog = new JDialog(creator, "Properties", Dialog.ModalityType.APPLICATION_MODAL);
 		
 		JPanel panel = new JPanel(new BorderLayout());
-        panel.setPreferredSize(new Dimension(500, 300));
+        panel.setPreferredSize(new Dimension(500, 225));
         dialog.add(panel);
         
         SpringLayout generalSpringLayout = new SpringLayout();
         JPanel generalPanel = new JPanel(generalSpringLayout);
         panel.add(generalPanel);
         
-        final JTextField assetText = new JTextField();
-        final JTextField javaText = new JTextField();
         final JSlider hardnessSlider = new JSlider();
         final JSlider resistanceSlider = new JSlider();
         final JSlider lightSlider = new JSlider();
         final JComboBox<String> comboBoxMaterials = new JComboBox<>();
         final JComboBox<String> comboBoxSounds = new JComboBox<>();
-        
-        //Settings to set the block asset- and java ID
-        JPanel idsPanel = new JPanel(new GridLayout(1, 2));
-        {
-        	generalPanel.add(idsPanel);
-        	
-	        JPanel assetPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-	        idsPanel.add(assetPanel);
-	
-	        JLabel labelUndoLimit = new JLabel("Asset-ID");
-	        assetPanel.add(labelUndoLimit);
-	
-	        assetText.setPreferredSize(new Dimension(100, 24));
-	        assetText.getDocument().addDocumentListener(new TextFieldListener(assetID -> {
-	        	//TODO: check correct format
-	        }));
-	        assetPanel.add(assetText);
-	
-	        JPanel javaPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-	        idsPanel.add(javaPanel);
-	        
-	        JLabel labelJavaText = new JLabel("Java-ID");
-	        javaPanel.add(labelJavaText);
-	
-	        javaText.setPreferredSize(new Dimension(100, 24));
-	        javaText.getDocument().addDocumentListener(new TextFieldListener(javaID -> {
-	        	//TODO: check correct format
-	        }));
-	        javaPanel.add(javaText);
-        }
-        
-        JSeparator separator = new JSeparator();
-        generalPanel.add(separator);
         
         //Setting for BlockProperties
         JPanel blockPropertiesPanel = new JPanel(new GridLayout(0, 1));
@@ -214,8 +179,8 @@ public class BlockProperties
 	        clLight.stateChanged(null);
         }
         
-        JSeparator separator2 = new JSeparator();
-        generalPanel.add(separator2);
+        JSeparator separator = new JSeparator();
+        generalPanel.add(separator);
         
         //Set Material and SoundType
         JPanel soundMatPanel = new JPanel(new GridLayout(1, 2));
@@ -252,16 +217,12 @@ public class BlockProperties
         saveButton.setPreferredSize(new Dimension(80, 24));
         saveButton.addActionListener(e ->
         {
-        	String assetStr = assetText.getText();
-        	String javaStr = javaText.getText();
         	float hardness = hardnessSlider.getValue() / (float)hardnessSlider.getMaximum();
         	float resistance = resistanceSlider.getValue() / (float)resistanceSlider.getMaximum();
         	float lightLevel = lightSlider.getValue() / (float)lightSlider.getMaximum();
         	String material = (String)comboBoxMaterials.getSelectedItem();
         	String sound = (String)comboBoxSounds.getSelectedItem();
         	
-        	BlockManager.assetID = assetStr;
-        	BlockManager.javaID = javaStr;
         	BlockManager.properties.setHardness(hardness);
         	BlockManager.properties.setResistance(resistance);
         	BlockManager.properties.setLightLevel(lightLevel);
@@ -270,21 +231,15 @@ public class BlockProperties
         });
         savePanel.add(saveButton);
         
-        generalSpringLayout.putConstraint(SpringLayout.WEST, idsPanel, 5, SpringLayout.WEST, generalPanel);
-        generalSpringLayout.putConstraint(SpringLayout.NORTH, idsPanel, 5, SpringLayout.NORTH, generalPanel);
-        generalSpringLayout.putConstraint(SpringLayout.EAST, idsPanel, 5, SpringLayout.EAST, generalPanel);
-        generalSpringLayout.putConstraint(SpringLayout.WEST, separator, 0, SpringLayout.WEST, generalPanel);
-        generalSpringLayout.putConstraint(SpringLayout.EAST, separator, 0, SpringLayout.EAST, generalPanel);
-        generalSpringLayout.putConstraint(SpringLayout.NORTH, separator, 5, SpringLayout.SOUTH, idsPanel);
         generalSpringLayout.putConstraint(SpringLayout.WEST, blockPropertiesPanel, 10, SpringLayout.WEST, generalPanel);
         generalSpringLayout.putConstraint(SpringLayout.EAST, blockPropertiesPanel, -10, SpringLayout.EAST, generalPanel);
-        generalSpringLayout.putConstraint(SpringLayout.NORTH, blockPropertiesPanel, 10, SpringLayout.SOUTH, separator);
-        generalSpringLayout.putConstraint(SpringLayout.WEST, separator2, 0, SpringLayout.WEST, generalPanel);
-        generalSpringLayout.putConstraint(SpringLayout.EAST, separator2, 0, SpringLayout.EAST, generalPanel);
-        generalSpringLayout.putConstraint(SpringLayout.NORTH, separator2, 5, SpringLayout.SOUTH, blockPropertiesPanel);
+        generalSpringLayout.putConstraint(SpringLayout.NORTH, blockPropertiesPanel, 10, SpringLayout.NORTH, generalPanel);
+        generalSpringLayout.putConstraint(SpringLayout.WEST, separator, 0, SpringLayout.WEST, generalPanel);
+        generalSpringLayout.putConstraint(SpringLayout.EAST, separator, 0, SpringLayout.EAST, generalPanel);
+        generalSpringLayout.putConstraint(SpringLayout.NORTH, separator, 5, SpringLayout.SOUTH, blockPropertiesPanel);
         generalSpringLayout.putConstraint(SpringLayout.WEST, soundMatPanel, 10, SpringLayout.WEST, generalPanel);
         generalSpringLayout.putConstraint(SpringLayout.EAST, soundMatPanel, -10, SpringLayout.EAST, generalPanel);
-        generalSpringLayout.putConstraint(SpringLayout.NORTH, soundMatPanel, 10, SpringLayout.SOUTH, separator2); 
+        generalSpringLayout.putConstraint(SpringLayout.NORTH, soundMatPanel, 10, SpringLayout.SOUTH, separator); 
         generalSpringLayout.putConstraint(SpringLayout.WEST, savePanel, 10, SpringLayout.WEST, generalPanel);
         generalSpringLayout.putConstraint(SpringLayout.EAST, savePanel, -10, SpringLayout.EAST, generalPanel);
         generalSpringLayout.putConstraint(SpringLayout.NORTH, savePanel, 10, SpringLayout.SOUTH, soundMatPanel);

@@ -65,12 +65,7 @@ public class ProjectManager
          }
          
          JsonObject block = parsed.getAsJsonObject();
-         
-         //Basic data
-         JsonObject basic = block.get("basic").getAsJsonObject();
-         BlockManager.assetID = basic.get("assetID").getAsString();
-         BlockManager.javaID = basic.get("javaID").getAsString();
-         
+        
          //Properties
          JsonObject properties = block.get("properties").getAsJsonObject();
          BlockManager.properties.setHardness(properties.get("hardness").getAsFloat());
@@ -202,12 +197,6 @@ public class ProjectManager
     	
     	//Construct json object
     	{
-    		//Basic data
-        	JsonObject basic = new JsonObject();
-        	basic.addProperty("assetID", BlockManager.assetID);
-        	basic.addProperty("javaID", BlockManager.javaID);
-        	rootObj.add("basic", basic);
-        	
         	//Block properties
         	JsonObject properties = new JsonObject();
         	properties.addProperty("hardness", BlockManager.properties.getHardness());

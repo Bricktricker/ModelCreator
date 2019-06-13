@@ -378,11 +378,13 @@ public class Menu extends JMenuBar
         btnLoad.setPreferredSize(new Dimension(80, 24));
         btnLoad.addActionListener(e ->
         {
-            int selection = comboBoxProjects.getSelectedIndex();
-            File project = projects[selection];
             TextureManager.clear();
             StateManager.clear();
             BlockManager.clear();
+            
+            int selection = comboBoxProjects.getSelectedIndex();
+            BlockManager.projectName = projectNames.get(selection);
+            File project = projects[selection];
             ProjectManager.loadProject(creator.getElementManager(), project);
             DisplayPropertiesDialog.update(creator);
             StateManager.pushState(creator.getElementManager());
@@ -411,25 +413,26 @@ public class Menu extends JMenuBar
 
     public static void saveProject(ModelCreator creator)
     {
-    	String name = JOptionPane.showInputDialog("Enter project name");
-    	if(name == null || name.isEmpty()) {
-    		JOptionPane.showMessageDialog(null, "Invalid project name", "Error", JOptionPane.ERROR_MESSAGE);
-    		return;
+    	if(BlockManager.projectName.isEmpty()) {
+    		String name = JOptionPane.showInputDialog("Enter project name");
+        	if(name == null || name.isEmpty()) {
+        		JOptionPane.showMessageDialog(null, "Invalid project name", "Error", JOptionPane.ERROR_MESSAGE);
+        		return;
+        	}
+        	
+        	//check for valid filename
+        	if(name.matches(".*[/`\\?\\*\\<>|\":\\.].*")) {
+        		JOptionPane.showMessageDialog(null, "Invalid project name", "Error", JOptionPane.ERROR_MESSAGE);
+        		return;
+        	}
+        	BlockManager.projectName = name;
     	}
-    	//TODO: check for valid filename
     	
     	//TODO: save the name, remove assetID and javaID;
     	
-    	//Check if javaID and assetID are set
-    	if(BlockManager.assetID.isEmpty() || BlockManager.javaID.isEmpty()) {
-    		System.err.println("AssetID or javaID empty");
-    		//TODO: show warning
-    		return;
-    	}
-    	
     	File dir = new File(Settings.getProjectsDir());
     	dir.mkdirs();
-    	File filePath = new File(dir, BlockManager.assetID + ".block");
+    	File filePath = new File(dir, BlockManager.projectName + ".block");
     	ProjectManager.saveProject(creator.getElementManager(), filePath);
     	//TODO: show some sort of success window?
     }
