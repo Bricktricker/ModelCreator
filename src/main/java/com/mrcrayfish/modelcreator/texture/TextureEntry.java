@@ -159,6 +159,7 @@ public class TextureEntry
         return 1;
     }
 
+    //Used for texture modifications
     public File getTextureFile()
     {
         return textureFile;

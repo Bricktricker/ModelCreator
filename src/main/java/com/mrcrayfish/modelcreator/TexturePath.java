@@ -30,6 +30,7 @@ public class TexturePath
 
     public TexturePath(File file)
     {
+    	//TODO: improve modid, directory and name finding algo (check for vanilla / non vanilla texture)
         this.modId = AssetsUtil.getModId(file);
         this.directory = AssetsUtil.getTextureDirectory(file);
         this.name = file.getName().substring(0, file.getName().indexOf("."));
