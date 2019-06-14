@@ -2,11 +2,11 @@ package com.mrcrayfish.modelcreator.component;
 
 import com.mrcrayfish.modelcreator.Icons;
 import com.mrcrayfish.modelcreator.ModelCreator;
-import com.mrcrayfish.modelcreator.Settings;
 import com.mrcrayfish.modelcreator.TexturePath;
 import com.mrcrayfish.modelcreator.element.ElementManager;
 import com.mrcrayfish.modelcreator.element.Face;
 import com.mrcrayfish.modelcreator.texture.TextureEntry;
+import com.mrcrayfish.modelcreator.util.AssetsUtil;
 import com.mrcrayfish.modelcreator.util.Util;
 
 import javax.swing.*;
@@ -33,7 +33,6 @@ public class TextureManager extends JDialog
     private static final List<TextureEntry> pendingLoad = new ArrayList<>();
     private static final List<TextureEntry> pendingRemove = new ArrayList<>();
     private static final List<TextureEntry> textureEntries = new ArrayList<>();
-    private static File lastLocation = null;
 
     private ElementManager manager;
     private JList<TextureEntry> textureEntryList;
@@ -204,21 +203,8 @@ public class TextureManager extends JDialog
         chooser.setDialogTitle("Select a Texture");
         chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         chooser.setApproveButtonText("Select");
-
-        if(lastLocation == null)
-        {
-            String dir = Settings.getImageImportDir();
-            if(dir != null)
-            {
-                lastLocation = new File(dir);
-            }
-        }
-
-        if(lastLocation != null)
-        {
-            chooser.setCurrentDirectory(lastLocation);
-        }
-
+        chooser.setCurrentDirectory(new File(AssetsUtil.getAssetFolder(), "textures"));
+        
         FileNameExtensionFilter filter = new FileNameExtensionFilter("PNG Images", "png");
         chooser.setFileFilter(filter);
         int returnVal = chooser.showOpenDialog(null);
@@ -241,9 +227,6 @@ public class TextureManager extends JDialog
                     JOptionPane.showMessageDialog(this, "Image size must be multiple of 16", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
-
-                lastLocation = image.getParentFile();
-                Settings.setImageImportDir(lastLocation.toString());
 
                 DefaultListModel<TextureEntry> listModel = (DefaultListModel<TextureEntry>) textureEntryList.getModel();
                 TextureEntry entry = new TextureEntry(image);

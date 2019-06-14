@@ -27,17 +27,15 @@ public class AssetsUtil
 
     public static String getModId(File file)
     {
-        File previous = null;
-        File parent = file;
-        while((parent = parent.getParentFile()) != null)
-        {
-            if(parent.getName().equals("assets"))
-            {
-                break;
-            }
-            previous = parent;
-        }
-        return previous != null && Util.hasFolder(previous, "textures") ? previous.getName() : "minecraft";
+        String texturePath = file.getAbsolutePath();
+        String assetPath = (new File(AssetsUtil.getAssetFolder())).getAbsolutePath();
+    	if(texturePath.startsWith(assetPath)) {
+    		return "minecraft";
+    	}
+        
+    	//selected texture is not in default asset folder, assume is's not a vanilla texture
+    	//return modid as "modid", to replace it later in the export step with the actual modid
+    	return "modid";
     }
     
     public static String getAssetFolder() {
