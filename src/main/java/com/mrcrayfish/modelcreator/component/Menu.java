@@ -434,8 +434,6 @@ public class Menu extends JMenuBar
         	BlockManager.projectName = name;
     	}
     	
-    	//TODO: save the name, remove assetID and javaID;
-    	
     	File dir = new File(Settings.getProjectsDir());
     	dir.mkdirs();
     	File filePath = new File(dir, BlockManager.projectName + ".block");

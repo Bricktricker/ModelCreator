@@ -43,11 +43,8 @@ public class Start
         }
         
         Settings.load();
+        Settings.saveSettings(); //Create settings file, if none exists yet
         
-        //TODO: Check if assets are extracted/available
-        
-        
-
         new ModelCreator(Constants.NAME + " v" + Constants.VERSION);
     }
 }
