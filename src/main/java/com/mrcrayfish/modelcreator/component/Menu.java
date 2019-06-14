@@ -34,6 +34,7 @@ public class Menu extends JMenuBar
     private JMenuItem itemLoad;
     private JMenuItem itemSave;
     private JMenuItem itemImport;
+    private JMenuItem itemExport;
     private JMenuItem itemSettings;
     private JMenuItem itemExit;
 
@@ -88,6 +89,7 @@ public class Menu extends JMenuBar
             itemLoad = createMenuItem("Load Project...", "Load Project from File", KeyEvent.VK_S, Icons.load, KeyEvent.VK_O, Keyboard.KEY_O, InputEvent.CTRL_MASK);
             itemSave = createMenuItem("Save Project...", "Save Project to File", KeyEvent.VK_S, Icons.disk, KeyEvent.VK_S, Keyboard.KEY_S, InputEvent.CTRL_MASK);
             itemImport = createMenuItem("Import JSON...", "Import Model from JSON", KeyEvent.VK_I, Icons.import_);
+            itemExport = createMenuItem("Export JSON...", "Export Model to JSON", KeyEvent.VK_E, Icons.export);
             itemSettings = createMenuItem("Settings", "Change the settings of the Model Creator", KeyEvent.VK_S, Icons.settings, KeyEvent.VK_S, Keyboard.KEY_S, InputEvent.CTRL_MASK + InputEvent.ALT_MASK);
             itemExit = createMenuItem("Exit", "Exit Application", KeyEvent.VK_E, Icons.exit);
         }
@@ -152,6 +154,7 @@ public class Menu extends JMenuBar
         menuFile.add(itemSave);
         menuFile.addSeparator();
         menuFile.add(itemImport);
+        menuFile.add(itemExport);
         menuFile.addSeparator();
         menuFile.add(itemSettings);
         menuFile.addSeparator();
@@ -218,6 +221,8 @@ public class Menu extends JMenuBar
         itemSave.addActionListener(a -> saveProject(creator));
 
         itemImport.addActionListener(a -> showImportJson(creator));
+        
+        itemExport.addActionListener(a -> showExportJson(creator));
 
         itemJavaCode.addActionListener(a -> showExportJavaCode(creator, a));
 
