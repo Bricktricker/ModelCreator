@@ -21,6 +21,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -90,6 +91,22 @@ public class ProjectManager
         	 }
         	 BlockManager.translation.addTranslation(langKey, name, tooltip);
          });
+         
+         //Crafting
+         if(block.has("crafting")) {
+        	 JsonObject crafting = block.get("crafting").getAsJsonObject();
+        	 boolean isShapeless = crafting.get("shapeless").getAsBoolean();
+        	 BlockManager.crafting.setShapeLess(isShapeless);
+        	 int numOutput = crafting.get("numOutput").getAsInt();
+        	 BlockManager.crafting.setNumOutputItems(numOutput);
+        	 JsonArray recipe = crafting.getAsJsonArray("recipe");
+        	 final ArrayList<String> craftItems = new ArrayList<>();
+        	 recipe.forEach(item -> {
+        		 craftItems.add(item.getAsString());
+        	 });
+        	 assert(craftItems.size() == 9);
+        	 BlockManager.crafting.setCraftItems(craftItems);
+         }
     }
     
     public static void loadImages(Project project) throws IOException {
@@ -195,9 +212,8 @@ public class ProjectManager
     private static String getBlockFile() {
     	JsonObject rootObj = new JsonObject();
     	
-    	//Construct json object
+    	//Block properties
     	{
-        	//Block properties
         	JsonObject properties = new JsonObject();
         	properties.addProperty("hardness", BlockManager.properties.getHardness());
         	properties.addProperty("resistance", BlockManager.properties.getResistance());
@@ -212,8 +228,10 @@ public class ProjectManager
         		properties.addProperty("sound", sound);
         	
         	rootObj.add("properties", properties);
-        	
-        	//Block translations
+    	}
+    	
+    	//Block translations
+    	{
         	JsonObject translation = new JsonObject();
         	BlockManager.translation.getAllTranslations().forEach((key, t) -> {
         		JsonObject trans = new JsonObject();
@@ -223,6 +241,19 @@ public class ProjectManager
         		translation.add(key, trans);
         	});
         	rootObj.add("translation", translation);
+    	}
+        
+    	//Crafting
+    	{
+    		if(!BlockManager.crafting.isEmpty()) {
+    			JsonObject crafting = new JsonObject();
+            	crafting.addProperty("shapeless", BlockManager.crafting.isShapeLess());
+            	crafting.addProperty("numOutput", BlockManager.crafting.getNumOutputItems());
+            	JsonArray recipe = new JsonArray();
+            	BlockManager.crafting.getCraftItems().forEach(recipe::add);
+            	crafting.add("recipe", recipe);
+            	rootObj.add("crafting", crafting);	
+    		}
     	}
     	
     	return rootObj.toString();

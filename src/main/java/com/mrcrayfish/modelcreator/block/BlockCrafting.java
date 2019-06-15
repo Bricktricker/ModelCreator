@@ -33,6 +33,17 @@ public class BlockCrafting {
 	
 	public BlockCrafting() {
 		this.craftItems = new ArrayList<>();
+		for(int i = 0 ; i < 9; i++) {
+			this.craftItems.add("");
+		}
+	}
+	
+	public boolean isEmpty() {		
+		for(String item : craftItems) {
+			if(!item.isEmpty())
+				return false;
+		}
+		return true;
 	}
 	
 	public boolean isShapeLess() {
@@ -101,11 +112,12 @@ public class BlockCrafting {
         JPanel craftingPanel = new JPanel(new GridLayout(3, 3));
         {
         	generalPanel.add(craftingPanel);
+        	List<String> craftItems = BlockManager.crafting.getCraftItems();
         	
         	for(int i = 0; i < 9; i++) {
         		final JComboBox<String> comboBoxSlot = new JComboBox<>();
         		comboBoxSlot.setPreferredSize(new Dimension(150, 24));
-        		comboBoxSlot.addItem("");
+        		comboBoxSlot.addItem(craftItems.get(i));
         		craftingPanel.add(comboBoxSlot);
         		craftingSlots.add(comboBoxSlot);
         	}
@@ -119,15 +131,7 @@ public class BlockCrafting {
         {
         	generalPanel.add(itemPanel);
         	
-        	List<String> itemList = new ArrayList<>();
-        	itemList.add("item");
-        	itemList.add("block");
-        	itemList.add("cobble");
-        	itemList.add("dirt");
-        	itemList.add("grass");
-        	itemList.add("web");
-        	
-        	AutoComboBox itemsBox = new AutoComboBox(itemList);
+        	AutoComboBox itemsBox = new AutoComboBox(Resources.items);
         	itemPanel.add(itemsBox);
         	
         	JButton addButton = new JButton("ADD");

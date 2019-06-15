@@ -18,6 +18,7 @@ public class Resources
 	public static List<String> soundTypes;
 	public static List<String> materials;
 	public static List<LangPair> languages;
+	public static List<String> items;
 	
 	public static class LangPair {
 		public String key;
@@ -78,6 +79,19 @@ public class Resources
 				String id = langObject.get("id").getAsString();
 				String name = langObject.get("name").getAsString();
 				languages.add(new LangPair(id, name));
+			});
+		}
+		
+		//Items
+		{
+			File itemFile = new File(classLoader.getResource("block/Items.json").getFile());
+			BufferedReader reader = new BufferedReader(new FileReader(itemFile));
+			JsonParser parser = new JsonParser();
+			JsonElement jsonElement = parser.parse(reader);
+			JsonArray itemJsonArray = jsonElement.getAsJsonArray();
+			items = new ArrayList<>();
+			itemJsonArray.forEach(i -> {
+				items.add(i.getAsString());
 			});
 		}
 	}
