@@ -78,6 +78,9 @@ public class ProjectManager
          if(properties.has("sound")) {
         	 BlockManager.properties.setSound(properties.get("sound").getAsString());
          }
+         if(properties.has("creative")) {
+        	 BlockManager.properties.setCreativeTab(properties.get("creative").getAsString());
+         }
          
          //Translation
          JsonObject translations = block.get("translation").getAsJsonObject();
@@ -237,6 +240,10 @@ public class ProjectManager
         	String sound = BlockManager.properties.getSound();
         	if(sound != null && !sound.isEmpty())
         		properties.addProperty("sound", sound);
+        	
+        	String creativeTab = BlockManager.properties.getCreativeTab();
+        	if(creativeTab != null && !creativeTab.isEmpty())
+        		properties.addProperty("creative", creativeTab);
         	
         	rootObj.add("properties", properties);
     	}

@@ -19,6 +19,7 @@ public class Resources
 	public static List<String> materials;
 	public static List<LangPair> languages;
 	public static List<String> items;
+	public static List<String> creativeTabs;
 	
 	public static class LangPair {
 		public String key;
@@ -50,6 +51,7 @@ public class Resources
 				materials.add(v.getAsString());
 			});
 			Collections.sort(materials);
+			materials = Collections.unmodifiableList(materials);
 		}
 		
 		//Block breaking sound
@@ -64,6 +66,7 @@ public class Resources
 				soundTypes.add(v.getAsString());
 			});
 			Collections.sort(soundTypes);
+			soundTypes = Collections.unmodifiableList(soundTypes);
 		}
 		
 		//Minecraft languages
@@ -80,6 +83,7 @@ public class Resources
 				String name = langObject.get("name").getAsString();
 				languages.add(new LangPair(id, name));
 			});
+			languages = Collections.unmodifiableList(languages);
 		}
 		
 		//Items
@@ -93,6 +97,22 @@ public class Resources
 			itemJsonArray.forEach(i -> {
 				items.add(i.getAsString());
 			});
+			Collections.sort(items);
+			items = Collections.unmodifiableList(items);
+		}
+		
+		//Creative tabs
+		{
+			File creativeFile = new File(classLoader.getResource("res/CreativeTabs.json").getFile());
+			BufferedReader reader = new BufferedReader(new FileReader(creativeFile));
+			JsonParser parser = new JsonParser();
+			JsonElement jsonElement = parser.parse(reader);
+			JsonArray creativeJsonArray = jsonElement.getAsJsonArray();
+			creativeTabs = new ArrayList<>();
+			creativeJsonArray.forEach(i -> {
+				creativeTabs.add(i.getAsString());
+			});
+			creativeTabs = Collections.unmodifiableList(creativeTabs);
 		}
 	}
 }

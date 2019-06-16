@@ -29,6 +29,7 @@ public class BlockProperties
 	private int lightLevel;
 	private String material;
 	private String sound;
+	private String creativeTab;
 	
 	public BlockProperties() {
 		hardness = 0.5F;
@@ -86,11 +87,21 @@ public class BlockProperties
 		this.sound = sound;
 	}
 
+	public String getCreativeTab()
+	{
+		return creativeTab;
+	}
+
+	public void setCreativeTab(String creativeTab)
+	{
+		this.creativeTab = creativeTab;
+	}
+
 	public static void show(ModelCreator creator) {
 		JDialog dialog = new JDialog(creator, "Properties", Dialog.ModalityType.APPLICATION_MODAL);
 		
 		JPanel panel = new JPanel(new BorderLayout());
-        panel.setPreferredSize(new Dimension(500, 225));
+        panel.setPreferredSize(new Dimension(500, 250));
         dialog.add(panel);
         
         SpringLayout generalSpringLayout = new SpringLayout();
@@ -102,6 +113,7 @@ public class BlockProperties
         final JSlider lightSlider = new JSlider();
         final JComboBox<String> comboBoxMaterials = new JComboBox<>();
         final JComboBox<String> comboBoxSounds = new JComboBox<>();
+        final JComboBox<String> comboBoxCreative = new JComboBox<>();
         
         //Setting for BlockProperties
         JPanel blockPropertiesPanel = new JPanel(new GridLayout(0, 1));
@@ -159,8 +171,8 @@ public class BlockProperties
         JSeparator separator = new JSeparator();
         generalPanel.add(separator);
         
-        //Set Material and SoundType
-        JPanel soundMatPanel = new JPanel(new GridLayout(1, 2));
+        //Set Material, SoundType, CreativeTab
+        JPanel soundMatPanel = new JPanel(new GridLayout(2, 2));
         {
         	generalPanel.add(soundMatPanel);
         	
@@ -185,11 +197,20 @@ public class BlockProperties
         	comboBoxSounds.addItem("");
         	Resources.soundTypes.forEach(comboBoxSounds::addItem);
         	soundPanel.add(comboBoxSounds);
+        	
+        	//Crafting tab
+        	JPanel creativePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        	soundMatPanel.add(creativePanel);
+        	JLabel creativeLabel = new JLabel("Creative tab");
+        	creativePanel.add(creativeLabel);
+        	
+        	comboBoxCreative.setPreferredSize(new Dimension(150, 24));
+        	comboBoxCreative.addItem("");
+        	Resources.creativeTabs.forEach(comboBoxCreative::addItem);
+        	creativePanel.add(comboBoxCreative);
         }
         
         //Save Button
-        JPanel savePanel = new JPanel(new GridLayout(0, 1));
-        generalPanel.add(savePanel);
     	JButton saveButton = new JButton("Save");
         saveButton.setPreferredSize(new Dimension(80, 24));
         saveButton.addActionListener(e ->
@@ -199,14 +220,16 @@ public class BlockProperties
         	int lightLevel = lightSlider.getValue();
         	String material = (String)comboBoxMaterials.getSelectedItem();
         	String sound = (String)comboBoxSounds.getSelectedItem();
+        	String creativeTab = (String)comboBoxCreative.getSelectedItem();
         	
         	BlockManager.properties.setHardness((float)hardness);
         	BlockManager.properties.setResistance((float)resistance);
         	BlockManager.properties.setLightLevel(lightLevel);
         	BlockManager.properties.setMaterial(material);
         	BlockManager.properties.setSound(sound);
+        	BlockManager.properties.setCreativeTab(creativeTab);
         });
-        savePanel.add(saveButton);
+        generalPanel.add(saveButton);
         
         generalSpringLayout.putConstraint(SpringLayout.WEST, blockPropertiesPanel, 10, SpringLayout.WEST, generalPanel);
         generalSpringLayout.putConstraint(SpringLayout.EAST, blockPropertiesPanel, -10, SpringLayout.EAST, generalPanel);
@@ -217,9 +240,9 @@ public class BlockProperties
         generalSpringLayout.putConstraint(SpringLayout.WEST, soundMatPanel, 10, SpringLayout.WEST, generalPanel);
         generalSpringLayout.putConstraint(SpringLayout.EAST, soundMatPanel, -10, SpringLayout.EAST, generalPanel);
         generalSpringLayout.putConstraint(SpringLayout.NORTH, soundMatPanel, 10, SpringLayout.SOUTH, separator); 
-        generalSpringLayout.putConstraint(SpringLayout.WEST, savePanel, 10, SpringLayout.WEST, generalPanel);
-        generalSpringLayout.putConstraint(SpringLayout.EAST, savePanel, -10, SpringLayout.EAST, generalPanel);
-        generalSpringLayout.putConstraint(SpringLayout.NORTH, savePanel, 10, SpringLayout.SOUTH, soundMatPanel);
+        generalSpringLayout.putConstraint(SpringLayout.WEST, saveButton, 0, SpringLayout.WEST, generalPanel);
+        generalSpringLayout.putConstraint(SpringLayout.EAST, saveButton, 0, SpringLayout.EAST, generalPanel);
+        generalSpringLayout.putConstraint(SpringLayout.NORTH, saveButton, 5, SpringLayout.SOUTH, soundMatPanel);
 		
         dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         dialog.requestFocus();
