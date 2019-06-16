@@ -14,10 +14,8 @@ public class Settings
 	
 	private static final String SETTINGS_PATH = "settings.properties";
 	
-    private static final String IMAGE_IMPORT_DIR = "image_import_dir";
     private static final String PROJECTS_DIR = "projects_dir";
     private static final String JSON_DIR = "json_dir";
-    private static final String EXPORT_JSON_DIR = "export_json_dir";
     private static final String UNDO_LIMIT = "undo_limit";
     private static final String RENDER_CARDINAL_POINTS = "cardinal_points";
     private static final String EXTRACTED_ASSETS = "extracted_assets";
@@ -27,20 +25,6 @@ public class Settings
     private static final String USED_MC_VERSION = "used_mc_version";
 
     public static final int[] DEFAULT_FACE_COLORS = {16711680, 65280, 255, 16776960, 16711935, 65535};
-
-    public static String getImageImportDir()
-    {
-        return settings.getProperty(IMAGE_IMPORT_DIR, null);
-    }
-
-    public static void setImageImportDir(String dir)
-    {
-    	if(isNullOrEmpty(dir)) {
-    		settings.remove(IMAGE_IMPORT_DIR);
-    	}else {
-    		settings.put(IMAGE_IMPORT_DIR, dir);	
-    	}
-    }
 
     public static String getProjectsDir()
     {
@@ -56,6 +40,7 @@ public class Settings
     	}
     }
 
+    //Used when importing JSON model, save the dir and open fileshooser next time there
     public static String getJSONDir()
     {
         return settings.getProperty(JSON_DIR, null);
@@ -67,20 +52,6 @@ public class Settings
     		settings.remove(JSON_DIR);
     	}else {
     		settings.put(JSON_DIR, dir);	
-    	}
-    }
-
-    public static String getExportJSONDir()
-    {
-        return settings.getProperty(EXPORT_JSON_DIR, null);
-    }
-
-    public static void setExportJSONDir(String dir)
-    {
-    	if(isNullOrEmpty(dir)) {
-    		settings.remove(EXPORT_JSON_DIR);
-    	}else {
-    		settings.put(EXPORT_JSON_DIR, dir);	
     	}
     }
     

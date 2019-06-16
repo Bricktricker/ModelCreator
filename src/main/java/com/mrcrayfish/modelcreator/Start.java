@@ -42,8 +42,9 @@ public class Start
             e.printStackTrace();
         }
         
-        Settings.load();
-        Settings.saveSettings(); //Create settings file, if none exists yet
+        if(!Settings.load()) {
+        	Settings.saveSettings(); //Create settings file, if none exists yet	
+        }
         
         new ModelCreator(Constants.NAME + " v" + Constants.VERSION);
     }

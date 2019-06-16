@@ -429,7 +429,7 @@ public class Menu extends JMenuBar
         	}
         	
         	//check for valid filename
-        	if(name.matches(".*[/`\\?\\*\\<>|\":\\.].*")) {
+        	if(name.matches(".*[/`\\?\\*\\<>|\":\\.\\s].*")) {
         		JOptionPane.showMessageDialog(null, "Invalid project name", "Error", JOptionPane.ERROR_MESSAGE);
         		return;
         	}
@@ -440,7 +440,6 @@ public class Menu extends JMenuBar
     	dir.mkdirs();
     	File filePath = new File(dir, BlockManager.projectName + ".block");
     	ProjectManager.saveProject(creator.getElementManager(), filePath);
-    	//TODO: show some sort of success window?
     }
 
     public static void optimizeModel(ModelCreator creator)
@@ -523,7 +522,7 @@ public class Menu extends JMenuBar
         JTextField textFieldDestination = new JTextField();
         textFieldDestination.setPreferredSize(new Dimension(100, 24));
 
-        String exportJsonDir = Settings.getExportJSONDir();
+        String exportJsonDir = Settings.getJSONDir();
         if(exportJsonDir != null)
         {
             textFieldDestination.setText(exportJsonDir);
@@ -668,7 +667,7 @@ public class Menu extends JMenuBar
                 }
                 else
                 {
-                    Settings.setExportJSONDir(textFieldDestination.getText());
+                    Settings.setJSONDir(textFieldDestination.getText());
                     int returnVal = JOptionPane.showOptionDialog(dialog, "Model exported successfully!", "Success", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new Object[]{"Open Folder", "Close"}, "Close");
                     if(returnVal == 0)
                     {
@@ -898,14 +897,6 @@ public class Menu extends JMenuBar
         JSeparator separator = new JSeparator();
         generalPanel.add(separator);
 
-        //TODO: make this not hardcoded, Setting may not needed anymore??
-        String assetsPath = "resources"; //Settings.getAssetsDir() != null ? Settings.getAssetsDir() : "";
-        JPanel texturePathPanel = createDirectorySelector("Assets Path", dialog, assetsPath);
-        generalPanel.add(texturePathPanel);
-
-        JSeparator separator2 = new JSeparator();
-        generalPanel.add(separator2);
-
         String imageEditorPath = Settings.getImageEditor() != null ? Settings.getImageEditor() : "";
         JPanel imageEditorPanel = ComponentUtil.createFileSelector("Image Editor", dialog, imageEditorPath, null, null);
         generalPanel.add(imageEditorPanel);
@@ -924,15 +915,9 @@ public class Menu extends JMenuBar
         generalSpringLayout.putConstraint(SpringLayout.WEST, separator, 0, SpringLayout.WEST, generalPanel);
         generalSpringLayout.putConstraint(SpringLayout.EAST, separator, 0, SpringLayout.EAST, generalPanel);
         generalSpringLayout.putConstraint(SpringLayout.NORTH, separator, 5, SpringLayout.SOUTH, optionsPanel);
-        generalSpringLayout.putConstraint(SpringLayout.EAST, texturePathPanel, -10, SpringLayout.EAST, generalPanel);
-        generalSpringLayout.putConstraint(SpringLayout.WEST, texturePathPanel, 10, SpringLayout.WEST, generalPanel);
-        generalSpringLayout.putConstraint(SpringLayout.NORTH, texturePathPanel, 10, SpringLayout.SOUTH, separator);
-        generalSpringLayout.putConstraint(SpringLayout.EAST, separator2, 0, SpringLayout.EAST, generalPanel);
-        generalSpringLayout.putConstraint(SpringLayout.WEST, separator2, 0, SpringLayout.WEST, generalPanel);
-        generalSpringLayout.putConstraint(SpringLayout.NORTH, separator2, 10, SpringLayout.SOUTH, texturePathPanel);
         generalSpringLayout.putConstraint(SpringLayout.EAST, imageEditorPanel, -10, SpringLayout.EAST, generalPanel);
         generalSpringLayout.putConstraint(SpringLayout.WEST, imageEditorPanel, 10, SpringLayout.WEST, generalPanel);
-        generalSpringLayout.putConstraint(SpringLayout.NORTH, imageEditorPanel, 10, SpringLayout.SOUTH, separator2);
+        generalSpringLayout.putConstraint(SpringLayout.NORTH, imageEditorPanel, 10, SpringLayout.SOUTH, separator);
         generalSpringLayout.putConstraint(SpringLayout.WEST, labelArguments, 10, SpringLayout.WEST, generalPanel);
         generalSpringLayout.putConstraint(SpringLayout.NORTH, labelArguments, 2, SpringLayout.NORTH, textFieldArguments);
         generalSpringLayout.putConstraint(SpringLayout.EAST, textFieldArguments, -10, SpringLayout.EAST, generalPanel);
@@ -967,7 +952,6 @@ public class Menu extends JMenuBar
             @Override
             public void windowClosed(WindowEvent e)
             {
-                //Settings.setAssetsDir(getDirectoryFromSelector(texturePathPanel));
                 Settings.setUndoLimit((int) undoLimitSpinner.getValue());
                 Settings.setFaceColors(Face.getFaceColors());
                 Settings.setImageEditor(getDirectoryFromSelector(imageEditorPanel));
@@ -983,56 +967,6 @@ public class Menu extends JMenuBar
         dialog.setResizable(false);
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
-    }
-
-    private static JPanel createDirectorySelector(String label, Component parent, String defaultDir)
-    {
-        SpringLayout layout = new SpringLayout();
-        JPanel panel = new JPanel(layout);
-        panel.setPreferredSize(new Dimension(100, 24));
-
-        JTextField textFieldDestination = new JTextField();
-        textFieldDestination.setPreferredSize(new Dimension(100, 24));
-        textFieldDestination.setText(defaultDir);
-        textFieldDestination.setEditable(false);
-        textFieldDestination.setFocusable(false);
-        textFieldDestination.setCaretPosition(0);
-        panel.add(textFieldDestination);
-
-        JButton btnBrowserDir = new JButton("Browse");
-        btnBrowserDir.setPreferredSize(new Dimension(80, 24));
-        btnBrowserDir.setIcon(Icons.load);
-        btnBrowserDir.addActionListener(e ->
-        {
-            JFileChooser chooser = new JFileChooser();
-            chooser.setDialogTitle("Select a Folder");
-            chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-            chooser.setApproveButtonText("Select");
-            chooser.setCurrentDirectory(new File(defaultDir));
-            int returnVal = chooser.showOpenDialog(parent);
-            if(returnVal == JFileChooser.APPROVE_OPTION)
-            {
-                File file = chooser.getSelectedFile();
-                if(file != null)
-                {
-                    textFieldDestination.setText(file.getAbsolutePath());
-                }
-            }
-        });
-        panel.add(btnBrowserDir);
-
-        JLabel labelExportDir = new JLabel(label);
-        panel.add(labelExportDir);
-
-        layout.putConstraint(SpringLayout.NORTH, textFieldDestination, 0, SpringLayout.NORTH, panel);
-        layout.putConstraint(SpringLayout.WEST, textFieldDestination, 10, SpringLayout.EAST, labelExportDir);
-        layout.putConstraint(SpringLayout.EAST, textFieldDestination, -10, SpringLayout.WEST, btnBrowserDir);
-        layout.putConstraint(SpringLayout.NORTH, labelExportDir, 3, SpringLayout.NORTH, textFieldDestination);
-        layout.putConstraint(SpringLayout.WEST, labelExportDir, 0, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.NORTH, btnBrowserDir, 0, SpringLayout.NORTH, textFieldDestination);
-        layout.putConstraint(SpringLayout.EAST, btnBrowserDir, 0, SpringLayout.EAST, panel);
-
-        return panel;
     }
 
     public static String getDirectoryFromSelector(JPanel panel)
