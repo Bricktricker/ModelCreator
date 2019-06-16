@@ -107,6 +107,17 @@ public class ProjectManager
         	 assert(craftItems.size() == 9);
         	 BlockManager.crafting.setCraftItems(craftItems);
          }
+         
+         //Loot
+         JsonObject loot = block.get("loot").getAsJsonObject();
+         boolean silk = loot.get("silk").getAsBoolean();
+         BlockManager.loot.setSilkTouch(silk);
+         int num = loot.get("num").getAsInt();
+         BlockManager.loot.setNumDrops(num);
+         if(loot.has("drop")) {
+        	 String item = loot.get("drop").getAsString();
+        	 BlockManager.loot.setDropItem(item);
+         }
     }
     
     public static void loadImages(Project project) throws IOException {
@@ -254,6 +265,17 @@ public class ProjectManager
             	crafting.add("recipe", recipe);
             	rootObj.add("crafting", crafting);	
     		}
+    	}
+    	
+    	//Loot
+    	{
+    		JsonObject loot = new JsonObject();
+    		loot.addProperty("silk", BlockManager.loot.isSilkTouch());
+    		loot.addProperty("num", BlockManager.loot.getNumDrops());
+    		if(BlockManager.loot.getDropItem() != null) {
+    			loot.addProperty("drop", BlockManager.loot.getDropItem());
+    		}
+    		rootObj.add("loot", loot);
     	}
     	
     	return rootObj.toString();
