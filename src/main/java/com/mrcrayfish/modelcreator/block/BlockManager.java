@@ -7,6 +7,7 @@ public class BlockManager
 	public static BlockTranslation translation = new BlockTranslation();
 	public static BlockCrafting crafting = new BlockCrafting();
 	public static BlockLoot loot = new BlockLoot();
+	public static BlockNotes notes = new BlockNotes();
 	
 	public static void clear() {
 		projectName = "";
@@ -14,6 +15,7 @@ public class BlockManager
 		translation = new BlockTranslation();
 		crafting = new BlockCrafting();
 		loot = new BlockLoot();
+		notes = new BlockNotes();
 	}
 	
 }

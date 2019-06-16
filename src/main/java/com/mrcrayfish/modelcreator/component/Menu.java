@@ -4,6 +4,7 @@ import com.mrcrayfish.modelcreator.*;
 import com.mrcrayfish.modelcreator.block.BlockCrafting;
 import com.mrcrayfish.modelcreator.block.BlockLoot;
 import com.mrcrayfish.modelcreator.block.BlockManager;
+import com.mrcrayfish.modelcreator.block.BlockNotes;
 import com.mrcrayfish.modelcreator.block.BlockProperties;
 import com.mrcrayfish.modelcreator.block.BlockTranslation;
 import com.mrcrayfish.modelcreator.display.DisplayProperties;
@@ -60,7 +61,7 @@ public class Menu extends JMenuBar
     private JMenuItem itemTransation;
     private JMenuItem itemCrafting;
     private JMenuItem itemLoot;
-    private JMenuItem itemBlockState;
+    private JMenuItem itemNotes;
     private JMenuItem itemCollision; //Collision-BB
 
     /* More */
@@ -123,7 +124,7 @@ public class Menu extends JMenuBar
         	itemTransation = createMenuItem("Block Translation", "Set the block translations", KeyEvent.VK_T, Icons.edit, 0, 0, InputEvent.CTRL_MASK);
         	itemCrafting = createMenuItem("Crafting", "Set the crafting recipe", KeyEvent.VK_C, Icons.edit);
         	itemLoot = createMenuItem("Block drops", "Set the block loot", KeyEvent.VK_L, Icons.edit, 0, 0, InputEvent.CTRL_MASK);
-        	itemBlockState = createMenuItem("Block States", "Set the block states", KeyEvent.VK_S, Icons.edit, 0, 0, InputEvent.CTRL_MASK);
+        	itemNotes = createMenuItem("Notes", "Take some notes", KeyEvent.VK_N, Icons.new_);
         	itemCollision = createMenuItem("Block collision", "Set the block collision box", KeyEvent.VK_C, Icons.edit, 0, 0, InputEvent.CTRL_MASK);
         }
 
@@ -194,7 +195,7 @@ public class Menu extends JMenuBar
         menuBlock.add(itemTransation);
         menuBlock.add(itemCrafting);
         menuBlock.add(itemLoot);
-        menuBlock.add(itemBlockState);
+        menuBlock.add(itemNotes);
         menuBlock.add(itemCollision);
         this.add(menuBlock);
 
@@ -255,7 +256,7 @@ public class Menu extends JMenuBar
         
         itemLoot.addActionListener(a -> BlockLoot.show(creator));
         
-        itemBlockState.addActionListener(a -> System.out.println("itemBlockState"));
+        itemNotes.addActionListener(a -> BlockNotes.show(creator));
         
         itemCollision.addActionListener(a -> System.out.println("itemCollision"));
 

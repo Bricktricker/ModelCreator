@@ -45,6 +45,12 @@ public class ProjectManager
         	loadImages(project);
         	ModelImporter importer = new ModelImporter(manager, project.getModelData());
         	importer.importFromJSON();
+        	
+        	byte[] notesBytes = project.getFileData("notes.txt");
+        	if(notesBytes != null) {
+        		String text = new String(notesBytes);
+        		BlockManager.notes.setNotes(text);
+        	}
         } catch (IOException e)
 		{
 			e.printStackTrace();
@@ -189,6 +195,12 @@ public class ProjectManager
             //Block properties
             String blockJson = getBlockFile();
             addToZipFile(blockJson, zos, "block.json");
+            
+            //Block notes
+            String notes = BlockManager.notes.getNotes();
+            if(notes != null && !notes.isEmpty()) {
+            	addToZipFile(notes, zos, "notes.txt");
+            }
 
             zos.close();
             fos.close();
