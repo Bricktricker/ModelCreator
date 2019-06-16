@@ -40,7 +40,7 @@ public class Resources
 		
 		//Block materials
 		{
-			File materialsFile = new File(classLoader.getResource("block/materials.json").getFile());
+			File materialsFile = new File(classLoader.getResource("res/materials.json").getFile());
 			BufferedReader reader = new BufferedReader(new FileReader(materialsFile));
 			JsonParser parser = new JsonParser();
 			JsonElement jsonElement = parser.parse(reader);
@@ -54,7 +54,7 @@ public class Resources
 		
 		//Block breaking sound
 		{
-			File soundsFile = new File(classLoader.getResource("block/SoundTypes.json").getFile());
+			File soundsFile = new File(classLoader.getResource("res/SoundTypes.json").getFile());
 			BufferedReader reader = new BufferedReader(new FileReader(soundsFile));
 			JsonParser parser = new JsonParser();
 			JsonElement jsonElement = parser.parse(reader);
@@ -68,7 +68,7 @@ public class Resources
 		
 		//Minecraft languages
 		{
-			File langFile = new File(classLoader.getResource("block/Languages.json").getFile());
+			File langFile = new File(classLoader.getResource("res/Languages.json").getFile());
 			BufferedReader reader = new BufferedReader(new FileReader(langFile));
 			JsonParser parser = new JsonParser();
 			JsonElement jsonElement = parser.parse(reader);
@@ -84,7 +84,7 @@ public class Resources
 		
 		//Items
 		{
-			File itemFile = new File(classLoader.getResource("block/Items.json").getFile());
+			File itemFile = new File(classLoader.getResource("res/Items.json").getFile());
 			BufferedReader reader = new BufferedReader(new FileReader(itemFile));
 			JsonParser parser = new JsonParser();
 			JsonElement jsonElement = parser.parse(reader);
