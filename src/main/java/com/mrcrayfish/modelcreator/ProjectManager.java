@@ -71,7 +71,7 @@ public class ProjectManager
          JsonObject properties = block.get("properties").getAsJsonObject();
          BlockManager.properties.setHardness(properties.get("hardness").getAsFloat());
          BlockManager.properties.setResistance(properties.get("resistance").getAsFloat());
-         BlockManager.properties.setLightLevel(properties.get("lightLevel").getAsFloat());
+         BlockManager.properties.setLightLevel(properties.get("lightLevel").getAsInt());
          if(properties.has("material")) {
         	 BlockManager.properties.setMaterial(properties.get("material").getAsString());
          }

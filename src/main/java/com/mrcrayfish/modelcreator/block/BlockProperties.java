@@ -13,7 +13,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JSlider;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.SpringLayout;
 import javax.swing.WindowConstants;
 import javax.swing.event.ChangeListener;
@@ -22,15 +24,15 @@ import com.mrcrayfish.modelcreator.ModelCreator;
 
 public class BlockProperties
 {
-	private float hardness;
+	private float hardness; //In vanilla between 0 and 100
 	private float resistance;
-	private float lightLevel;
+	private int lightLevel;
 	private String material;
 	private String sound;
 	
 	public BlockProperties() {
-		hardness = 0.8F;
-		resistance = 0.8F;
+		hardness = 0.5F;
+		resistance = 30.0F;
 		lightLevel = 0;
 	}
 
@@ -54,12 +56,12 @@ public class BlockProperties
 		this.resistance = resistance;
 	}
 
-	public float getLightLevel()
+	public int getLightLevel()
 	{
 		return lightLevel;
 	}
 
-	public void setLightLevel(float lightLevel)
+	public void setLightLevel(int lightLevel)
 	{
 		this.lightLevel = lightLevel;
 	}
@@ -95,8 +97,8 @@ public class BlockProperties
         JPanel generalPanel = new JPanel(generalSpringLayout);
         panel.add(generalPanel);
         
-        final JSlider hardnessSlider = new JSlider();
-        final JSlider resistanceSlider = new JSlider();
+        final SpinnerNumberModel hardnessSpinnerModel = new SpinnerNumberModel(BlockManager.properties.getHardness(), 0.0, 1000.0, 0.1);
+        final SpinnerNumberModel resistanceSpinnerModel = new SpinnerNumberModel(BlockManager.properties.getResistance(), 0.0, Double.MAX_VALUE, 1.0);
         final JSlider lightSlider = new JSlider();
         final JComboBox<String> comboBoxMaterials = new JComboBox<>();
         final JComboBox<String> comboBoxSounds = new JComboBox<>();
@@ -113,22 +115,9 @@ public class BlockProperties
         	JLabel hardnessLabel = new JLabel("Hardness");
         	hardnessPanel.add(hardnessLabel);
         	
-        	hardnessSlider.setOrientation(JSlider.HORIZONTAL);
-        	hardnessSlider.setMinimum(0);
-        	hardnessSlider.setMaximum(100);
-        	hardnessSlider.setValue((int)(BlockManager.properties.getHardness() * 100));
-        	hardnessPanel.add(hardnessSlider);
-        	
-        	JTextField hardnessText = new JTextField();
-        	hardnessText.setPreferredSize(new Dimension(30, 24));
-	        hardnessText.setEditable(false);
-	        hardnessPanel.add(hardnessText);
-	        ChangeListener clHardness = a -> {
-	        	float value = hardnessSlider.getValue() / 100F;
-	        	hardnessText.setText(String.valueOf(value));
-	        };
-	        hardnessSlider.addChangeListener(clHardness);
-	        clHardness.stateChanged(null);
+        	JSpinner hardnessSpinner = new JSpinner(hardnessSpinnerModel);
+        	hardnessSpinner.setPreferredSize(new Dimension(50, 24));
+        	hardnessPanel.add(hardnessSpinner);
         	
         	//Resistance
 	        JPanel resistancePanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -137,22 +126,9 @@ public class BlockProperties
         	JLabel resistanceLabel = new JLabel("Resistance");
         	resistancePanel.add(resistanceLabel);
         	
-        	resistanceSlider.setOrientation(JSlider.HORIZONTAL);
-        	resistanceSlider.setMinimum(0);
-        	resistanceSlider.setMaximum(100);
-        	resistanceSlider.setValue((int)(BlockManager.properties.getResistance() * 100));
-        	resistancePanel.add(resistanceSlider);
-        	
-        	JTextField resistanceText = new JTextField();
-        	resistanceText.setPreferredSize(new Dimension(30, 24));
-        	resistanceText.setEditable(false);
-        	resistancePanel.add(resistanceText);
-	        ChangeListener clResistance = a -> {
-	        	float value = resistanceSlider.getValue() / 100F;
-	        	resistanceText.setText(String.valueOf(value));
-	        };
-	        resistanceSlider.addChangeListener(clResistance);
-	        clResistance.stateChanged(null);
+        	JSpinner resistanceSpinner = new JSpinner(resistanceSpinnerModel);
+        	resistanceSpinner.setPreferredSize(new Dimension(50, 24));
+        	resistancePanel.add(resistanceSpinner);
 	        
 	        //Lightlevel
 	        JPanel lightPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -163,16 +139,17 @@ public class BlockProperties
         	
         	lightSlider.setOrientation(JSlider.HORIZONTAL);
         	lightSlider.setMinimum(0);
-        	lightSlider.setMaximum(100);
-        	lightSlider.setValue((int)(BlockManager.properties.getLightLevel() * 100));
+        	lightSlider.setMaximum(15);
+        	lightSlider.setValue(BlockManager.properties.getLightLevel());
+        	lightSlider.setMinorTickSpacing(1);
         	lightPanel.add(lightSlider);
         	
         	JTextField lightText = new JTextField();
-        	lightText.setPreferredSize(new Dimension(30, 24));
+        	lightText.setPreferredSize(new Dimension(50, 24));
         	lightText.setEditable(false);
         	lightPanel.add(lightText);
 	        ChangeListener clLight = a -> {
-	        	float value = lightSlider.getValue() / 100F;
+	        	int value = lightSlider.getValue();
 	        	lightText.setText(String.valueOf(value));
 	        };
 	        lightSlider.addChangeListener(clLight);
@@ -217,14 +194,14 @@ public class BlockProperties
         saveButton.setPreferredSize(new Dimension(80, 24));
         saveButton.addActionListener(e ->
         {
-        	float hardness = hardnessSlider.getValue() / (float)hardnessSlider.getMaximum();
-        	float resistance = resistanceSlider.getValue() / (float)resistanceSlider.getMaximum();
-        	float lightLevel = lightSlider.getValue() / (float)lightSlider.getMaximum();
+        	double hardness = (Double)hardnessSpinnerModel.getValue();
+        	double resistance = (Double)resistanceSpinnerModel.getValue();
+        	int lightLevel = lightSlider.getValue();
         	String material = (String)comboBoxMaterials.getSelectedItem();
         	String sound = (String)comboBoxSounds.getSelectedItem();
         	
-        	BlockManager.properties.setHardness(hardness);
-        	BlockManager.properties.setResistance(resistance);
+        	BlockManager.properties.setHardness((float)hardness);
+        	BlockManager.properties.setResistance((float)resistance);
         	BlockManager.properties.setLightLevel(lightLevel);
         	BlockManager.properties.setMaterial(material);
         	BlockManager.properties.setSound(sound);
