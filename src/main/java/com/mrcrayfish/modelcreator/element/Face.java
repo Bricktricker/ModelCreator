@@ -387,7 +387,7 @@ public class Face
         }
     }
 
-    private void startRender(int pass)
+    protected void startRender(int pass)
     {
         int color = Face.colors[side];
         float b = (float) (color & 0xFF) / 0xFF;

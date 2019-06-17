@@ -2,8 +2,8 @@ package com.mrcrayfish.modelcreator.sidebar;
 
 import com.mrcrayfish.modelcreator.ModelCreator;
 import com.mrcrayfish.modelcreator.element.Element;
-import com.mrcrayfish.modelcreator.element.ElementManager;
 import com.mrcrayfish.modelcreator.element.Face;
+import com.mrcrayfish.modelcreator.panels.SidebarPanel;
 import com.mrcrayfish.modelcreator.util.FontManager;
 import org.lwjgl.input.Mouse;
 import org.newdawn.slick.Color;
@@ -13,7 +13,7 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class UVSidebar extends Sidebar
 {
-    private ElementManager manager;
+    private SidebarPanel manager;
 
     private final int LENGTH = 110;
 
@@ -27,7 +27,7 @@ public class UVSidebar extends Sidebar
     private int hoveredFace = -1;
     private int canvasHeight;
 
-    public UVSidebar(String title, ElementManager manager)
+    public UVSidebar(String title, SidebarPanel manager)
     {
         super(title);
         this.manager = manager;

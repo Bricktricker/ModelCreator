@@ -2,6 +2,8 @@ package com.mrcrayfish.modelcreator.display.render;
 
 import com.mrcrayfish.modelcreator.Camera;
 import com.mrcrayfish.modelcreator.ModelCreator;
+import com.mrcrayfish.modelcreator.SidebarManager;
+import com.mrcrayfish.modelcreator.block.BlockManager;
 import com.mrcrayfish.modelcreator.display.DisplayProperties;
 import com.mrcrayfish.modelcreator.element.ElementManager;
 import com.mrcrayfish.modelcreator.texture.TextureAtlas;
@@ -16,14 +18,14 @@ import static org.lwjgl.opengl.GL11.*;
 public class GuiPropertyRenderer extends DisplayPropertyRenderer
 {
     @Override
-    public void onRenderPerspective(ModelCreator creator, ElementManager manager, Camera camera) {}
+    public void onRenderPerspective(ModelCreator creator, SidebarManager manager, Camera camera) {}
 
     @Override
     public void onRenderOverlay(ElementManager manager, Camera camera, ModelCreator creator)
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        DisplayProperties.Entry entry = creator.getElementManager().getDisplayProperties().getEntry("gui");
+        DisplayProperties.Entry entry = BlockManager.displayProperties.getEntry("gui");
         if(entry != null)
         {
             int canvasOffset = creator.getCanvasOffset();

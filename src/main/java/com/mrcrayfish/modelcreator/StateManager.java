@@ -18,6 +18,7 @@ public class StateManager
     private static int lastId = -1;
     private static Timer timer;
 
+    //TODO: make this more ElementManager dependent
     public static void pushState(ElementManager manager)
     {
         pushState(manager.createState());

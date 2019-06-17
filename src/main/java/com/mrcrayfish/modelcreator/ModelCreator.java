@@ -9,6 +9,7 @@ import com.mrcrayfish.modelcreator.element.Element;
 import com.mrcrayfish.modelcreator.element.ElementCellEntry;
 import com.mrcrayfish.modelcreator.element.ElementManager;
 import com.mrcrayfish.modelcreator.element.ElementManagerState;
+import com.mrcrayfish.modelcreator.panels.CollisionPanel;
 import com.mrcrayfish.modelcreator.panels.SidebarPanel;
 import com.mrcrayfish.modelcreator.sidebar.Sidebar;
 import com.mrcrayfish.modelcreator.sidebar.UVSidebar;
@@ -53,7 +54,7 @@ public class ModelCreator extends JFrame
     // Swing Components
     private JScrollPane scroll;
     private Camera camera;
-    private SidebarPanel manager;
+    private SidebarManager manager;
     private Element grabbed = null;
 
     private int lastMouseX, lastMouseY;
@@ -76,7 +77,7 @@ public class ModelCreator extends JFrame
     private static CanvasRenderer standardRenderer = new StandardRenderer();
     private static CanvasRenderer canvasRenderer = standardRenderer;
 
-    private boolean debugMode = false;
+    private boolean debugMode = false; //TODO: test debug mode
 
     public ModelCreator(String title)
     {
@@ -132,7 +133,8 @@ public class ModelCreator extends JFrame
         initComponents();
         registerShortcuts();
 
-        uvSidebar = new UVSidebar("UV Editor", manager);
+        //TODO: hide when switch do collision panel
+        uvSidebar = new UVSidebar("UV Editor", manager.getModelPanel());
 
         addWindowListener(new WindowAdapter()
         {
@@ -143,7 +145,7 @@ public class ModelCreator extends JFrame
             }
         });
 
-        manager.updateValues();
+        manager.getActivePanel().updateValues();
 
         pack();
         setVisible(true);
@@ -179,13 +181,24 @@ public class ModelCreator extends JFrame
         canvas.setFocusable(true);
         add(canvas, BorderLayout.CENTER);
 
-        manager = new SidebarPanel(this);
-        scroll = new JScrollPane(manager);
+        JTabbedPane rightSide = new JTabbedPane();
+        SidebarPanel modelPanel = new SidebarPanel(this);
+        rightSide.addTab("model", modelPanel);
+        CollisionPanel collisionPanel = new CollisionPanel();
+        rightSide.addTab("collision", collisionPanel);
+       
+        manager = new SidebarManager(modelPanel, collisionPanel);
+        rightSide.addChangeListener(l -> {
+        	int active = rightSide.getSelectedIndex();
+        	manager.setActivePanel(active);
+        });
+        
+        scroll = new JScrollPane(rightSide);
         scroll.setBorder(BorderFactory.createEmptyBorder());
         scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         add(scroll, BorderLayout.EAST);
-        StateManager.pushState(manager);
+        StateManager.pushState(manager.getActivePanel());
     }
 
     private void registerShortcuts()
@@ -194,7 +207,7 @@ public class ModelCreator extends JFrame
         {
             if(pressed && modifiers == InputEvent.CTRL_MASK)
             {
-                manager.newElement();
+                manager.getActivePanel().newElement();
             }
         }));
         this.keyActions.add(new KeyAction(KeyEvent.VK_D, Keyboard.KEY_D, (modifiers, pressed) ->
@@ -208,11 +221,11 @@ public class ModelCreator extends JFrame
         {
             if(pressed && modifiers == InputEvent.CTRL_MASK)
             {
-                ElementCellEntry entry = manager.getSelectedElementEntry();
+                ElementCellEntry entry = manager.getActivePanel().getSelectedElementEntry();
                 if(entry != null)
                 {
                     entry.toggleVisibility();
-                    manager.getList().repaint();
+                    manager.getActivePanel().getList().repaint();
                 }
             }
         }));
@@ -220,7 +233,7 @@ public class ModelCreator extends JFrame
         {
             if(pressed && modifiers == InputEvent.CTRL_MASK)
             {
-                manager.deleteElement();
+                manager.getActivePanel().deleteElement();
             }
         }));
     }
@@ -415,7 +428,7 @@ public class ModelCreator extends JFrame
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
 
-        canvasRenderer.onRenderOverlay(manager, camera, this);
+        canvasRenderer.onRenderOverlay(manager.getActivePanel(), camera, this);
 
         glViewport(0, 0, width, height);
         glMatrixMode(GL_PROJECTION);
@@ -571,7 +584,7 @@ public class ModelCreator extends JFrame
         {
             if(grabbed != null && performedChange)
             {
-                StateManager.pushState(manager);
+                StateManager.pushState(manager.getActivePanel());
                 performedChange = false;
             }
             grabbing = false;
@@ -598,13 +611,13 @@ public class ModelCreator extends JFrame
                         int sel = select(Mouse.getX(), Mouse.getY());
                         if(sel >= 0)
                         {
-                            grabbed = manager.getAllElements().get(sel);
-                            manager.setSelectedElement(sel);
+                            grabbed = manager.getActivePanel().getAllElements().get(sel);
+                            manager.getActivePanel().setSelectedElement(sel);
                         }
                         else
                         {
                             grabbed = null;
-                            manager.setSelectedElement(-1);
+                            manager.getActivePanel().setSelectedElement(-1);
                         }
                     }
                 }
@@ -711,7 +724,7 @@ public class ModelCreator extends JFrame
                             lastMouseY = newMouseY;
                         }
 
-                        manager.updateValues();
+                        manager.getActivePanel().updateValues();
                         element.updateEndUVs();
 
                         performedChange = true;
@@ -839,9 +852,21 @@ public class ModelCreator extends JFrame
         return activeSidebar;
     }
 
-    public ElementManager getElementManager()
+    public ElementManager getActivePanel()
     {
-        return manager;
+        return manager.getActivePanel();
+    }
+    
+    public SidebarPanel getSidebarPanel() {
+    	return manager.getModelPanel();
+    }
+    
+    public CollisionPanel getCollisionPanel() {
+    	return manager.getCollisionPanel();
+    }
+    
+    public SidebarManager getSidebarManager() {
+    	return manager;
     }
 
     public void close()

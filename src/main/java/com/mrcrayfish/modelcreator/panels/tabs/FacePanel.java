@@ -3,9 +3,9 @@ package com.mrcrayfish.modelcreator.panels.tabs;
 import com.mrcrayfish.modelcreator.ModelCreator;
 import com.mrcrayfish.modelcreator.StateManager;
 import com.mrcrayfish.modelcreator.element.Element;
-import com.mrcrayfish.modelcreator.element.ElementManager;
 import com.mrcrayfish.modelcreator.panels.FaceExtrasPanel;
 import com.mrcrayfish.modelcreator.panels.IElementUpdater;
+import com.mrcrayfish.modelcreator.panels.SidebarPanel;
 import com.mrcrayfish.modelcreator.panels.TexturePanel;
 import com.mrcrayfish.modelcreator.panels.UVPanel;
 
@@ -19,7 +19,7 @@ public class FacePanel extends JPanel implements IElementUpdater
 {
 	private static final long serialVersionUID = 1426896318514100975L;
 
-	private ElementManager manager;
+	private SidebarPanel manager;
 
     private JPanel menuPanel;
     private JComboBox<String> menuList;
@@ -35,7 +35,7 @@ public class FacePanel extends JPanel implements IElementUpdater
 
     private DefaultComboBoxModel<String> model;
 
-    public FacePanel(ElementManager manager)
+    public FacePanel(SidebarPanel manager)
     {
         this.manager = manager;
         setBackground(ModelCreator.BACKGROUND);

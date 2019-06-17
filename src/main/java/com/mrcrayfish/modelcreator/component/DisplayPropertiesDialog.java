@@ -1,6 +1,7 @@
 package com.mrcrayfish.modelcreator.component;
 
 import com.mrcrayfish.modelcreator.ModelCreator;
+import com.mrcrayfish.modelcreator.block.BlockManager;
 import com.mrcrayfish.modelcreator.display.CanvasRenderer;
 import com.mrcrayfish.modelcreator.display.DisplayProperties;
 import com.mrcrayfish.modelcreator.panels.DisplayEntryPanel;
@@ -16,14 +17,11 @@ public class DisplayPropertiesDialog extends JDialog
 {
 	private static final long serialVersionUID = -3783764432695158262L;
 
-	private ModelCreator creator;
-
     private JTabbedPane tabbedPane;
 
     public DisplayPropertiesDialog(ModelCreator creator)
     {
         super(creator, "Display Properties", Dialog.ModalityType.MODELESS);
-        this.creator = creator;
         this.init();
         this.pack();
         this.setResizable(false);
@@ -47,7 +45,7 @@ public class DisplayPropertiesDialog extends JDialog
         comboBoxProperties.setPreferredSize(new Dimension(0, 24));
         panel.add(comboBoxProperties);
 
-        DisplayProperties properties = creator.getElementManager().getDisplayProperties();
+        DisplayProperties properties = BlockManager.displayProperties;
 
         tabbedPane = new JTabbedPane();
         tabbedPane.addTab("GUI", new DisplayEntryPanel(properties.getEntry("gui")));
@@ -81,8 +79,8 @@ public class DisplayPropertiesDialog extends JDialog
         btnApplyProperties.setPreferredSize(new Dimension(80, 24));
         btnApplyProperties.addActionListener(e ->
         {
-            creator.getElementManager().setDisplayProperties((DisplayProperties) comboBoxProperties.getSelectedItem());
-            this.updateValues(creator.getElementManager().getDisplayProperties());
+        	BlockManager.displayProperties = (DisplayProperties)comboBoxProperties.getSelectedItem();
+            this.updateValues(BlockManager.displayProperties);
         });
         panel.add(btnApplyProperties);
 
@@ -126,7 +124,7 @@ public class DisplayPropertiesDialog extends JDialog
     {
         if(Menu.displayPropertiesDialog != null)
         {
-            Menu.displayPropertiesDialog.updateValues(creator.getElementManager().getDisplayProperties());
+            Menu.displayPropertiesDialog.updateValues(BlockManager.displayProperties);
         }
     }
 }

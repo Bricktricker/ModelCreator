@@ -3,6 +3,7 @@ package com.mrcrayfish.modelcreator.display.render;
 import com.mrcrayfish.modelcreator.Camera;
 import com.mrcrayfish.modelcreator.ModelCreator;
 import com.mrcrayfish.modelcreator.Settings;
+import com.mrcrayfish.modelcreator.SidebarManager;
 import com.mrcrayfish.modelcreator.component.Menu;
 import com.mrcrayfish.modelcreator.display.CanvasRenderer;
 import com.mrcrayfish.modelcreator.element.Element;
@@ -30,7 +31,7 @@ public class StandardRenderer extends CanvasRenderer
     }
 
     @Override
-    public void onRenderPerspective(ModelCreator creator, ElementManager manager, Camera camera)
+    public void onRenderPerspective(ModelCreator creator, SidebarManager manager, Camera camera)
     {
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
@@ -39,7 +40,12 @@ public class StandardRenderer extends CanvasRenderer
         camera.useView();
 
         this.drawGrid(camera, Settings.getCardinalPoints()); //TODO make this an option
-        this.drawElements(manager);
+        
+        glTranslatef(-8, 0, -8);
+        ElementManager panel = manager.getModelPanel();
+        this.drawElements(panel);
+        panel = manager.getCollisionPanel();
+        this.drawElements(panel);
 
         glDisable(GL_DEPTH_TEST);
         glDisable(GL_CULL_FACE);
@@ -49,7 +55,6 @@ public class StandardRenderer extends CanvasRenderer
 
     protected void drawElements(ElementManager manager)
     {
-        glTranslatef(-8, 0, -8);
         for(int i = 0; i < manager.getElementCount(); i++)
         {
             Element cube = manager.getElement(i);

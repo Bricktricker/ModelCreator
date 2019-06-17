@@ -33,17 +33,18 @@ import java.util.zip.ZipOutputStream;
 public class ProjectManager
 {
 
-    public static void loadProject(ElementManager manager, File projectFile)
+    public static void loadProject(SidebarManager manager, File projectFile)
     {
-        manager.clearElements();
-        manager.setParticle(null);
+        manager.getModelPanel().clearElements();
+        manager.getModelPanel().setParticle(null);
         
         try(ZipInputStream zis = new ZipInputStream(new FileInputStream(projectFile)))
         {
+        	//TODO: load collision data
         	Project project = new Project(zis);
         	loadBlockData(project.getBlockData());
         	loadImages(project);
-        	ModelImporter importer = new ModelImporter(manager, project.getModelData());
+        	ModelImporter importer = new ModelImporter(manager.getModelPanel(), project.getModelData());
         	importer.importFromJSON();
         	
         	byte[] notesBytes = project.getFileData("notes.txt");
@@ -153,7 +154,7 @@ public class ProjectManager
     	}
     }
 
-    public static void saveProject(ElementManager manager, File name)
+    public static void saveProject(SidebarManager manager, File name)
     {
         try
         {
@@ -161,13 +162,13 @@ public class ProjectManager
             ZipOutputStream zos = new ZipOutputStream(fos);
 
             //Model
-            File model = getModelFile(manager);
+            File model = getModelFile(manager.getModelPanel());
             addToZipFile(model, zos, "model.json");
             model.delete();
 
             //Textures
             JsonArray textureRoot = new JsonArray();
-            for(TextureEntry entry : getAllTextures(manager))
+            for(TextureEntry entry : getAllTextures(manager.getModelPanel()))
             {
             	if(entry.getModId().equals("minecraft"))
             		continue;

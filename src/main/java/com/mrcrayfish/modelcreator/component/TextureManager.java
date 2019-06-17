@@ -3,8 +3,8 @@ package com.mrcrayfish.modelcreator.component;
 import com.mrcrayfish.modelcreator.Icons;
 import com.mrcrayfish.modelcreator.ModelCreator;
 import com.mrcrayfish.modelcreator.TexturePath;
-import com.mrcrayfish.modelcreator.element.ElementManager;
 import com.mrcrayfish.modelcreator.element.Face;
+import com.mrcrayfish.modelcreator.panels.SidebarPanel;
 import com.mrcrayfish.modelcreator.texture.TextureEntry;
 import com.mrcrayfish.modelcreator.util.AssetsUtil;
 import com.mrcrayfish.modelcreator.util.Util;
@@ -34,7 +34,7 @@ public class TextureManager extends JDialog
     private static final List<TextureEntry> pendingRemove = new ArrayList<>();
     private static final List<TextureEntry> textureEntries = new ArrayList<>();
 
-    private ElementManager manager;
+    private SidebarPanel manager;
     private JList<TextureEntry> textureEntryList;
     private JButton btnApply;
     private JButton btnCancel;
@@ -44,7 +44,7 @@ public class TextureManager extends JDialog
     private int result;
     private boolean canApply = true;
 
-    public TextureManager(Frame owner, ElementManager manager, ModalityType type, boolean canApply)
+    public TextureManager(Frame owner, SidebarPanel manager, ModalityType type, boolean canApply)
     {
         super(owner, "Texture Manager", type);
         this.canApply = canApply;
@@ -329,7 +329,7 @@ public class TextureManager extends JDialog
         }
     }
 
-    public static TextureEntry display(Frame owner, ElementManager manager, ModalityType modalityType)
+    public static TextureEntry display(Frame owner, SidebarPanel manager, ModalityType modalityType)
     {
         TextureManager textureManager = new TextureManager(owner, manager, modalityType, true);
         textureManager.setLocationRelativeTo(null);

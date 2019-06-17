@@ -3,7 +3,7 @@ package com.mrcrayfish.modelcreator.util;
 import com.google.gson.Gson;
 import com.mrcrayfish.modelcreator.ProjectManager;
 import com.mrcrayfish.modelcreator.Settings;
-import com.mrcrayfish.modelcreator.element.ElementManager;
+import com.mrcrayfish.modelcreator.SidebarManager;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
@@ -117,7 +117,7 @@ public class Util
         }
     }
 
-    public static void loadModelFromJar(ElementManager manager, Class<?> clazz, String name)
+    public static void loadModelFromJar(SidebarManager manager, Class<?> clazz, String name)
     {
         try
         {

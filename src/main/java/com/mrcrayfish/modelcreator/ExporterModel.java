@@ -263,7 +263,9 @@ public class ExporterModel extends Exporter
 
     private void writeDisplayProperties(BufferedWriter writer) throws IOException
     {
-        Map<String, DisplayProperties.Entry> entries = manager.getDisplayProperties().getEntries();
+        /*
+         * TODO: removed display properties getting writen to model.json
+    	Map<String, DisplayProperties.Entry> entries = manager.getDisplayProperties().getEntries();
         List<String> ids = new ArrayList<>();
         for(String id : DISPLAY_PROPERTY_ORDER)
         {
@@ -292,6 +294,7 @@ public class ExporterModel extends Exporter
 
         writer.newLine();
         writer.write(space(1) + "},");
+        */
     }
 
     private void writeDisplayEntry(BufferedWriter writer, String id, DisplayProperties.Entry entry) throws IOException

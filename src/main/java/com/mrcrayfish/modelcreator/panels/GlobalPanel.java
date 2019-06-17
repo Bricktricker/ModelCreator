@@ -5,7 +5,6 @@ import com.mrcrayfish.modelcreator.ModelCreator;
 import com.mrcrayfish.modelcreator.StateManager;
 import com.mrcrayfish.modelcreator.component.TextureManager;
 import com.mrcrayfish.modelcreator.element.Element;
-import com.mrcrayfish.modelcreator.element.ElementManager;
 import com.mrcrayfish.modelcreator.texture.TextureEntry;
 import com.mrcrayfish.modelcreator.util.ComponentUtil;
 
@@ -14,12 +13,12 @@ import java.awt.*;
 
 public class GlobalPanel extends JPanel implements IElementUpdater
 {
-    private ElementManager manager;
+    private SidebarPanel manager;
 
     private JRadioButton ambientOcc;
     private JButton btnParticle;
 
-    public GlobalPanel(ElementManager manager)
+    public GlobalPanel(SidebarPanel manager)
     {
         this.manager = manager;
         this.setBackground(ModelCreator.BACKGROUND);
@@ -45,7 +44,7 @@ public class GlobalPanel extends JPanel implements IElementUpdater
         btnParticle.setIcon(Icons.texture);
         btnParticle.addActionListener(a ->
         {
-            TextureEntry entry = TextureManager.display(((SidebarPanel) manager).getCreator(), manager, Dialog.ModalityType.APPLICATION_MODAL);
+            TextureEntry entry = TextureManager.display(manager.getCreator(), manager, Dialog.ModalityType.APPLICATION_MODAL);
             if(entry != null)
             {
                 manager.setParticle(entry);

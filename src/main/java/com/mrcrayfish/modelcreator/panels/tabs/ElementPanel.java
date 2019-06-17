@@ -16,12 +16,10 @@ public class ElementPanel extends JPanel implements IElementUpdater
 {
 	private static final long serialVersionUID = 2345409972608231073L;
 
-	private ElementManager manager;
+	protected ElementManager manager;
 
-    private SizePanel panelSize;
-    private PositionPanel panelPosition;
-    private ElementExtraPanel panelExtras;
-    private GlobalPanel panelGlobal;
+	protected SizePanel panelSize;
+	protected PositionPanel panelPosition;
 
     public ElementPanel(ElementManager manager)
     {
@@ -32,25 +30,18 @@ public class ElementPanel extends JPanel implements IElementUpdater
         addComponents();
     }
 
-    private void initComponents()
+    protected void initComponents()
     {
         panelSize = new SizePanel(manager);
         panelPosition = new PositionPanel(manager);
-        panelExtras = new ElementExtraPanel(manager);
-        panelGlobal = new GlobalPanel(manager);
     }
 
-    private void addComponents()
+    protected void addComponents()
     {
         add(Box.createRigidArea(new Dimension(188, 5)));
         add(panelSize);
         add(Box.createRigidArea(new Dimension(188, 5)));
         add(panelPosition);
-        add(Box.createRigidArea(new Dimension(188, 5)));
-        add(panelExtras);
-        add(Box.createRigidArea(new Dimension(188, 70)));
-        add(new JSeparator(JSeparator.HORIZONTAL));
-        add(panelGlobal);
     }
 
     @Override
@@ -58,7 +49,5 @@ public class ElementPanel extends JPanel implements IElementUpdater
     {
         panelSize.updateValues(cube);
         panelPosition.updateValues(cube);
-        panelExtras.updateValues(cube);
-        panelGlobal.updateValues(cube);
     }
 }

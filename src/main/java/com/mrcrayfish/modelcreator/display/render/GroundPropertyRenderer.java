@@ -3,9 +3,10 @@ package com.mrcrayfish.modelcreator.display.render;
 import com.mrcrayfish.modelcreator.Animation;
 import com.mrcrayfish.modelcreator.Camera;
 import com.mrcrayfish.modelcreator.ModelCreator;
+import com.mrcrayfish.modelcreator.SidebarManager;
+import com.mrcrayfish.modelcreator.block.BlockManager;
 import com.mrcrayfish.modelcreator.display.DisplayProperties;
 import com.mrcrayfish.modelcreator.element.Element;
-import com.mrcrayfish.modelcreator.element.ElementManager;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -40,9 +41,9 @@ public class GroundPropertyRenderer extends DisplayPropertyRenderer
     }
 
     @Override
-    public void onRenderPerspective(ModelCreator creator, ElementManager manager, Camera camera)
+    public void onRenderPerspective(ModelCreator creator, SidebarManager manager, Camera camera)
     {
-        DisplayProperties.Entry entry = creator.getElementManager().getDisplayProperties().getEntry("ground");
+        DisplayProperties.Entry entry = BlockManager.displayProperties.getEntry("ground");
         if(entry != null)
         {
             glMatrixMode(GL_MODELVIEW);
@@ -54,7 +55,7 @@ public class GroundPropertyRenderer extends DisplayPropertyRenderer
 
             for(Element element : elements)
             {
-                element.drawExtras(manager);
+                element.drawExtras(manager.getActivePanel());
                 element.draw();
             }
 
@@ -76,8 +77,9 @@ public class GroundPropertyRenderer extends DisplayPropertyRenderer
 
             glPushMatrix();
             {
-                this.drawGrid(camera, false);
-                this.drawElements(manager);
+                this.drawGrid(camera, false);                
+                this.drawElements(manager.getModelPanel());
+                this.drawElements(manager.getCollisionPanel());
             }
             glPopMatrix();
 

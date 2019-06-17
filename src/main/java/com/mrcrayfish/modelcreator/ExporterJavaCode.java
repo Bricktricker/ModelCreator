@@ -17,7 +17,7 @@ public class ExporterJavaCode extends Exporter
 
     public ExporterJavaCode(ModelCreator creator, boolean includeFields, boolean includeMethods, boolean useBoundsHelper, boolean generateRotatedBounds)
     {
-        super(creator.getElementManager());
+        super(creator.getActivePanel());
         this.creator = creator;
         this.includeFields = includeFields;
         this.includeMethods = includeMethods;

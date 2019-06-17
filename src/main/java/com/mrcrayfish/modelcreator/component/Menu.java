@@ -235,7 +235,7 @@ public class Menu extends JMenuBar
 
         itemTextureManager.addActionListener(a ->
         {
-            TextureManager manager = new TextureManager(creator, creator.getElementManager(), Dialog.ModalityType.APPLICATION_MODAL, false);
+            TextureManager manager = new TextureManager(creator, creator.getSidebarPanel(), Dialog.ModalityType.APPLICATION_MODAL, false);
             manager.setLocationRelativeTo(null);
             manager.setVisible(true);
         });
@@ -244,9 +244,9 @@ public class Menu extends JMenuBar
 
         itemOptimise.addActionListener(a -> optimizeModel(creator));
 
-        itemRotateClockwise.addActionListener(a -> Actions.rotateModel(creator.getElementManager(), true));
+        itemRotateClockwise.addActionListener(a -> Actions.rotateModel(creator.getActivePanel(), true));
 
-        itemRotateCounterClockwise.addActionListener(a -> Actions.rotateModel(creator.getElementManager(), false));
+        itemRotateCounterClockwise.addActionListener(a -> Actions.rotateModel(creator.getActivePanel(), false));
         
         itemProperties.addActionListener(a -> BlockProperties.show(creator));
         
@@ -269,20 +269,22 @@ public class Menu extends JMenuBar
         itemModelCauldron.addActionListener(a ->
         {
             StateManager.clear();
-            Util.loadModelFromJar(creator.getElementManager(), getClass(), "models/cauldron");
-            StateManager.pushState(creator.getElementManager());
+            Util.loadModelFromJar(creator.getSidebarManager(), getClass(), "models/cauldron");
+            StateManager.pushState(creator.getSidebarManager().getModelPanel());
+            StateManager.pushState(creator.getSidebarManager().getCollisionPanel());
         });
 
         itemModelChair.addActionListener(a ->
         {
             StateManager.clear();
-            Util.loadModelFromJar(creator.getElementManager(), getClass(), "models/modern_chair");
-            StateManager.pushState(creator.getElementManager());
+            Util.loadModelFromJar(creator.getSidebarManager(), getClass(), "models/modern_chair");
+            StateManager.pushState(creator.getSidebarManager().getModelPanel());
+            StateManager.pushState(creator.getSidebarManager().getCollisionPanel());
         });
 
-        itemUndo.addActionListener(a -> StateManager.restorePreviousState(creator.getElementManager()));
+        itemUndo.addActionListener(a -> StateManager.restorePreviousState(creator.getActivePanel()));
 
-        itemRedo.addActionListener(a -> StateManager.restoreNextState(creator.getElementManager()));
+        itemRedo.addActionListener(a -> StateManager.restoreNextState(creator.getActivePanel()));
     }
 
     private JMenuItem createMenuItem(String name, String tooltip, int mnemonic, Icon icon)
@@ -336,16 +338,20 @@ public class Menu extends JMenuBar
             TextureManager.clear();
             StateManager.clear();
             BlockManager.clear();
-            creator.getElementManager().reset();
-            creator.getElementManager().updateValues();
+            SidebarManager manager = creator.getSidebarManager();
+            manager.getModelPanel().reset();
+            manager.getCollisionPanel().reset();
+            manager.getModelPanel().updateValues();
+            manager.getCollisionPanel().updateValues();
             DisplayPropertiesDialog.update(creator);
-            StateManager.pushState(creator.getElementManager());
+            //TODO: manager StateManager better
+            //StateManager.pushState(creator.getElementManager());
         }
     }
 
     public static void loadProject(ModelCreator creator)
     {
-    	if(creator.getElementManager().getElementCount() > 0) {
+    	if(creator.getSidebarPanel().getElementCount() > 0 || creator.getCollisionPanel().getElementCount() > 0) {
             int returnVal = JOptionPane.showConfirmDialog(null, "Your current project will be cleared, are you sure you want to continue?", "Warning", JOptionPane.YES_NO_OPTION);
             if(returnVal == JOptionPane.NO_OPTION)
             	return;
@@ -393,9 +399,10 @@ public class Menu extends JMenuBar
             int selection = comboBoxProjects.getSelectedIndex();
             BlockManager.projectName = projectNames.get(selection);
             File project = projects[selection];
-            ProjectManager.loadProject(creator.getElementManager(), project);
+            ProjectManager.loadProject(creator.getSidebarManager(), project);
             DisplayPropertiesDialog.update(creator);
-            StateManager.pushState(creator.getElementManager());
+            //TODO: manage StateManager better
+            //StateManager.pushState(creator.getElementManager());
             dialog.dispose();
             
         });
@@ -439,7 +446,7 @@ public class Menu extends JMenuBar
     	File dir = new File(Settings.getProjectsDir());
     	dir.mkdirs();
     	File filePath = new File(dir, BlockManager.projectName + ".block");
-    	ProjectManager.saveProject(creator.getElementManager(), filePath);
+    	ProjectManager.saveProject(creator.getSidebarManager(), filePath);
     }
 
     public static void optimizeModel(ModelCreator creator)
@@ -447,7 +454,7 @@ public class Menu extends JMenuBar
         int result = JOptionPane.showConfirmDialog(null, "<html>Are you sure you want to optimize the model?<br/>It is recommended you save the project before running this<br/>action, otherwise you will have to re-enable the disabled faces.<html>", "Optimize Confirmation", JOptionPane.YES_NO_OPTION);
         if(result == JOptionPane.YES_OPTION)
         {
-            int count = Actions.optimiseModel(creator.getElementManager());
+            int count = Actions.optimiseModel(creator.getSidebarPanel());
             JOptionPane.showMessageDialog(null, "<html>Optimizing the model disabled <b>" + count + "</b> faces</html>", "Optimization Success", JOptionPane.INFORMATION_MESSAGE);
         }
     }
@@ -471,7 +478,7 @@ public class Menu extends JMenuBar
         int returnVal = chooser.showOpenDialog(null);
         if(returnVal == JFileChooser.APPROVE_OPTION)
         {
-            if(creator.getElementManager().getElementCount() > 0)
+            if(creator.getSidebarPanel().getElementCount() > 0 || creator.getCollisionPanel().getElementCount() > 0)
             {
                 returnVal = JOptionPane.showConfirmDialog(null, "Your current project will be cleared, are you sure you want to continue?", "Warning", JOptionPane.YES_NO_OPTION);
             }
@@ -486,7 +493,7 @@ public class Menu extends JMenuBar
                 try
 				{
 					String modelJson = new String(Files.readAllBytes(chooser.getSelectedFile().toPath()));
-					ModelImporter importer = new ModelImporter(creator.getElementManager(), modelJson);
+					ModelImporter importer = new ModelImporter(creator.getSidebarPanel(), modelJson);
 	                importer.importFromJSON();
 				} catch (IOException e)
 				{
@@ -494,9 +501,9 @@ public class Menu extends JMenuBar
 					e.printStackTrace();
 					return;
 				}
-                StateManager.pushState(creator.getElementManager());
+                StateManager.pushState(creator.getSidebarPanel());
             }
-            creator.getElementManager().updateValues();
+            creator.getSidebarPanel().updateValues();
         }
     }
 
@@ -656,7 +663,7 @@ public class Menu extends JMenuBar
 
                 dialog.dispose();
 
-                ExporterModel exporter = new ExporterModel(creator.getElementManager());
+                ExporterModel exporter = new ExporterModel(creator.getSidebarPanel());
                 exporter.setOptimize(checkBoxOptimize.isSelected());
                 exporter.setDisplayProps(checkBoxDisplayProps.isSelected());
                 exporter.setIncludeNames(checkBoxElementNames.isSelected());

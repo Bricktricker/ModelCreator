@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.mrcrayfish.modelcreator.block.BlockManager;
 import com.mrcrayfish.modelcreator.component.TextureManager;
 import com.mrcrayfish.modelcreator.display.DisplayProperties;
 import com.mrcrayfish.modelcreator.element.Element;
@@ -54,7 +55,7 @@ public class ModelImporter
     {
         manager.clearElements();
         manager.setParticle(null);
-        manager.setDisplayProperties(DisplayProperties.MODEL_CREATOR_BLOCK);
+        BlockManager.displayProperties = DisplayProperties.MODEL_CREATOR_BLOCK;
 
         JsonParser parser = new JsonParser();
         JsonElement read = parser.parse(this.modelData);
@@ -101,7 +102,7 @@ public class ModelImporter
             // load display properties
             if(obj.has("display") && obj.get("display").isJsonObject())
             {
-                readDisplayProperties(obj.getAsJsonObject("display"), manager);
+                readDisplayProperties(obj.getAsJsonObject("display"));
             }
 
             // load elements
@@ -181,9 +182,9 @@ public class ModelImporter
         return entry;
     }
 
-    private void readDisplayProperties(JsonObject obj, ElementManager manager)
+    private void readDisplayProperties(JsonObject obj)
     {
-        DisplayProperties properties = manager.getDisplayProperties();
+        DisplayProperties properties = BlockManager.displayProperties;
         properties.getEntries().forEach((s, entry) -> entry.setEnabled(false));
         for(String displayName : displayNames)
         {

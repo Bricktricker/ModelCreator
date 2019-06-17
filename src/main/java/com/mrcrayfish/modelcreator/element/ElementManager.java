@@ -1,13 +1,18 @@
 package com.mrcrayfish.modelcreator.element;
 
-import com.mrcrayfish.modelcreator.display.DisplayProperties;
 import com.mrcrayfish.modelcreator.texture.TextureEntry;
 
 import java.util.List;
 
+import javax.swing.JList;
+
 public interface ElementManager
 {
+	public JList<ElementCellEntry> getList();
+	
     Element getSelectedElement();
+    
+    public ElementCellEntry getSelectedElementEntry();
 
     void setSelectedElement(int pos);
 
@@ -41,8 +46,8 @@ public interface ElementManager
     }
 
     void restoreState(ElementManagerState state);
-
-    void setDisplayProperties(DisplayProperties properties);
-
-    DisplayProperties getDisplayProperties();
+    
+    public void newElement();
+    
+    public void deleteElement();
 }
