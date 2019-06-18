@@ -1,9 +1,9 @@
 package com.mrcrayfish.modelcreator.block;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -36,13 +36,13 @@ public class Resources
 		}
 	}
 	
-	public static void loadResources() throws FileNotFoundException {
-		ClassLoader classLoader = Resources.class.getClassLoader();
+	public static void loadResources(Class<?> clazz) throws FileNotFoundException {
+		ClassLoader classLoader = clazz.getClassLoader();
 		
 		//Block materials
 		{
-			File materialsFile = new File(classLoader.getResource("res/materials.json").getFile());
-			BufferedReader reader = new BufferedReader(new FileReader(materialsFile));
+			InputStream stream = classLoader.getResourceAsStream("res/Materials.json");
+			BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 			JsonParser parser = new JsonParser();
 			JsonElement jsonElement = parser.parse(reader);
 			JsonArray materialJsonArray = jsonElement.getAsJsonArray();
@@ -56,8 +56,8 @@ public class Resources
 		
 		//Block breaking sound
 		{
-			File soundsFile = new File(classLoader.getResource("res/SoundTypes.json").getFile());
-			BufferedReader reader = new BufferedReader(new FileReader(soundsFile));
+			InputStream stream = classLoader.getResourceAsStream("res/SoundTypes.json");
+			BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 			JsonParser parser = new JsonParser();
 			JsonElement jsonElement = parser.parse(reader);
 			JsonArray soundJsonArray = jsonElement.getAsJsonArray();
@@ -71,8 +71,8 @@ public class Resources
 		
 		//Minecraft languages
 		{
-			File langFile = new File(classLoader.getResource("res/Languages.json").getFile());
-			BufferedReader reader = new BufferedReader(new FileReader(langFile));
+			InputStream stream = classLoader.getResourceAsStream("res/Languages.json");
+			BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 			JsonParser parser = new JsonParser();
 			JsonElement jsonElement = parser.parse(reader);
 			JsonArray langJsonArray = jsonElement.getAsJsonArray();
@@ -88,8 +88,8 @@ public class Resources
 		
 		//Items
 		{
-			File itemFile = new File(classLoader.getResource("res/Items.json").getFile());
-			BufferedReader reader = new BufferedReader(new FileReader(itemFile));
+			InputStream stream = classLoader.getResourceAsStream("res/Items.json");
+			BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 			JsonParser parser = new JsonParser();
 			JsonElement jsonElement = parser.parse(reader);
 			JsonArray itemJsonArray = jsonElement.getAsJsonArray();
@@ -103,8 +103,8 @@ public class Resources
 		
 		//Creative tabs
 		{
-			File creativeFile = new File(classLoader.getResource("res/CreativeTabs.json").getFile());
-			BufferedReader reader = new BufferedReader(new FileReader(creativeFile));
+			InputStream stream = classLoader.getResourceAsStream("res/CreativeTabs.json");
+			BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 			JsonParser parser = new JsonParser();
 			JsonElement jsonElement = parser.parse(reader);
 			JsonArray creativeJsonArray = jsonElement.getAsJsonArray();

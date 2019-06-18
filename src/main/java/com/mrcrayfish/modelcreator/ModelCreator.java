@@ -171,7 +171,7 @@ public class ModelCreator extends JFrame
     private void initComponents()
     {
     	try{
-			Resources.loadResources();
+			Resources.loadResources(this.getClass());
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
