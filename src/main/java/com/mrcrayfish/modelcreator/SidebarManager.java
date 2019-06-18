@@ -28,16 +28,21 @@ public class SidebarManager
 		return this.collisionPanel;
 	}
 	
-	public void setActivePanel(int panel) {
-		if(panel == 0) {
+	public void setActivePanel(SidebarTypes panel) {
+		if(panel == SidebarTypes.MODEL) {
 			this.activePanel = modelPanel;
 			collisionPanel.setSelectedElement(-1);
-		}else if(panel == 1) {
+		}else if(panel == SidebarTypes.COLLISION) {
 			this.activePanel = collisionPanel;
 			modelPanel.setSelectedElement(-1);
 		}else {
 			throw new IllegalArgumentException("new active panel out of range");
 		}
+	}
+	
+	public enum SidebarTypes {
+		MODEL,
+		COLLISION
 	}
 	
 }

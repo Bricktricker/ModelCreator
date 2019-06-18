@@ -1,5 +1,6 @@
 package com.mrcrayfish.modelcreator;
 
+import com.mrcrayfish.modelcreator.SidebarManager.SidebarTypes;
 import com.mrcrayfish.modelcreator.block.Resources;
 import com.mrcrayfish.modelcreator.component.Menu;
 import com.mrcrayfish.modelcreator.component.TextureManager;
@@ -191,7 +192,7 @@ public class ModelCreator extends JFrame
         manager = new SidebarManager(modelPanel, collisionPanel);
         rightSide.addChangeListener(l -> {
         	int active = rightSide.getSelectedIndex();
-        	manager.setActivePanel(active);
+        	manager.setActivePanel(active == 0 ? SidebarTypes.MODEL : SidebarTypes.COLLISION);
         });
         
         scroll = new JScrollPane(rightSide);

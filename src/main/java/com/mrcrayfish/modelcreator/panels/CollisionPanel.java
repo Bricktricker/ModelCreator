@@ -3,6 +3,7 @@ package com.mrcrayfish.modelcreator.panels;
 import java.awt.Dimension;
 
 import com.mrcrayfish.modelcreator.ModelCreator;
+import com.mrcrayfish.modelcreator.SidebarManager.SidebarTypes;
 import com.mrcrayfish.modelcreator.element.CollisionState;
 import com.mrcrayfish.modelcreator.element.Element;
 import com.mrcrayfish.modelcreator.element.ElementCellEntry;
@@ -40,6 +41,7 @@ public class CollisionPanel extends ElementManager
         }
         this.setSelectedElement(state.getSelectedIndex());
         this.updateValues();
+        creator.getSidebarManager().setActivePanel(SidebarTypes.COLLISION);
 	}
 
 }

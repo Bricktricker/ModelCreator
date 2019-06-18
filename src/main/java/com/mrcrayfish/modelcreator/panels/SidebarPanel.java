@@ -2,6 +2,7 @@ package com.mrcrayfish.modelcreator.panels;
 
 
 import com.mrcrayfish.modelcreator.ModelCreator;
+import com.mrcrayfish.modelcreator.SidebarManager.SidebarTypes;
 import com.mrcrayfish.modelcreator.element.*;
 import com.mrcrayfish.modelcreator.panels.tabs.ElementPanelExtra;
 import com.mrcrayfish.modelcreator.panels.tabs.FacePanel;
@@ -99,6 +100,7 @@ public class SidebarPanel extends ElementManager
         this.setAmbientOcc(state.isAmbientOcclusion());
         this.setParticle(state.getParticleTexture());
         this.updateValues();
+        creator.getSidebarManager().setActivePanel(SidebarTypes.COLLISION);
 	}
 
 }
