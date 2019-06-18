@@ -83,4 +83,22 @@ public class SidebarPanel extends ElementManager
         return particle;
     }
 
+	@Override
+	public ElementManagerState createState()
+	{
+		return new SidebarState(this);
+	}
+	
+	public void restoreState(SidebarState state) {
+		this.reset();
+        for(Element element : state.getElements())
+        {
+            this.model.addElement(new ElementCellEntry(new Element(element)));
+        }
+        this.setSelectedElement(state.getSelectedIndex());
+        this.setAmbientOcc(state.isAmbientOcclusion());
+        this.setParticle(state.getParticleTexture());
+        this.updateValues();
+	}
+
 }

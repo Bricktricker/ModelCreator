@@ -18,10 +18,9 @@ public class StateManager
     private static int lastId = -1;
     private static Timer timer;
 
-    //TODO: make this more ElementManager dependent
     public static void pushState(ElementManager manager)
     {
-        //pushState(manager.createState());
+        pushState(manager.createState());
     }
 
     private static void pushState(ElementManagerState state)
@@ -61,7 +60,7 @@ public class StateManager
         if(canRestorePreviousState())
         {
             ElementManagerState state = states.get(tailIndex - 1);
-            manager.restoreState(state);
+            state.restore();
             tailIndex--;
         }
     }
@@ -71,7 +70,7 @@ public class StateManager
         if(canRestoreNextState())
         {
             ElementManagerState state = states.get(tailIndex + 1);
-            manager.restoreState(state);
+            state.restore();
             tailIndex++;
         }
     }
@@ -128,14 +127,11 @@ public class StateManager
             }
         }
 
-        throw new UnsupportedOperationException();
-        /*
         ElementManagerState state = manager.createState();
         ActionListener listener = e -> pushManagerState(state);
         timer = new Timer(400, listener);
         timer.setRepeats(false);
         timer.start();
         lastId = id;
-        */
     }
 }

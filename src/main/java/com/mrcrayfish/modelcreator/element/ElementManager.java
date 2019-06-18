@@ -151,6 +151,8 @@ public abstract class ElementManager extends JPanel
 	
 	protected abstract void addElementPanel();
 	
+	public abstract ElementManagerState createState();
+	
 	protected void setLayoutConstaints()
     {
         layout.putConstraint(SpringLayout.NORTH, name, 212, SpringLayout.NORTH, this);
@@ -250,17 +252,6 @@ public abstract class ElementManager extends JPanel
 	public void reset()
 	{
 		this.clearElements();
-	}
-	
-	public void restoreState(ElementManagerState state)
-	{
-		this.reset();
-        for(Element element : state.getElements())
-        {
-            this.model.addElement(new ElementCellEntry(new Element(element)));
-        }
-        this.setSelectedElement(state.getSelectedIndex());
-        this.updateValues();
 	}
 	
 	public void newElement()
