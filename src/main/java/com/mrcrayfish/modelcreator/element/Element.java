@@ -212,7 +212,7 @@ public class Element
         }
     }
 
-    public void drawOutline()
+    public void drawOutline(boolean blackOutline)
     {
         GL11.glDepthMask(false);
         GL11.glPushMatrix();
@@ -226,7 +226,11 @@ public class Element
             GL11.glScalef(outlineScale, outlineScale, outlineScale);
             GL11.glTranslated(-((getWidth() * outlineScale) - getWidth()) / 2.0, -((getHeight() * outlineScale) - getHeight()) / 2.0, -((getDepth() * outlineScale) - getDepth()) / 2.0);
 
-            GL11.glColor3f(1.0F, 1.0F, 1.0F);
+            if(!blackOutline) {
+            	GL11.glColor3f(1.0F, 1.0F, 1.0F);	
+            }else {
+            	GL11.glColor3f(0.1F, 0.1F, 0.1F);
+            }
             GL11.glLineWidth(3F);
 
             boolean grabbing = ((UVSidebar)ModelCreator.uvSidebar).isGrabbing();

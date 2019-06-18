@@ -8,6 +8,8 @@ import com.mrcrayfish.modelcreator.component.Menu;
 import com.mrcrayfish.modelcreator.display.CanvasRenderer;
 import com.mrcrayfish.modelcreator.element.Element;
 import com.mrcrayfish.modelcreator.element.ElementManager;
+import com.mrcrayfish.modelcreator.panels.CollisionPanel;
+import com.mrcrayfish.modelcreator.panels.SidebarPanel;
 import com.mrcrayfish.modelcreator.util.FontManager;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.opengl.TextureImpl;
@@ -42,18 +44,20 @@ public class StandardRenderer extends CanvasRenderer
         this.drawGrid(camera, Settings.getCardinalPoints()); //TODO make this an option
         
         glTranslatef(-8, 0, -8);
-        ElementManager panel = manager.getModelPanel();
-        this.drawElements(panel);
-        panel = manager.getCollisionPanel();
-        this.drawElements(panel);
+        this.drawElements(manager.getModelPanel());
+        this.drawElements(manager.getCollisionPanel());
 
         glDisable(GL_DEPTH_TEST);
         glDisable(GL_CULL_FACE);
         glDisable(GL_TEXTURE_2D);
         glDisable(GL_LIGHTING);
     }
+    
+    protected void drawElements(ElementManager manager) {
+    	throw new IllegalStateException();
+    }
 
-    protected void drawElements(ElementManager manager)
+    protected void drawElements(SidebarPanel manager)
     {
         for(int i = 0; i < manager.getElementCount(); i++)
         {
@@ -70,7 +74,20 @@ public class StandardRenderer extends CanvasRenderer
         Element selectedElement = manager.getSelectedElement();
         if(selectedElement != null && selectedElement.isVisible())
         {
-            selectedElement.drawOutline();
+            selectedElement.drawOutline(false);
+        }
+    }
+    
+    protected void drawElements(CollisionPanel manager)
+    {
+        for(int i = 0; i < manager.getElementCount(); i++)
+        {
+            Element cube = manager.getElement(i);
+            if(cube.isVisible())
+            {
+            	cube.drawOutline(true);
+            	cube.drawExtras(manager);
+            }
         }
     }
 
