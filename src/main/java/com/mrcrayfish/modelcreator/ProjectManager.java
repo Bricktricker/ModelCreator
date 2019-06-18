@@ -7,11 +7,14 @@ import com.google.gson.JsonParser;
 import com.mrcrayfish.modelcreator.block.BlockManager;
 import com.mrcrayfish.modelcreator.component.TextureManager;
 import com.mrcrayfish.modelcreator.element.Element;
+import com.mrcrayfish.modelcreator.element.ElementCellEntry;
 import com.mrcrayfish.modelcreator.element.ElementManager;
 import com.mrcrayfish.modelcreator.element.Face;
+import com.mrcrayfish.modelcreator.panels.CollisionPanel;
 import com.mrcrayfish.modelcreator.texture.TextureEntry;
 
 import javax.imageio.ImageIO;
+import javax.swing.ListModel;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -40,9 +43,8 @@ public class ProjectManager
         
         try(ZipInputStream zis = new ZipInputStream(new FileInputStream(projectFile)))
         {
-        	//TODO: load collision data
         	Project project = new Project(zis);
-        	loadBlockData(project.getBlockData());
+        	loadBlockData(project.getBlockData(), manager.getCollisionPanel());
         	loadImages(project);
         	ModelImporter importer = new ModelImporter(manager.getModelPanel(), project.getModelData());
         	importer.importFromJSON();
@@ -60,7 +62,7 @@ public class ProjectManager
 
     }
     
-    private static void loadBlockData(String blockData) {
+    private static void loadBlockData(String blockData, CollisionPanel collisionPanel) {
     	if(blockData == null || blockData.isEmpty())
     		return;
     	
@@ -128,6 +130,17 @@ public class ProjectManager
         	 String item = loot.get("drop").getAsString();
         	 BlockManager.loot.setDropItem(item);
          }
+         
+         //Collision
+         JsonArray collision = block.getAsJsonArray("collision");
+         collision.forEach(b -> {
+        	 JsonObject box = b.getAsJsonObject();
+        	 String name = box.get("name").getAsString();
+        	 JsonArray startJson = box.getAsJsonArray("start");
+        	 
+        	 Element elem = new Element(0, 0, 0);
+        	 //Continue here
+         });
     }
     
     public static void loadImages(Project project) throws IOException {
@@ -194,7 +207,7 @@ public class ProjectManager
             }
 
             //Block properties
-            String blockJson = getBlockFile();
+            String blockJson = getBlockFile(manager.getCollisionPanel());
             addToZipFile(blockJson, zos, "block.json");
             
             //Block notes
@@ -236,7 +249,7 @@ public class ProjectManager
         return exporter.writeFile(File.createTempFile("model.json", ""));
     }
     
-    private static String getBlockFile() {
+    private static String getBlockFile(CollisionPanel collisionPanel) {
     	JsonObject rootObj = new JsonObject();
     	
     	//Block properties
@@ -296,6 +309,35 @@ public class ProjectManager
     			loot.addProperty("drop", BlockManager.loot.getDropItem());
     		}
     		rootObj.add("loot", loot);
+    	}
+    	
+    	//Collision box
+    	{
+    		JsonArray collision = new JsonArray();
+    		ListModel<ElementCellEntry> boxes = collisionPanel.getList().getModel();
+    		for(int i = 0; i < boxes.getSize(); i++) {
+    			Element elem = boxes.getElementAt(i).getElement();
+    			JsonObject jsonElem = new JsonObject();
+    			jsonElem.addProperty("name", elem.getName());
+    			
+    			//start
+    			JsonArray startArray = new JsonArray();
+    			startArray.add(elem.getStartX());
+    			startArray.add(elem.getStartY());
+    			startArray.add(elem.getStartZ());
+    			jsonElem.add("start", startArray);
+    			
+    			//end
+    			JsonArray endArray = new JsonArray();
+    			endArray.add(elem.getStartX() + elem.getWidth());
+    			endArray.add(elem.getStartY() + elem.getHeight());
+    			endArray.add(elem.getStartZ() + elem.getDepth());
+    			jsonElem.add("end", endArray);
+    			
+    			collision.add(jsonElem);
+    		}
+    		
+    		rootObj.add("collision", collision);
     	}
     	
     	return rootObj.toString();
