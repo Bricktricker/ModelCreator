@@ -11,7 +11,9 @@ import java.awt.*;
 
 public class ElementExtraPanel extends JPanel implements IElementUpdater
 {
-    private ElementManager manager;
+	private static final long serialVersionUID = 2404530469699783994L;
+
+	private ElementManager manager;
 
     private JRadioButton btnShade;
 

@@ -1,7 +1,6 @@
 package com.mrcrayfish.modelcreator.panels;
 
 import com.mrcrayfish.modelcreator.ModelCreator;
-import com.mrcrayfish.modelcreator.Settings;
 import com.mrcrayfish.modelcreator.StateManager;
 import com.mrcrayfish.modelcreator.element.Element;
 import com.mrcrayfish.modelcreator.element.ElementManager;
@@ -12,7 +11,9 @@ import java.awt.*;
 
 public class FaceExtrasPanel extends JPanel implements IElementUpdater
 {
-    private ElementManager manager;
+	private static final long serialVersionUID = -5302586741729079416L;
+
+	private ElementManager manager;
 
     private JPanel horizontalBox;
     private JRadioButton boxCullFace;

@@ -11,7 +11,9 @@ import java.awt.event.*;
 
 public class PositionPanel extends JPanel implements IElementUpdater
 {
-    private ElementManager manager;
+	private static final long serialVersionUID = 9069953783103159145L;
+
+	private ElementManager manager;
 
     private JButton btnPlusX;
     private JButton btnPlusY;

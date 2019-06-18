@@ -16,7 +16,9 @@ import java.awt.event.KeyEvent;
  */
 public class DisplayEntryPanel extends JPanel
 {
-    private DisplayProperties.Entry entry; //TODO remove instance
+	private static final long serialVersionUID = -8662188542650616402L;
+	
+	private DisplayProperties.Entry entry; //TODO remove instance
     private JCheckBox checkBoxEnabled;
     private JSlider sliderRotationX;
     private JSlider sliderRotationY;

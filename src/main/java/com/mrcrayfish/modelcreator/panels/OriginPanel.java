@@ -11,7 +11,9 @@ import java.awt.event.*;
 
 public class OriginPanel extends JPanel implements IElementUpdater
 {
-    private ElementManager manager;
+	private static final long serialVersionUID = -5260113880605992143L;
+
+	private ElementManager manager;
 
     private JButton btnPlusX;
     private JButton btnPlusY;

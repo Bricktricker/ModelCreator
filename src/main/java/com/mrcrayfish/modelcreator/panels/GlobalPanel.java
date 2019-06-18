@@ -13,7 +13,9 @@ import java.awt.*;
 
 public class GlobalPanel extends JPanel implements IElementUpdater
 {
-    private SidebarPanel manager;
+	private static final long serialVersionUID = 6507973208727064548L;
+
+	private SidebarPanel manager;
 
     private JRadioButton ambientOcc;
     private JButton btnParticle;

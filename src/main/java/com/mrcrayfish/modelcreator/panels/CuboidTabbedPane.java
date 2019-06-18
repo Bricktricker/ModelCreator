@@ -1,7 +1,6 @@
 package com.mrcrayfish.modelcreator.panels;
 
 import com.mrcrayfish.modelcreator.element.Element;
-import com.mrcrayfish.modelcreator.element.ElementManager;
 
 import javax.swing.*;
 import java.awt.*;

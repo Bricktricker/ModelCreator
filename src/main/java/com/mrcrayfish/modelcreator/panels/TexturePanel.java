@@ -15,7 +15,9 @@ import java.awt.event.InputEvent;
 
 public class TexturePanel extends JPanel
 {
-    private SidebarPanel manager;
+	private static final long serialVersionUID = 2788057657454100486L;
+
+	private SidebarPanel manager;
 
     private JButton btnSelect;
     private JButton btnClear;

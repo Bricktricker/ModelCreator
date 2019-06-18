@@ -12,7 +12,9 @@ import java.awt.event.*;
 
 public class UVPanel extends JPanel implements IElementUpdater
 {
-    private ElementManager manager;
+	private static final long serialVersionUID = -801528944312525082L;
+	
+	private ElementManager manager;
     private JButton btnPlusX;
     private JButton btnPlusY;
     private JTextField xStartField;
