@@ -8,19 +8,20 @@ import java.util.stream.Collectors;
 /**
  * Author: MrCrayfish
  */
+//TODO: make an interface
 public class ElementManagerState
 {
     private final List<Element> elements;
     private final int selectedIndex;
-    private final boolean ambientOcclusion;
-    private final TextureEntry particleTexture;
+    private boolean ambientOcclusion;
+    private TextureEntry particleTexture;
 
     public ElementManagerState(ElementManager manager)
     {
         this.elements = manager.getAllElements().stream().map(Element::new).collect(Collectors.toList());
         this.selectedIndex = manager.getAllElements().indexOf(manager.getSelectedElement());
-        this.ambientOcclusion = manager.getAmbientOcc();
-        this.particleTexture = manager.getParticle();
+        //this.ambientOcclusion = manager.getAmbientOcc();
+        //this.particleTexture =  manager.getParticle();
     }
 
     public List<Element> getElements()

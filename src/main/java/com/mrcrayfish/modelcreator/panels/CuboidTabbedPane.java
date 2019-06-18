@@ -1,20 +1,16 @@
 package com.mrcrayfish.modelcreator.panels;
 
+import com.mrcrayfish.modelcreator.element.Element;
 import com.mrcrayfish.modelcreator.element.ElementManager;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class CuboidTabbedPane extends JTabbedPane
+public class CuboidTabbedPane extends JTabbedPane implements IElementUpdater
 {
-    private ElementManager manager;
+	private static final long serialVersionUID = -2177899971092802618L;
 
-    public CuboidTabbedPane(ElementManager manager)
-    {
-        this.manager = manager;
-    }
-
-    public void updateValues()
+	public void updateValues(Element elem)
     {
         for(int i = 0; i < getTabCount(); i++)
         {
@@ -24,7 +20,7 @@ public class CuboidTabbedPane extends JTabbedPane
                 if(component instanceof IElementUpdater)
                 {
                     IElementUpdater updater = (IElementUpdater) component;
-                    updater.updateValues(manager.getSelectedElement());
+                    updater.updateValues(elem);
                 }
             }
         }

@@ -21,7 +21,7 @@ public class StateManager
     //TODO: make this more ElementManager dependent
     public static void pushState(ElementManager manager)
     {
-        pushState(manager.createState());
+        //pushState(manager.createState());
     }
 
     private static void pushState(ElementManagerState state)
@@ -128,11 +128,14 @@ public class StateManager
             }
         }
 
+        throw new UnsupportedOperationException();
+        /*
         ElementManagerState state = manager.createState();
         ActionListener listener = e -> pushManagerState(state);
         timer = new Timer(400, listener);
         timer.setRepeats(false);
         timer.start();
         lastId = id;
+        */
     }
 }

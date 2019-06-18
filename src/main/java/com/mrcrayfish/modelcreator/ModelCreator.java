@@ -184,7 +184,7 @@ public class ModelCreator extends JFrame
         JTabbedPane rightSide = new JTabbedPane();
         SidebarPanel modelPanel = new SidebarPanel(this);
         rightSide.addTab("model", modelPanel);
-        CollisionPanel collisionPanel = new CollisionPanel();
+        CollisionPanel collisionPanel = new CollisionPanel(this);
         rightSide.addTab("collision", collisionPanel);
        
         manager = new SidebarManager(modelPanel, collisionPanel);

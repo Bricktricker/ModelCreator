@@ -4,6 +4,7 @@ import com.mrcrayfish.modelcreator.display.DisplayProperties;
 import com.mrcrayfish.modelcreator.element.Element;
 import com.mrcrayfish.modelcreator.element.ElementManager;
 import com.mrcrayfish.modelcreator.element.Face;
+import com.mrcrayfish.modelcreator.panels.SidebarPanel;
 import com.mrcrayfish.modelcreator.texture.TextureEntry;
 
 import java.io.BufferedWriter;
@@ -73,9 +74,9 @@ public class ExporterModel extends Exporter
         writer.write(space(1) + "\"__comment\": \"Model generated using MrCrayfish's Model Creator (https://mrcrayfish.com/tools?id=mc)\",");
         writer.newLine();
 
-        if(!manager.getAmbientOcc())
+        if(!((SidebarPanel)manager).getAmbientOcc())
         {
-            writer.write("\"ambientocclusion\": " + manager.getAmbientOcc() + ",");
+            writer.write("\"ambientocclusion\": " + ((SidebarPanel)manager).getAmbientOcc() + ",");
             writer.newLine();
         }
 
@@ -118,9 +119,9 @@ public class ExporterModel extends Exporter
     {
         writer.write(space(1) + "\"textures\": {");
         writer.newLine();
-        if(manager.getParticle() != null)
+        if(((SidebarPanel)manager).getParticle() != null)
         {
-            TextureEntry entry = manager.getParticle();
+            TextureEntry entry = ((SidebarPanel)manager).getParticle();
             writer.write(space(2) + "\"particle\": \"" + entry.getModId() + ":");
             if(!entry.getDirectory().isEmpty())
             {

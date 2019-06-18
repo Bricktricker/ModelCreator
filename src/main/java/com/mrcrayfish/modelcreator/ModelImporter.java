@@ -10,6 +10,7 @@ import com.mrcrayfish.modelcreator.display.DisplayProperties;
 import com.mrcrayfish.modelcreator.element.Element;
 import com.mrcrayfish.modelcreator.element.ElementManager;
 import com.mrcrayfish.modelcreator.element.Face;
+import com.mrcrayfish.modelcreator.panels.SidebarPanel;
 import com.mrcrayfish.modelcreator.texture.TextureEntry;
 import com.mrcrayfish.modelcreator.util.AssetsUtil;
 
@@ -32,9 +33,9 @@ public class ModelImporter
     private String modelData;
 
     // Model Variables
-    private ElementManager manager;
+    private SidebarPanel manager;
 
-    public ModelImporter(ElementManager manager, String modelData)
+    public ModelImporter(SidebarPanel manager, String modelData)
     {
         this.manager = manager;
         this.modelData = modelData;
@@ -44,14 +45,14 @@ public class ModelImporter
     {
     	try
     	{
-			readComponents(manager);
+			readComponents();
 		} catch (IOException e)
 		{
 			e.printStackTrace();
 		}
     }
 
-    private void readComponents(ElementManager manager) throws IOException
+    private void readComponents() throws IOException
     {
         manager.clearElements();
         manager.setParticle(null);
@@ -59,10 +60,10 @@ public class ModelImporter
 
         JsonParser parser = new JsonParser();
         JsonElement read = parser.parse(this.modelData);
-        readComponents(manager, read);
+        readComponents(read);
     }
     
-    private void readComponents(ElementManager manager, JsonElement read) throws IOException {
+    private void readComponents(JsonElement read) throws IOException {
     	if(read.isJsonObject())
         {
             JsonObject obj = read.getAsJsonObject();
@@ -90,7 +91,7 @@ public class ModelImporter
                     loadTextures(obj);
 
                     // Load Parent
-                    readExternalModel(manager, file);
+                    readExternalModel(file);
                 }
 
                 //return; //WHY??
@@ -127,7 +128,7 @@ public class ModelImporter
         }
     }
     
-    private void readExternalModel(ElementManager manager, File file) throws IOException {
+    private void readExternalModel(File file) throws IOException {
     	try(FileReader fr = new FileReader(file))
     	{
     		BufferedReader reader = new BufferedReader(fr);
@@ -135,7 +136,7 @@ public class ModelImporter
             JsonParser parser = new JsonParser();
             JsonElement read = parser.parse(reader);
             
-            readComponents(manager, read);
+            readComponents(read);
             reader.close();
     	}
     }
