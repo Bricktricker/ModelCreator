@@ -62,7 +62,6 @@ public class Menu extends JMenuBar
     private JMenuItem itemCrafting;
     private JMenuItem itemLoot;
     private JMenuItem itemNotes;
-    private JMenuItem itemCollision; //Collision-BB
 
     /* More */
     private JMenu menuMore;
@@ -125,7 +124,6 @@ public class Menu extends JMenuBar
         	itemCrafting = createMenuItem("Crafting", "Set the crafting recipe", KeyEvent.VK_C, Icons.edit);
         	itemLoot = createMenuItem("Block drops", "Set the block loot", KeyEvent.VK_L, Icons.edit, 0, 0, InputEvent.CTRL_MASK);
         	itemNotes = createMenuItem("Notes", "Take some notes", KeyEvent.VK_N, Icons.new_);
-        	itemCollision = createMenuItem("Block collision", "Set the block collision box", KeyEvent.VK_C, Icons.edit, 0, 0, InputEvent.CTRL_MASK);
         }
 
         menuMore = new JMenu("More");
@@ -196,7 +194,6 @@ public class Menu extends JMenuBar
         menuBlock.add(itemCrafting);
         menuBlock.add(itemLoot);
         menuBlock.add(itemNotes);
-        menuBlock.add(itemCollision);
         this.add(menuBlock);
 
         /* Menu More Sub Menus */
@@ -257,8 +254,6 @@ public class Menu extends JMenuBar
         itemLoot.addActionListener(a -> BlockLoot.show(creator));
         
         itemNotes.addActionListener(a -> BlockNotes.show(creator));
-        
-        itemCollision.addActionListener(a -> System.out.println("itemCollision"));
 
         itemGitHub.addActionListener(a -> Util.openUrl(Constants.URL_GITHUB));
 
