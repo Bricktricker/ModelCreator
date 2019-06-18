@@ -282,9 +282,9 @@ public class Menu extends JMenuBar
             StateManager.pushState(creator.getSidebarManager().getCollisionPanel());
         });
 
-        itemUndo.addActionListener(a -> StateManager.restorePreviousState(creator.getActivePanel()));
+        itemUndo.addActionListener(a -> StateManager.restorePreviousState());
 
-        itemRedo.addActionListener(a -> StateManager.restoreNextState(creator.getActivePanel()));
+        itemRedo.addActionListener(a -> StateManager.restoreNextState());
     }
 
     private JMenuItem createMenuItem(String name, String tooltip, int mnemonic, Icon icon)

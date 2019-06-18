@@ -82,7 +82,7 @@ public class FixedPropertyRenderer extends DisplayPropertyRenderer
             glPushMatrix();
             for(Element element : elements)
             {
-                element.drawExtras(manager.getActivePanel());
+                element.drawExtras(manager.getModelPanel());
                 element.draw();
             }
             glPopMatrix();
@@ -101,7 +101,6 @@ public class FixedPropertyRenderer extends DisplayPropertyRenderer
             {
                 this.drawGrid(camera, false);
                 this.drawElements(manager.getModelPanel());
-                this.drawElements(manager.getCollisionPanel());
             }
             glPopMatrix();
 

@@ -55,7 +55,7 @@ public class StateManager
         tailIndex = states.size() - 1;
     }
 
-    public static void restorePreviousState(ElementManager manager)
+    public static void restorePreviousState()
     {
         if(canRestorePreviousState())
         {
@@ -65,7 +65,7 @@ public class StateManager
         }
     }
 
-    public static void restoreNextState(ElementManager manager)
+    public static void restoreNextState()
     {
         if(canRestoreNextState())
         {

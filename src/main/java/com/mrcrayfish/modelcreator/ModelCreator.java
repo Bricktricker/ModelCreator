@@ -145,7 +145,8 @@ public class ModelCreator extends JFrame
             }
         });
 
-        manager.getActivePanel().updateValues();
+        manager.getModelPanel().updateValues();
+        manager.getCollisionPanel().updateValues();
 
         pack();
         setVisible(true);

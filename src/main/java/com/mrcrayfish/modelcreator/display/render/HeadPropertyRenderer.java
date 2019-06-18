@@ -109,7 +109,7 @@ public class HeadPropertyRenderer extends DisplayPropertyRenderer
 
             for(Element element : elements)
             {
-                element.drawExtras(manager.getActivePanel());
+                element.drawExtras(manager.getModelPanel());
                 element.draw();
             }
 
@@ -127,7 +127,6 @@ public class HeadPropertyRenderer extends DisplayPropertyRenderer
             {
                 this.drawGrid(camera, false);
                 this.drawElements(manager.getModelPanel());
-                this.drawElements(manager.getCollisionPanel());
             }
             glPopMatrix();
 
