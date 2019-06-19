@@ -1,5 +1,6 @@
 package com.mrcrayfish.modelcreator;
 
+import com.mrcrayfish.modelcreator.block.BlockManager;
 import com.mrcrayfish.modelcreator.display.DisplayProperties;
 import com.mrcrayfish.modelcreator.element.Element;
 import com.mrcrayfish.modelcreator.element.ElementManager;
@@ -264,9 +265,7 @@ public class ExporterModel extends Exporter
 
     private void writeDisplayProperties(BufferedWriter writer) throws IOException
     {
-        /*
-         * TODO: removed display properties getting writen to model.json
-    	Map<String, DisplayProperties.Entry> entries = manager.getDisplayProperties().getEntries();
+    	Map<String, DisplayProperties.Entry> entries = BlockManager.displayProperties.getEntries();
         List<String> ids = new ArrayList<>();
         for(String id : DISPLAY_PROPERTY_ORDER)
         {
@@ -295,7 +294,6 @@ public class ExporterModel extends Exporter
 
         writer.newLine();
         writer.write(space(1) + "},");
-        */
     }
 
     private void writeDisplayEntry(BufferedWriter writer, String id, DisplayProperties.Entry entry) throws IOException

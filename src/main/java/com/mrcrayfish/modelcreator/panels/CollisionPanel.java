@@ -26,6 +26,14 @@ public class CollisionPanel extends ElementManager
         add(elemTmp);
         this.elementPanel = elemTmp;
     }
+    
+    @Override
+    public void addElement(Element e) {
+    	e.setAllTextures(null);
+    	e.setRotation(0);
+    	e.setRotationAxis(0);
+    	super.addElement(e);
+    }
 
 	@Override
 	public ElementManagerState createState()
