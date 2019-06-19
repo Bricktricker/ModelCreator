@@ -237,7 +237,7 @@ public class TextureManager extends JDialog
         }
         catch(IOException e)
         {
-            e.printStackTrace();
+            Util.writeCrashLog(e);
         }
     }
 
@@ -272,7 +272,7 @@ public class TextureManager extends JDialog
         }
         catch(IOException e)
         {
-            e.printStackTrace();
+            Util.writeCrashLog(e);
         }
         return null;
     }

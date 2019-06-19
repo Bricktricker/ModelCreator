@@ -17,8 +17,11 @@ import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Function;
@@ -349,6 +352,22 @@ public class Util
     {
         File[] files = parent.listFiles((dir, name) -> name.equals(targetName));
         return files != null && Arrays.stream(files).anyMatch(File::isDirectory);
+    }
+    
+    public static void writeCrashLog(Exception e) {
+    	DateFormat dateFormat = new SimpleDateFormat("dd_MM_yyyy HH_mm_ss");
+    	File file = new File("crash_" + dateFormat.format(new Date()) + ".log");
+    	try(PrintStream stream = new PrintStream(file))
+    	{
+    		String message = e.getMessage();
+    		stream.print(message + "\n");
+    		if(e.getCause() != null)
+    			stream.print("Cause: \n" + e.getCause().getMessage());
+    		e.printStackTrace(stream);
+    	}catch(Exception ex) {
+    		ex.printStackTrace();
+    	}
+		System.exit(1);
     }
 
     private static boolean isLegacyAssets(File file)

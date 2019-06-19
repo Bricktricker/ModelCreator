@@ -12,6 +12,7 @@ import com.mrcrayfish.modelcreator.element.ElementManager;
 import com.mrcrayfish.modelcreator.element.Face;
 import com.mrcrayfish.modelcreator.panels.CollisionPanel;
 import com.mrcrayfish.modelcreator.texture.TextureEntry;
+import com.mrcrayfish.modelcreator.util.Util;
 
 import javax.imageio.ImageIO;
 import javax.swing.ListModel;
@@ -56,8 +57,7 @@ public class ProjectManager
         	}
         } catch (IOException e)
 		{
-			e.printStackTrace();
-			return;
+			Util.writeCrashLog(e);
 		}
 
     }
@@ -231,7 +231,7 @@ public class ProjectManager
         }
         catch(IOException e)
         {
-            e.printStackTrace();
+            Util.writeCrashLog(e);
         }
     }
 

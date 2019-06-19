@@ -17,6 +17,8 @@ import com.mrcrayfish.modelcreator.sidebar.UVSidebar;
 import com.mrcrayfish.modelcreator.texture.TextureAtlas;
 import com.mrcrayfish.modelcreator.util.FontManager;
 import com.mrcrayfish.modelcreator.util.KeyboardUtil;
+import com.mrcrayfish.modelcreator.util.Util;
+
 import org.lwjgl.LWJGLException;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -127,8 +129,7 @@ public class ModelCreator extends JFrame
         }
         catch(LWJGLException e)
         {
-            e.printStackTrace();
-            System.exit(1);
+            Util.writeCrashLog(e);
         }
 
         initComponents();
@@ -174,7 +175,7 @@ public class ModelCreator extends JFrame
     	try{
 			Resources.loadResources(this.getClass());
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			Util.writeCrashLog(e);
 		}
     	
         Icons.init(this.getClass());
@@ -291,7 +292,7 @@ public class ModelCreator extends JFrame
         }
         catch(LWJGLException e)
         {
-            e.printStackTrace();
+            Util.writeCrashLog(e);
         }
 
         try
@@ -308,7 +309,7 @@ public class ModelCreator extends JFrame
         }
         catch(LWJGLException e)
         {
-            e.printStackTrace();
+            Util.writeCrashLog(e);
         }
     }
 

@@ -1,12 +1,15 @@
 package com.mrcrayfish.modelcreator;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
+
+import com.mrcrayfish.modelcreator.util.Util;
 
 public class Settings
 {
@@ -184,14 +187,13 @@ public class Settings
     	}
     }
     
-    public static boolean saveSettings() {
+    public static void saveSettings() {
     	try(FileOutputStream fos = new FileOutputStream(SETTINGS_PATH))
     	{
     		settings.store(fos, "");
     	}catch(IOException e) {
-    		return false;
+    		Util.writeCrashLog(e);
     	}
-    	return true;
     }
     
     public static boolean load() {
@@ -199,9 +201,11 @@ public class Settings
     	try(FileInputStream ifr = new FileInputStream(SETTINGS_PATH))
     	{
     		settings.load(ifr);
-    	}catch(IOException e) {
+    	}catch(FileNotFoundException e) {
     		return false;
-    	}
+    	} catch (IOException e) {
+			Util.writeCrashLog(e);
+		}
     	
     	if(getUsedMcVersion() == null) {
     		List<String> extractedAssets = getExtractedAssets();

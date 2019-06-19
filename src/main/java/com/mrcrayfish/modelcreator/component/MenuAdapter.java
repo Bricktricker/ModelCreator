@@ -8,6 +8,7 @@ import javax.swing.event.MenuListener;
  */
 public abstract class MenuAdapter implements MenuListener
 {
+	//TODO: make fully abstract
     @Override
     public void menuSelected(MenuEvent e)
     {

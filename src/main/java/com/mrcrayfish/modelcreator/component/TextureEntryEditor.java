@@ -122,7 +122,7 @@ public class TextureEntryEditor extends JDialog
                 }
                 catch(IOException e)
                 {
-                    e.printStackTrace();
+                    Util.writeCrashLog(e);
                 }
             }
             else
@@ -193,7 +193,7 @@ public class TextureEntryEditor extends JDialog
                 catch(IOException e1)
                 {
                     JOptionPane.showMessageDialog(this, "Unable to determine image dimensions", "Error", JOptionPane.ERROR_MESSAGE);
-                    return;
+                    Util.writeCrashLog(e1);
                 }
                 entry.setTextureFile(texture);
             }
@@ -266,6 +266,7 @@ public class TextureEntryEditor extends JDialog
         catch(IOException e1)
         {
             JOptionPane.showMessageDialog(this, "Unable to determine image dimensions", "Error", JOptionPane.ERROR_MESSAGE);
+            Util.writeCrashLog(e1);
             return false;
         }
         try
@@ -276,6 +277,7 @@ public class TextureEntryEditor extends JDialog
         catch(IOException e)
         {
             JOptionPane.showMessageDialog(this, "Unable to load image", "Error", JOptionPane.ERROR_MESSAGE);
+            Util.writeCrashLog(e);
             return false;
         }
         return true;

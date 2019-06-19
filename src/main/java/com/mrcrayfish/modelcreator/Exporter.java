@@ -1,6 +1,7 @@
 package com.mrcrayfish.modelcreator;
 
 import com.mrcrayfish.modelcreator.element.ElementManager;
+import com.mrcrayfish.modelcreator.util.Util;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -56,7 +57,7 @@ public abstract class Exporter
         }
         catch(IOException e)
         {
-            e.printStackTrace();
+            Util.writeCrashLog(e);
         }
         return null;
     }

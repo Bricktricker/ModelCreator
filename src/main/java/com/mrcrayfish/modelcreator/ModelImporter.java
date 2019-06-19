@@ -13,6 +13,7 @@ import com.mrcrayfish.modelcreator.element.Face;
 import com.mrcrayfish.modelcreator.panels.SidebarPanel;
 import com.mrcrayfish.modelcreator.texture.TextureEntry;
 import com.mrcrayfish.modelcreator.util.AssetsUtil;
+import com.mrcrayfish.modelcreator.util.Util;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -48,7 +49,7 @@ public class ModelImporter
 			readComponents();
 		} catch (IOException e)
 		{
-			e.printStackTrace();
+			Util.writeCrashLog(e);
 		}
     }
 

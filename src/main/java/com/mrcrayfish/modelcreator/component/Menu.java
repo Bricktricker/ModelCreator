@@ -400,8 +400,7 @@ public class Menu extends JMenuBar
             File project = projects[selection];
             ProjectManager.loadProject(creator.getSidebarManager(), project);
             DisplayPropertiesDialog.update(creator);
-            //TODO: manage StateManager better
-            //StateManager.pushState(creator.getElementManager());
+            StateManager.pushState(new CombinedState(creator.getSidebarManager()));
             dialog.dispose();
             
         });
@@ -658,6 +657,7 @@ public class Menu extends JMenuBar
                 catch(IOException e1)
                 {
                     JOptionPane.showMessageDialog(dialog, "Unable to create the file. Check that your destination folder is writable", "Error", JOptionPane.ERROR_MESSAGE);
+                    Util.writeCrashLog(e1);
                 }
 
                 dialog.dispose();
@@ -684,7 +684,7 @@ public class Menu extends JMenuBar
                         }
                         catch(IOException e1)
                         {
-                            e1.printStackTrace();
+                            Util.writeCrashLog(e1);
                         }
                     }
                 }
@@ -799,6 +799,7 @@ public class Menu extends JMenuBar
             catch (Exception exception)
             {
                 JOptionPane.showMessageDialog(creator, "An error occured while copying code to your clipboard.", "Error", JOptionPane.ERROR_MESSAGE);
+                Util.writeCrashLog(exception);
             }
             return;
         }
