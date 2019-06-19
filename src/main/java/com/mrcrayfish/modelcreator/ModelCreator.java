@@ -135,7 +135,6 @@ public class ModelCreator extends JFrame
         initComponents();
         registerShortcuts();
 
-        //TODO: hide when switch do collision panel
         uvSidebar = new UVSidebar("UV Editor", manager.getModelPanel());
 
         addWindowListener(new WindowAdapter()
@@ -194,6 +193,10 @@ public class ModelCreator extends JFrame
         rightSide.addChangeListener(l -> {
         	int active = rightSide.getSelectedIndex();
         	manager.setActivePanel(active == 0 ? SidebarTypes.MODEL : SidebarTypes.COLLISION);
+        	if(active != 0) {
+        		this.setSidebar(null);
+                ModelCreator.isUVSidebarOpen = false;
+        	}
         });
         
         scroll = new JScrollPane(rightSide);

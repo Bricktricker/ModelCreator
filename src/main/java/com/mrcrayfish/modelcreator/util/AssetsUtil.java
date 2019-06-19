@@ -47,6 +47,6 @@ public class AssetsUtil
     }
     
     public static String getTexturePath(String texture) {
-    	return getAssetFolder() + "/textures/" + texture + ".png";
+    	return getAssetFolder() + "/textures/" + texture;
     }
 }

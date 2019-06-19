@@ -124,8 +124,8 @@ public class Util
     {
         try
         {
-            InputStream is = clazz.getClassLoader().getResourceAsStream(name + ".model");
-            File file = File.createTempFile(name + ".model", "");
+            InputStream is = clazz.getClassLoader().getResourceAsStream(name + ".block");
+            File file = File.createTempFile(name + ".block", "");
             FileOutputStream fos = new FileOutputStream(file);
 
             byte[] buffer = new byte[1024];

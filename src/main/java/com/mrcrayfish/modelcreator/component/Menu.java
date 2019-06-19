@@ -270,14 +270,22 @@ public class Menu extends JMenuBar
 
         itemModelCauldron.addActionListener(a ->
         {
+        	creator.getSidebarPanel().clearElements();
+        	creator.getCollisionPanel().clearElements();
+        	TextureManager.clear();
             StateManager.clear();
+            BlockManager.clear();
             Util.loadModelFromJar(creator.getSidebarManager(), getClass(), "models/cauldron");
             StateManager.pushState(new CombinedState(creator.getSidebarManager()));
         });
 
         itemModelChair.addActionListener(a ->
         {
+        	creator.getSidebarPanel().clearElements();
+        	creator.getCollisionPanel().clearElements();
+        	TextureManager.clear();
             StateManager.clear();
+            BlockManager.clear();
             Util.loadModelFromJar(creator.getSidebarManager(), getClass(), "models/modern_chair");
             StateManager.pushState(new CombinedState(creator.getSidebarManager()));
         });
