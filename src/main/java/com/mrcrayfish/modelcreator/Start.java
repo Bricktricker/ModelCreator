@@ -2,6 +2,7 @@ package com.mrcrayfish.modelcreator;
 
 import com.jtattoo.plaf.fast.FastLookAndFeel;
 import com.mrcrayfish.modelcreator.util.SharedLibraryLoader;
+import com.mrcrayfish.modelcreator.util.Util;
 
 import javax.swing.*;
 import java.util.Properties;
@@ -39,13 +40,17 @@ public class Start
         }
         catch(Exception e)
         {
-            e.printStackTrace();
+           Util.writeCrashLog(e);
         }
         
         if(!Settings.load()) {
         	Settings.saveSettings(); //Create settings file, if none exists yet	
         }
         
-        new ModelCreator(Constants.NAME + " v" + Constants.VERSION);
+        try {
+        	new ModelCreator(Constants.NAME + " v" + Constants.VERSION);	
+        }catch(Exception e) {
+        	Util.writeCrashLog(e);
+        }
     }
 }

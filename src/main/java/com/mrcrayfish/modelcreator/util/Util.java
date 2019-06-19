@@ -93,7 +93,7 @@ public class Util
                 }
                 catch(IOException e)
                 {
-                    e.printStackTrace();
+                    Util.writeCrashLog(e);
                 }
                 finally
                 {
@@ -115,7 +115,7 @@ public class Util
             }
             catch(Exception e)
             {
-                e.printStackTrace();
+                Util.writeCrashLog(e);
             }
         }
     }
@@ -145,7 +145,7 @@ public class Util
         }
         catch(IOException e)
         {
-            e.printStackTrace();
+            Util.writeCrashLog(e);
         }
     }
 
@@ -252,7 +252,7 @@ public class Util
             }
             catch(IOException e)
             {
-                e.printStackTrace();
+                Util.writeCrashLog(e);
             }
 
             if(entries.size() > 0)
@@ -299,7 +299,7 @@ public class Util
             }
             catch(IOException e)
             {
-                e.printStackTrace();
+                Util.writeCrashLog(e);
             }
         }).start();
 
@@ -381,7 +381,7 @@ public class Util
         }
         catch(IOException e)
         {
-            e.printStackTrace();
+           Util.writeCrashLog(e);
         }
         return false;
     }
