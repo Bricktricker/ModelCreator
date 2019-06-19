@@ -242,9 +242,15 @@ public class Menu extends JMenuBar
 
         itemOptimise.addActionListener(a -> optimizeModel(creator));
 
-        itemRotateClockwise.addActionListener(a -> Actions.rotateModel(creator.getActivePanel(), true));
+        itemRotateClockwise.addActionListener(a ->  {
+        	Actions.rotateModel(creator.getSidebarPanel(), true);
+        	Actions.rotateModel(creator.getCollisionPanel(), true);
+        });
 
-        itemRotateCounterClockwise.addActionListener(a -> Actions.rotateModel(creator.getActivePanel(), false));
+        itemRotateCounterClockwise.addActionListener(a -> {
+        	Actions.rotateModel(creator.getSidebarPanel(), false);
+        	Actions.rotateModel(creator.getCollisionPanel(), false);
+        });
         
         itemProperties.addActionListener(a -> BlockProperties.show(creator));
         
