@@ -78,7 +78,7 @@ public class ModelCreator extends JFrame
     private static CanvasRenderer standardRenderer = new StandardRenderer();
     private static CanvasRenderer canvasRenderer = standardRenderer;
 
-    private boolean debugMode = false; //TODO: test debug mode
+    private boolean debugMode = false;
 
     public ModelCreator(String title)
     {

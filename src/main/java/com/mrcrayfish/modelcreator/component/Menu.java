@@ -8,6 +8,7 @@ import com.mrcrayfish.modelcreator.block.BlockNotes;
 import com.mrcrayfish.modelcreator.block.BlockProperties;
 import com.mrcrayfish.modelcreator.block.BlockTranslation;
 import com.mrcrayfish.modelcreator.display.DisplayProperties;
+import com.mrcrayfish.modelcreator.element.CombinedState;
 import com.mrcrayfish.modelcreator.element.Face;
 import com.mrcrayfish.modelcreator.util.ComponentUtil;
 import com.mrcrayfish.modelcreator.util.KeyboardUtil;
@@ -265,16 +266,14 @@ public class Menu extends JMenuBar
         {
             StateManager.clear();
             Util.loadModelFromJar(creator.getSidebarManager(), getClass(), "models/cauldron");
-            StateManager.pushState(creator.getSidebarManager().getModelPanel());
-            StateManager.pushState(creator.getSidebarManager().getCollisionPanel());
+            StateManager.pushState(new CombinedState(creator.getSidebarManager()));
         });
 
         itemModelChair.addActionListener(a ->
         {
             StateManager.clear();
             Util.loadModelFromJar(creator.getSidebarManager(), getClass(), "models/modern_chair");
-            StateManager.pushState(creator.getSidebarManager().getModelPanel());
-            StateManager.pushState(creator.getSidebarManager().getCollisionPanel());
+            StateManager.pushState(new CombinedState(creator.getSidebarManager()));
         });
 
         itemUndo.addActionListener(a -> StateManager.restorePreviousState());
@@ -339,8 +338,7 @@ public class Menu extends JMenuBar
             manager.getModelPanel().updateValues();
             manager.getCollisionPanel().updateValues();
             DisplayPropertiesDialog.update(creator);
-            //TODO: manager StateManager better
-            //StateManager.pushState(creator.getElementManager());
+            StateManager.pushState(new CombinedState(manager.getModelPanel(), manager.getCollisionPanel()));
         }
     }
 

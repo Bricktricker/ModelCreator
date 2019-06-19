@@ -23,7 +23,7 @@ public class StateManager
         pushState(manager.createState());
     }
 
-    private static void pushState(ElementManagerState state)
+    public static void pushState(ElementManagerState state)
     {
         if(timer != null && timer.isRunning())
         {
