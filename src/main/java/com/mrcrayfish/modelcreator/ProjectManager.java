@@ -135,11 +135,21 @@ public class ProjectManager
          JsonArray collision = block.getAsJsonArray("collision");
          collision.forEach(b -> {
         	 JsonObject box = b.getAsJsonObject();
-        	 String name = box.get("name").getAsString();
-        	 JsonArray startJson = box.getAsJsonArray("start");
-        	 
         	 Element elem = new Element(0, 0, 0);
-        	 //Continue here
+        	 String name = box.get("name").getAsString();
+        	 
+        	 JsonArray startJson = box.getAsJsonArray("start");
+        	 elem.setStartX(startJson.get(0).getAsDouble());
+        	 elem.setStartY(startJson.get(1).getAsDouble());
+        	 elem.setStartZ(startJson.get(2).getAsDouble());
+        	 
+        	 JsonArray endJson = box.getAsJsonArray("end");
+        	 elem.setWidth(endJson.get(0).getAsDouble() - elem.getStartX());
+        	 elem.setHeight(endJson.get(1).getAsDouble() - elem.getStartY());
+        	 elem.setDepth(endJson.get(2).getAsDouble() - elem.getStartZ());
+        	 
+        	 elem.setName(name);
+        	 collisionPanel.addElement(elem);
          });
     }
     
