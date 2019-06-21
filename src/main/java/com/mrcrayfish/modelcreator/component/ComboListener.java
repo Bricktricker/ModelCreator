@@ -8,6 +8,7 @@ import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 public class ComboListener extends KeyAdapter {
 	JComboBox<String> cbListener;
@@ -20,19 +21,22 @@ public class ComboListener extends KeyAdapter {
 
 	@Override
 	public void keyTyped(KeyEvent key) {
-		String text = ((JTextField) key.getSource()).getText();
-		Vector<String> suggestions = getFilteredList(text);
-		cbListener.setModel(new DefaultComboBoxModel<String>(suggestions));
-		cbListener.setSelectedIndex(-1);
-		((JTextField) cbListener.getEditor().getEditorComponent()).setText(text);
-		cbListener.showPopup();
+		//invoke later to get the full TextField text
+		SwingUtilities.invokeLater(() -> {
+			String text = ((JTextField) key.getSource()).getText();
+			Vector<String> suggestions = getFilteredList(text);
+			cbListener.setModel(new DefaultComboBoxModel<String>(suggestions));
+			cbListener.setSelectedIndex(-1);
+			((JTextField) cbListener.getEditor().getEditorComponent()).setText(text);
+			cbListener.showPopup();
+		});
 	}
 
 	private Vector<String> getFilteredList(String text) {
 		Vector<String> v = new Vector<>();
 		for (int a = 0; a < vector.size(); a++) {
-			if (vector.get(a).toString().startsWith(text)) {
-				v.add(vector.get(a).toString());
+			if (vector.get(a).contains(text)) {
+				v.add(vector.get(a));
 			}
 		}
 		return v;
