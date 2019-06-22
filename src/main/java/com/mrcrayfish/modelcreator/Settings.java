@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
+import com.mrcrayfish.modelcreator.util.OperatingSystem;
 import com.mrcrayfish.modelcreator.util.Util;
 
 public class Settings
@@ -26,6 +27,9 @@ public class Settings
     private static final String IMAGE_EDITOR = "image_editor";
     private static final String IMAGE_EDITOR_ARGS = "image_editor_args";
     private static final String USED_MC_VERSION = "used_mc_version";
+    private static final String MODID = "mod_id";
+    private static final String RESOURCE_PATH = "resource_path";
+    private static final String TEXT_EDITOR = "text_editor";
 
     public static final int[] DEFAULT_FACE_COLORS = {16711680, 65280, 255, 16776960, 16711935, 65535};
 
@@ -184,6 +188,51 @@ public class Settings
     		settings.remove(USED_MC_VERSION);
     	}else {
     		settings.put(USED_MC_VERSION, version);	
+    	}
+    }
+    
+    public static String getModID() {
+    	return settings.getProperty(MODID, "");
+    }
+    
+    public static void setModID(String modid) {
+    	if(isNullOrEmpty(modid)) {
+    		settings.remove(MODID);
+    	}else {
+    		settings.put(MODID, modid);
+    	}
+    }
+    
+    public static String getResourcePath() {
+    	return settings.getProperty(RESOURCE_PATH);
+    }
+    
+    public static void setResourcePath(String path) {
+    	if(isNullOrEmpty(path)) {
+    		settings.remove(RESOURCE_PATH);
+    	}else {
+    		settings.put(RESOURCE_PATH, path);
+    	}
+    }
+    
+    public static String getTextEditorPath() {
+    	if(settings.containsKey(TEXT_EDITOR)) {
+    		return settings.getProperty(TEXT_EDITOR);
+    	}
+    	
+    	if(OperatingSystem.get() == OperatingSystem.WINDOWS) {
+    		String winDir = System.getenv("WINDIR");
+    		return winDir + "/system32/notepad.exe";
+    	}else {
+    		return "";
+    	}
+    }
+    
+    public static void setTextEditor(String path) {
+    	if(isNullOrEmpty(path)) {
+    		settings.remove(TEXT_EDITOR);
+    	}else {
+    		settings.put(TEXT_EDITOR, path);
     	}
     }
     

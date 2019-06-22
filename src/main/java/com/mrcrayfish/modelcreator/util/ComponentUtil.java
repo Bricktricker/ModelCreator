@@ -150,6 +150,56 @@ public class ComponentUtil
 
         return panel;
     }
+    
+    public static JPanel createFolderSelector(String label, Component parent, String defaultDir)
+    {
+        SpringLayout layout = new SpringLayout();
+        JPanel panel = new JPanel(layout);
+        panel.setPreferredSize(new Dimension(100, 24));
+
+        JTextField textFieldDestination = new JTextField();
+        textFieldDestination.setPreferredSize(new Dimension(100, 24));
+        textFieldDestination.setText(defaultDir);
+        textFieldDestination.setEditable(false);
+        textFieldDestination.setFocusable(false);
+        textFieldDestination.setCaretPosition(0);
+        panel.add(textFieldDestination);
+
+        JButton btnBrowserDir = new JButton("Browse");
+        btnBrowserDir.setPreferredSize(new Dimension(80, 24));
+        btnBrowserDir.setIcon(Icons.load);
+        btnBrowserDir.addActionListener(e ->
+        {
+            JFileChooser chooser = new JFileChooser();
+            chooser.setDialogTitle("Select a File");
+            chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            chooser.setApproveButtonText("Select");
+            chooser.setCurrentDirectory(new File(defaultDir));
+            int returnVal = chooser.showOpenDialog(parent);
+            if(returnVal == JFileChooser.APPROVE_OPTION)
+            {
+                File file = chooser.getSelectedFile();
+                if(file != null)
+                {
+                    textFieldDestination.setText(file.getAbsolutePath());
+                }
+            }
+        });
+        panel.add(btnBrowserDir);
+
+        JLabel labelExportDir = new JLabel(label);
+        panel.add(labelExportDir);
+
+        layout.putConstraint(SpringLayout.NORTH, textFieldDestination, 0, SpringLayout.NORTH, panel);
+        layout.putConstraint(SpringLayout.WEST, textFieldDestination, 10, SpringLayout.EAST, labelExportDir);
+        layout.putConstraint(SpringLayout.EAST, textFieldDestination, -10, SpringLayout.WEST, btnBrowserDir);
+        layout.putConstraint(SpringLayout.NORTH, labelExportDir, 3, SpringLayout.NORTH, textFieldDestination);
+        layout.putConstraint(SpringLayout.WEST, labelExportDir, 0, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, btnBrowserDir, 0, SpringLayout.NORTH, textFieldDestination);
+        layout.putConstraint(SpringLayout.EAST, btnBrowserDir, 0, SpringLayout.EAST, panel);
+
+        return panel;
+    }
 
     public static Rectangle expandRectangle(Rectangle r, int amount)
     {

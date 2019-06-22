@@ -967,6 +967,36 @@ public class Menu extends JMenuBar
         colorGrid.add(btnReset);
 
         colorGrid.setLayout(new GridLayout(colorGrid.getComponentCount(), 1, 20, 10));
+        
+        //Integration settings
+        SpringLayout integratelSpringLayout = new SpringLayout();
+        JPanel integrateGeneralPanel = new JPanel(integratelSpringLayout);
+        tabbedPane.addTab("integration", integrateGeneralPanel);
+        
+        JPanel integratePanel = new JPanel(new GridLayout(3, 0));
+        integrateGeneralPanel.add(integratePanel);
+        
+        //modid
+        JPanel modidPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        integratePanel.add(modidPanel);
+        
+        JLabel modidLabel = new JLabel("Mod ID");
+        modidPanel.add(modidLabel);
+        JTextField modidText = new JTextField();
+        modidText.setPreferredSize(new Dimension(125, 24));
+        modidPanel.add(modidText);
+        
+        //resource path
+        JPanel resourcePanel = ComponentUtil.createFolderSelector("Mod resources", dialog, Settings.getResourcePath());
+        integratePanel.add(resourcePanel);
+        
+        //text editor
+        JPanel textEditorPanel = ComponentUtil.createFileSelector("Text Editor", dialog, Settings.getTextEditorPath(), new FileNameExtensionFilter("Executable", "exe"), null);
+        integratePanel.add(textEditorPanel);
+        
+        integratelSpringLayout.putConstraint(SpringLayout.WEST, integratePanel, 5, SpringLayout.WEST, integrateGeneralPanel);
+        integratelSpringLayout.putConstraint(SpringLayout.NORTH, integratePanel, 5, SpringLayout.NORTH, integrateGeneralPanel);
+        integratelSpringLayout.putConstraint(SpringLayout.EAST, integratePanel, -5, SpringLayout.EAST, integrateGeneralPanel);
 
         dialog.addWindowListener(new WindowAdapter()
         {
@@ -978,6 +1008,9 @@ public class Menu extends JMenuBar
                 Settings.setImageEditor(getDirectoryFromSelector(imageEditorPanel));
                 Settings.setImageEditorArgs(textFieldArguments.getText());
                 Settings.setCardinalPoints(checkBoxCardinalPoints.isSelected());
+                Settings.setModID(modidText.getText());
+                Settings.setResourcePath(getDirectoryFromSelector(resourcePanel));
+                Settings.setTextEditor(getDirectoryFromSelector(textEditorPanel));
                 Settings.saveSettings();
             }
         });
