@@ -10,6 +10,7 @@ import com.mrcrayfish.modelcreator.block.BlockTranslation;
 import com.mrcrayfish.modelcreator.display.DisplayProperties;
 import com.mrcrayfish.modelcreator.element.CombinedState;
 import com.mrcrayfish.modelcreator.element.Face;
+import com.mrcrayfish.modelcreator.integrate.IntegrateDialog;
 import com.mrcrayfish.modelcreator.util.ComponentUtil;
 import com.mrcrayfish.modelcreator.util.KeyboardUtil;
 import com.mrcrayfish.modelcreator.util.Util;
@@ -37,6 +38,7 @@ public class Menu extends JMenuBar
     private JMenuItem itemNew;
     private JMenuItem itemLoad;
     private JMenuItem itemSave;
+    private JMenuItem itemIntegrate;
     private JMenuItem itemImport;
     private JMenuItem itemExport;
     private JMenuItem itemSettings;
@@ -91,6 +93,7 @@ public class Menu extends JMenuBar
             itemNew = createMenuItem("New", "New Model", KeyEvent.VK_N, Icons.new_, KeyEvent.VK_N, Keyboard.KEY_N, InputEvent.CTRL_MASK);
             itemLoad = createMenuItem("Load Project...", "Load Project from File", KeyEvent.VK_S, Icons.load, KeyEvent.VK_O, Keyboard.KEY_O, InputEvent.CTRL_MASK);
             itemSave = createMenuItem("Save Project...", "Save Project to File", KeyEvent.VK_S, Icons.disk, KeyEvent.VK_S, Keyboard.KEY_S, InputEvent.CTRL_MASK);
+            itemIntegrate = createMenuItem("Integrate Project...", "Integrate the project into the mod environment", -1, Icons.extract);
             itemImport = createMenuItem("Import JSON...", "Import Model from JSON", KeyEvent.VK_I, Icons.import_);
             itemExport = createMenuItem("Export JSON...", "Export Model to JSON", KeyEvent.VK_E, Icons.export);
             itemSettings = createMenuItem("Settings", "Change the settings of the Model Creator", KeyEvent.VK_S, Icons.settings, KeyEvent.VK_S, Keyboard.KEY_S, InputEvent.CTRL_MASK + InputEvent.ALT_MASK);
@@ -154,6 +157,7 @@ public class Menu extends JMenuBar
         menuFile.addSeparator();
         menuFile.add(itemLoad);
         menuFile.add(itemSave);
+        menuFile.add(itemIntegrate);
         menuFile.addSeparator();
         menuFile.add(itemImport);
         menuFile.add(itemExport);
@@ -220,6 +224,8 @@ public class Menu extends JMenuBar
         itemLoad.addActionListener(a -> loadProject(creator));
 
         itemSave.addActionListener(a -> saveProject(creator));
+        
+        itemIntegrate.addActionListener(a -> IntegrateDialog.show(creator));
 
         itemImport.addActionListener(a -> showImportJson(creator));
         
