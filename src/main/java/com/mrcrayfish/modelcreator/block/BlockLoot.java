@@ -113,13 +113,14 @@ public class BlockLoot
         	JCheckBox dropItselfCheckBox = ComponentUtil.createCheckBox("Drops itself", "", true);
         	dropsPanel.add(dropItselfCheckBox);
         	
-        	JPanel otherDropPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        	JPanel otherDropPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         	dropsPanel.add(otherDropPanel);
         	
         	JLabel otherLabel = new JLabel("Other");
         	otherDropPanel.add(otherLabel);
         	
         	itemsBox.setEnabled(false);
+        	itemsBox.setPreferredSize(new Dimension(200, 24));
         	otherDropPanel.add(itemsBox);
         	
         	dropItselfCheckBox.addActionListener(a -> {
