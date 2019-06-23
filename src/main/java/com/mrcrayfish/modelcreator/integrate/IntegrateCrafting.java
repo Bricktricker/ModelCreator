@@ -12,6 +12,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mrcrayfish.modelcreator.block.BlockManager;
+import com.mrcrayfish.modelcreator.util.Util;
 
 public class IntegrateCrafting extends Integrator
 {
@@ -24,6 +25,13 @@ public class IntegrateCrafting extends Integrator
 	
 	@Override
 	public void integrate() {
+		Path craftingPath = getDataFolder().resolve("recipes").resolve(IntegrateDialog.assetName + ".json");
+		try{
+			writeToFile(craftingPath, content + "\n");
+		} catch (IOException e) {
+			Util.writeCrashLog(e);
+		}
+		startTextEditor(craftingPath);
 	}
 	
 	private JsonObject generateShapeless() {
