@@ -63,7 +63,7 @@ public class IntegrateDialog
         		tabbedPane.setEnabledAt(1, v);
         	}else{
         		//construction time
-        		dataValid[0] &= v;
+        		dataValid[0] = v;
         	}
         }));
         if(dataValid[0]) {
@@ -243,6 +243,8 @@ public class IntegrateDialog
         
         JPanel craftingPanel = createPanel(new IntegrateCrafting());
         tabbedPane.addTab("crafting", craftingPanel);
+        
+        tabbedPane.addTab("drops", createPanel(new IntegrateLoot()));
         
         generalSpringLayout.putConstraint(SpringLayout.WEST, tabbedPane, 5, SpringLayout.WEST, generalPanel);
         generalSpringLayout.putConstraint(SpringLayout.EAST, tabbedPane, -5, SpringLayout.EAST, generalPanel);

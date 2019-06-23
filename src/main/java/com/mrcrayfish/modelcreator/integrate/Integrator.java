@@ -13,9 +13,15 @@ public abstract class Integrator
 {
 	protected String content;
 	
+	public Integrator() {
+		this.content = generate();
+	}
+	
 	public String getContent() {
 		return content;
 	}
+	
+	public abstract String generate();
 	
 	public abstract void integrate();
 	

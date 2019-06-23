@@ -24,6 +24,13 @@ public class IntegrateCrafting extends Integrator
 	}
 	
 	@Override
+	public String generate() {
+		JsonObject recipe = BlockManager.crafting.isShapeLess() ? generateShapeless() : generateShaped();
+		Gson g = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+		return g.toJson(recipe);
+	}
+	
+	@Override
 	public void integrate() {
 		Path craftingPath = getDataFolder().resolve("recipes").resolve(IntegrateDialog.assetName + ".json");
 		try{
@@ -102,4 +109,5 @@ public class IntegrateCrafting extends Integrator
 		
 		return rootObj;
 	}
+
 }
