@@ -204,7 +204,7 @@ public class Settings
     }
     
     public static String getResourcePath() {
-    	return settings.getProperty(RESOURCE_PATH);
+    	return settings.getProperty(RESOURCE_PATH, "");
     }
     
     public static void setResourcePath(String path) {

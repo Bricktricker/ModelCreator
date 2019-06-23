@@ -6,6 +6,8 @@ import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.regex.Pattern;
@@ -18,6 +20,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -32,6 +35,10 @@ import com.mrcrayfish.modelcreator.util.ComponentUtil;
 
 public class IntegrateDialog
 {
+	public static String modid;
+	public static String assetName;
+	public static String resourcePath;
+	
 	public static void show(ModelCreator creator) {
 		JDialog dialog = new JDialog(creator, "Integrate", Dialog.ModalityType.APPLICATION_MODAL);
 		
@@ -42,13 +49,25 @@ public class IntegrateDialog
         JTabbedPane tabbedPane = new JTabbedPane();
         panel.add(tabbedPane, BorderLayout.CENTER);
         
-        tabbedPane.addTab("general", createGeneralPanel(dialog, v -> tabbedPane.setEnabledAt(1, v)));
+        boolean[] dataValid = {false};
+        tabbedPane.addTab("general", createGeneralPanel(dialog, v -> {
+        	if(tabbedPane.getTabCount() > 1) {
+        		tabbedPane.setEnabledAt(1, v);	
+        	}else{
+        		dataValid[0] = v;
+        	}
+        }));
         JPanel dataPanel = createIntegratePanel();
         tabbedPane.addTab("data", dataPanel);
-        tabbedPane.setEnabledAt(1, false);
+        tabbedPane.setEnabledAt(1, dataValid[0]);
         
+        dialog.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                Settings.saveSettings();
+            }
+        });
         
-        //TODO: save Settings when closing window
         dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         dialog.requestFocus();
         dialog.pack();
@@ -59,7 +78,37 @@ public class IntegrateDialog
 	
 	private static JPanel createGeneralPanel(Component parent, Consumer<Boolean> isValid) {
 		Border invalidBorder = BorderFactory.createMatteBorder(1, 1, 1, 1, Color.red);
-		boolean[] validPanels = {false, false};
+		Border defaultBorder = (new JTextField()).getBorder();
+		boolean[] validPanels = {false, false, false};
+		
+		//Register input handler
+        BiConsumer<Integer, JTextField> textFieldHandler = (id, textField) -> {
+        	String text = textField.getText();
+        	if(text.isEmpty() || (!Pattern.matches("[A-Za-z0-9]+", text) && id != 1)) {
+        		textField.setBorder(invalidBorder);
+        		validPanels[id] = false;
+        		isValid.accept(false);
+        	}else {
+        		textField.setBorder(defaultBorder);
+        		validPanels[id] = true;
+
+        		switch(id) {
+        		case 0:
+        			Settings.setModID(text);
+        			modid = text;
+        			break;
+        		case 1:
+        			Settings.setResourcePath(text);
+        			resourcePath = text;
+        			break;
+        		case 2:
+        			assetName = text;
+        			break;
+        		}
+        		
+        		isValid.accept(validPanels[0] && validPanels[1]);
+        	}
+        };
 		
 		SpringLayout generalSpringLayout = new SpringLayout();
         JPanel generalPanel = new JPanel(generalSpringLayout);
@@ -67,56 +116,47 @@ public class IntegrateDialog
         //Needed: modid, item name, java/resource path, notepad.exe path
         //in general tab: Block Java name, block resource name, item resource name, modid, resource path
         
+        //modid
         JPanel modidPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         generalPanel.add(modidPanel);
         
         JLabel modidLabel = new JLabel("Mod ID");
         modidPanel.add(modidLabel);
+        
         JTextField modidText = new JTextField();
         modidText.setPreferredSize(new Dimension(125, 24));
-        Border defaultBorder =  modidText.getBorder();
-        if(!Settings.getModID().isEmpty()) {
-        	modidText.setText(Settings.getModID());
-        }else {
-        	modidText.setBorder(invalidBorder);
-        }
+        modidText.setText(Settings.getModID());
+        
+        textFieldHandler.accept(0, modidText);
+        modidText.getDocument().addDocumentListener(new TextFieldListener(s -> textFieldHandler.accept(0, modidText)));
+        
         modidPanel.add(modidText);
         
         //resource path
         JPanel resourcePanel = ComponentUtil.createFolderSelector("Mod resources", parent, Settings.getResourcePath());
         generalPanel.add(resourcePanel);
         JTextField resourceField = Stream.of(resourcePanel.getComponents()).filter(c -> c instanceof JTextField).map(c -> (JTextField)c).collect(Collectors.toList()).get(0);
-        if(resourceField.getText().isEmpty()) {
-        	resourceField.setBorder(invalidBorder);	
-        }
-        
-        //Register input handler
-        BiConsumer<Integer, JTextField> textFieldHandler = (id, textField) -> {
-        	String text = textField.getText();
-        	if(text.isEmpty() || !Pattern.matches("[a-z0-9]+", text)) {
-        		modidText.setBorder(invalidBorder);
-        		validPanels[id] = false;
-        		isValid.accept(false);
-        	}else {
-        		modidText.setBorder(defaultBorder);
-        		validPanels[id] = true;
-        		
-        		switch(id) {
-        		case 0:
-        			Settings.setModID(text);
-        			break;
-        		case 1:
-        			Settings.setResourcePath(text);
-        			break;
-        		default:
-        			throw new IllegalArgumentException();
-        		}
-        		
-        		isValid.accept(validPanels[0] && validPanels[1]);
-        	}
-        };
-        modidText.getDocument().addDocumentListener(new TextFieldListener(s -> textFieldHandler.accept(0, modidText)));
+        textFieldHandler.accept(1, resourceField);
         resourceField.getDocument().addDocumentListener(new TextFieldListener(s -> textFieldHandler.accept(1, resourceField)));
+        
+        JSeparator separator = new JSeparator();
+        generalPanel.add(separator);
+        
+        //registration name
+        JPanel assetNamePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        generalPanel.add(assetNamePanel);
+        
+        JLabel assetNameLabel = new JLabel("Asset name");
+        assetNamePanel.add(assetNameLabel);
+        
+        JTextField assetText = new JTextField();
+        assetText.setPreferredSize(new Dimension(125, 24));
+        assetText.setBorder(invalidBorder);
+        
+        textFieldHandler.accept(2, assetText);
+        assetText.getDocument().addDocumentListener(new TextFieldListener(s -> textFieldHandler.accept(2, assetText)));
+        
+        assetNamePanel.add(assetText);
         
         generalSpringLayout.putConstraint(SpringLayout.WEST, modidPanel, 5, SpringLayout.WEST, generalPanel);
         generalSpringLayout.putConstraint(SpringLayout.NORTH, modidPanel, 5, SpringLayout.NORTH, generalPanel);
@@ -124,6 +164,12 @@ public class IntegrateDialog
         generalSpringLayout.putConstraint(SpringLayout.EAST, resourcePanel, -10, SpringLayout.EAST, generalPanel);
         generalSpringLayout.putConstraint(SpringLayout.WEST, resourcePanel, 10, SpringLayout.WEST, generalPanel);
         generalSpringLayout.putConstraint(SpringLayout.NORTH, resourcePanel, 10, SpringLayout.SOUTH, modidPanel);
+        generalSpringLayout.putConstraint(SpringLayout.WEST, separator, 0, SpringLayout.WEST, generalPanel);
+        generalSpringLayout.putConstraint(SpringLayout.EAST, separator, 0, SpringLayout.EAST, generalPanel);
+        generalSpringLayout.putConstraint(SpringLayout.NORTH, separator, 5, SpringLayout.SOUTH, resourcePanel);
+        generalSpringLayout.putConstraint(SpringLayout.EAST, assetNamePanel, -5, SpringLayout.EAST, generalPanel);
+        generalSpringLayout.putConstraint(SpringLayout.WEST, assetNamePanel, 5, SpringLayout.WEST, generalPanel);
+        generalSpringLayout.putConstraint(SpringLayout.NORTH, assetNamePanel, 5, SpringLayout.SOUTH, separator);
         
         return generalPanel;
 	}

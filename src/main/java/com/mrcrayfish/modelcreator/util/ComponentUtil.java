@@ -7,6 +7,7 @@ import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import java.awt.*;
 import java.io.File;
+import java.util.stream.Stream;
 
 public class ComponentUtil
 {
@@ -182,6 +183,9 @@ public class ComponentUtil
                 if(file != null)
                 {
                     textFieldDestination.setText(file.getAbsolutePath());
+                    Stream.of(textFieldDestination.getActionListeners()).forEach(a -> {
+                    	a.actionPerformed(null);
+                    });
                 }
             }
         });
