@@ -245,6 +245,7 @@ public class IntegrateDialog
         tabbedPane.addTab("crafting", craftingPanel);
         
         tabbedPane.addTab("drops", createPanel(new IntegrateLoot()));
+        tabbedPane.addTab("translation", createPanel(new IntegrateTranslation()));
         
         generalSpringLayout.putConstraint(SpringLayout.WEST, tabbedPane, 5, SpringLayout.WEST, generalPanel);
         generalSpringLayout.putConstraint(SpringLayout.EAST, tabbedPane, -5, SpringLayout.EAST, generalPanel);
@@ -267,7 +268,10 @@ public class IntegrateDialog
         //integrate Button
     	JButton integrateButton = new JButton("Integrate");
     	integrateButton.setMaximumSize(new Dimension(80, 24));
-    	integrateButton.addActionListener(e -> integrator.integrate());
+    	integrateButton.addActionListener(e -> {
+    		integrator.integrate();
+    		textArea.setText(integrator.getContent());
+    	});
         generalPanel.add(integrateButton);
         
         generalSpringLayout.putConstraint(SpringLayout.WEST, scrollpane, 10, SpringLayout.WEST, generalPanel);
