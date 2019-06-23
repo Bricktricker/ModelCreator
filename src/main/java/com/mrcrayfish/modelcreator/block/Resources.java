@@ -95,7 +95,7 @@ public class Resources
 			JsonArray itemJsonArray = jsonElement.getAsJsonArray();
 			items = new ArrayList<>();
 			itemJsonArray.forEach(i -> {
-				items.add(i.getAsString());
+				items.add("minecraft:" + i.getAsString());
 			});
 			Collections.sort(items);
 			items = Collections.unmodifiableList(items);

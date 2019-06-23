@@ -243,7 +243,7 @@ public class IntegrateDialog
         return generalPanel;
 	}
 	
-	private static JPanel createPanel(IIntegrate integrator) {
+	private static JPanel createPanel(Integrator integrator) {
 		SpringLayout generalSpringLayout = new SpringLayout();
         JPanel generalPanel = new JPanel(generalSpringLayout);    
         
