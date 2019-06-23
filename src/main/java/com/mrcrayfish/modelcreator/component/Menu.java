@@ -69,11 +69,12 @@ public class Menu extends JMenuBar
     /* More */
     private JMenu menuMore;
     private JMenuItem itemExtractAssets;
-    private JMenu menuDeveloper;
-    private JMenuItem itemJavaCode;
     private JMenu menuExamples;
     private JMenuItem itemModelCauldron;
     private JMenuItem itemModelChair;
+    private JMenu menuWiki;
+    private JMenuItem itemHardnessWiki;
+    private JMenuItem itemResistanceWiki;
     private JMenuItem itemDonate;
     private JMenuItem itemGitHub;
 
@@ -123,28 +124,28 @@ public class Menu extends JMenuBar
         menuBlock = new JMenu("Block");
         {
         	//TODO: update key bindings
-        	itemProperties = createMenuItem("Block Properties", "Set the block properties", KeyEvent.VK_P, Icons.edit, 0, 0, InputEvent.CTRL_MASK);
-        	itemTransation = createMenuItem("Block Translation", "Set the block translations", KeyEvent.VK_T, Icons.edit, 0, 0, InputEvent.CTRL_MASK);
+        	itemProperties = createMenuItem("Block Properties", "Set the block properties", KeyEvent.VK_P, Icons.edit);
+        	itemTransation = createMenuItem("Block Translation", "Set the block translations", KeyEvent.VK_T, Icons.edit);
         	itemCrafting = createMenuItem("Crafting", "Set the crafting recipe", KeyEvent.VK_C, Icons.edit);
-        	itemLoot = createMenuItem("Block drops", "Set the block loot", KeyEvent.VK_L, Icons.edit, 0, 0, InputEvent.CTRL_MASK);
+        	itemLoot = createMenuItem("Block drops", "Set the block loot", KeyEvent.VK_L, Icons.edit);
         	itemNotes = createMenuItem("Notes", "Take some notes", KeyEvent.VK_N, Icons.new_);
         }
 
         menuMore = new JMenu("More");
         {
             itemExtractAssets = createMenuItem("Extract Assets...", "Extract Minecraft assets so you can get access to block and item textures", KeyEvent.VK_E, Icons.extract);
-            menuDeveloper = new JMenu("Mod Developer");
-            menuDeveloper.setMnemonic(KeyEvent.VK_M);
-            menuDeveloper.setIcon(Icons.mojang);
-            {
-                itemJavaCode = createMenuItem("Generate Java Code...", "Generate Java code for selection and collisions boxes", KeyEvent.VK_J, Icons.java);
-            }
             menuExamples = new JMenu("Examples");
             menuExamples.setMnemonic(KeyEvent.VK_E);
             menuExamples.setIcon(Icons.new_);
             {
                 itemModelCauldron = createMenuItem("Cauldron", "<html>Model by MrCrayfish<br><b>Private use only</b></html>", KeyEvent.VK_C, Icons.model_cauldron);
                 itemModelChair = createMenuItem("Chair", "<html>Model by MrCrayfish<br><b>Private use only</b></html>", KeyEvent.VK_C, Icons.model_chair);
+            }
+            menuWiki = new JMenu("Wiki");
+            menuWiki.setIcon(Icons.mojang);
+            {
+            	itemHardnessWiki = createMenuItem("Hardness values", "Open wiki for the hardness values of the blocks", KeyEvent.VK_H, Icons.gallery);
+            	itemResistanceWiki = createMenuItem("Resistance values", "Open wiki for the resistance values of the blocks", KeyEvent.VK_R, Icons.gallery);
             }
             itemDonate = createMenuItem("Donate (Patreon)", "Pledge to MrCrayfish", KeyEvent.VK_D, Icons.patreon);
             itemGitHub = createMenuItem("Source Code", "View Source Code", KeyEvent.VK_S, Icons.github);
@@ -202,15 +203,17 @@ public class Menu extends JMenuBar
         this.add(menuBlock);
 
         /* Menu More Sub Menus */
-        menuDeveloper.add(itemJavaCode);
         menuExamples.add(itemModelCauldron);
         menuExamples.add(itemModelChair);
+        menuWiki.add(itemHardnessWiki);
+        menuWiki.add(itemResistanceWiki);
 
         /* Menu More */
         menuMore.add(itemExtractAssets);
-        menuMore.add(menuDeveloper);
         menuMore.addSeparator();
         menuMore.add(menuExamples);
+        menuMore.addSeparator();
+        menuMore.add(menuWiki);
         menuMore.addSeparator();
         menuMore.add(itemGitHub);
         menuMore.add(itemDonate);
@@ -230,8 +233,6 @@ public class Menu extends JMenuBar
         itemImport.addActionListener(a -> showImportJson(creator));
         
         itemExport.addActionListener(a -> showExportJson(creator));
-
-        itemJavaCode.addActionListener(a -> showExportJavaCode(creator, a));
 
         itemSettings.addActionListener(a -> showSettings(creator));
 
@@ -267,6 +268,10 @@ public class Menu extends JMenuBar
         itemLoot.addActionListener(a -> BlockLoot.show(creator));
         
         itemNotes.addActionListener(a -> BlockNotes.show(creator));
+        
+        itemHardnessWiki.addActionListener(a -> Util.openUrl(Constants.URL_HARDNESS));
+        
+        itemResistanceWiki.addActionListener(a -> Util.openUrl(Constants.URL_RESISTANCE));
 
         itemGitHub.addActionListener(a -> Util.openUrl(Constants.URL_GITHUB));
 

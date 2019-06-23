@@ -9,4 +9,6 @@ public class Constants
     public static final String URL_TWITTER = "https://www.twitter.com/MrCraayfish";
     public static final String URL_FACEBOOK = "https://www.facebook.com/MrCrayfish";
     public static final String URL_GITHUB = "https://github.com/Bricktricker/ModelCreator";
+	public static final String URL_HARDNESS = "https://minecraft.gamepedia.com/Breaking#Blocks_by_hardness";
+	public static final String URL_RESISTANCE = "https://minecraft.gamepedia.com/Explosion#Blast_resistance";
 }
