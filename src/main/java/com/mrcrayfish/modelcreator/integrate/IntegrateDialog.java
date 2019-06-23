@@ -16,6 +16,7 @@ import java.util.stream.Stream;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -39,6 +40,7 @@ public class IntegrateDialog
 	public static String resourcePath;
 	public static String assetName;
 	public static String javaClass;
+	public static String BlockItem;
 	
 	public static void show(ModelCreator creator) {
 		JDialog dialog = new JDialog(creator, "Integrate", Dialog.ModalityType.APPLICATION_MODAL);
@@ -176,6 +178,31 @@ public class IntegrateDialog
         javaText.getDocument().addDocumentListener(new TextFieldListener(s -> textFieldHandler.accept(3, javaText)));
         javaNamePanel.add(javaText);
         
+        //block as item
+        JPanel blockItemPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        generalPanel.add(blockItemPanel);
+        
+        JCheckBox sameItemCheckBox = ComponentUtil.createCheckBox("Same item", "are the block and the inventory item the same?", BlockItem == null);
+        blockItemPanel.add(sameItemCheckBox);
+        
+        JTextField blockItemText = new JTextField();
+        blockItemText.setPreferredSize(new Dimension(125, 24));
+        blockItemText.setText(BlockItem);
+        blockItemText.setEnabled(!sameItemCheckBox.isSelected());  
+        blockItemPanel.add(blockItemText);
+        
+        sameItemCheckBox.addActionListener(a -> {
+        	boolean checked = ((JCheckBox)a.getSource()).isSelected();
+        	blockItemText.setEnabled(!checked);
+        	if(checked) {
+        		BlockItem = null;
+        	}else {
+        		BlockItem = blockItemText.getText();
+        	}
+        });
+        blockItemText.getDocument().addDocumentListener(new TextFieldListener(s -> BlockItem = s));
+        
+        
         generalSpringLayout.putConstraint(SpringLayout.WEST, modidPanel, 5, SpringLayout.WEST, generalPanel);
         generalSpringLayout.putConstraint(SpringLayout.NORTH, modidPanel, 5, SpringLayout.NORTH, generalPanel);
         generalSpringLayout.putConstraint(SpringLayout.EAST, modidPanel, -5, SpringLayout.EAST, generalPanel);
@@ -191,6 +218,9 @@ public class IntegrateDialog
         generalSpringLayout.putConstraint(SpringLayout.EAST, javaNamePanel, -5, SpringLayout.EAST, generalPanel);
         generalSpringLayout.putConstraint(SpringLayout.WEST, javaNamePanel, 5, SpringLayout.WEST, generalPanel);
         generalSpringLayout.putConstraint(SpringLayout.NORTH, javaNamePanel, 5, SpringLayout.SOUTH, assetNamePanel);
+        generalSpringLayout.putConstraint(SpringLayout.EAST, blockItemPanel, -5, SpringLayout.EAST, generalPanel);
+        generalSpringLayout.putConstraint(SpringLayout.WEST, blockItemPanel, 5, SpringLayout.WEST, generalPanel);
+        generalSpringLayout.putConstraint(SpringLayout.NORTH, blockItemPanel, 5, SpringLayout.SOUTH, javaNamePanel);
         
         return generalPanel;
 	}
