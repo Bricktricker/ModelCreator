@@ -36,8 +36,9 @@ import com.mrcrayfish.modelcreator.util.ComponentUtil;
 public class IntegrateDialog
 {
 	public static String modid;
-	public static String assetName;
 	public static String resourcePath;
+	public static String assetName;
+	public static String javaClass;
 	
 	public static void show(ModelCreator creator) {
 		JDialog dialog = new JDialog(creator, "Integrate", Dialog.ModalityType.APPLICATION_MODAL);
@@ -79,7 +80,7 @@ public class IntegrateDialog
 	private static JPanel createGeneralPanel(Component parent, Consumer<Boolean> isValid) {
 		Border invalidBorder = BorderFactory.createMatteBorder(1, 1, 1, 1, Color.red);
 		Border defaultBorder = (new JTextField()).getBorder();
-		boolean[] validPanels = {false, false, false};
+		boolean[] validPanels = {false, false, false, false}; //modid, resource path, asset name, java class
 		
 		//Register input handler
         BiConsumer<Integer, JTextField> textFieldHandler = (id, textField) -> {
@@ -104,9 +105,12 @@ public class IntegrateDialog
         		case 2:
         			assetName = text;
         			break;
+        		case 3:
+        			javaClass = text;
+        			break;
         		}
         		
-        		isValid.accept(validPanels[0] && validPanels[1]);
+        		isValid.accept(validPanels[0] && validPanels[1] && validPanels[2] && validPanels[3]);
         	}
         };
 		
@@ -114,7 +118,7 @@ public class IntegrateDialog
         JPanel generalPanel = new JPanel(generalSpringLayout);
         
         //Needed: modid, item name, java/resource path, notepad.exe path
-        //in general tab: Block Java name, block resource name, item resource name, modid, resource path
+        //in general tab: Block Java name, block resource name, modid, resource path
         
         //modid
         JPanel modidPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -142,7 +146,7 @@ public class IntegrateDialog
         JSeparator separator = new JSeparator();
         generalPanel.add(separator);
         
-        //registration name
+        //asset name
         JPanel assetNamePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         generalPanel.add(assetNamePanel);
         
@@ -151,12 +155,26 @@ public class IntegrateDialog
         
         JTextField assetText = new JTextField();
         assetText.setPreferredSize(new Dimension(125, 24));
-        assetText.setBorder(invalidBorder);
+        assetText.setText(assetName);
         
         textFieldHandler.accept(2, assetText);
         assetText.getDocument().addDocumentListener(new TextFieldListener(s -> textFieldHandler.accept(2, assetText)));
-        
         assetNamePanel.add(assetText);
+        
+        //java name
+        JPanel javaNamePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        generalPanel.add(javaNamePanel);
+        
+        JLabel javaNameLabel = new JLabel("Java class");
+        javaNamePanel.add(javaNameLabel);
+        
+        JTextField javaText = new JTextField();
+        javaText.setPreferredSize(new Dimension(125, 24));
+        javaText.setText(javaClass);
+        
+        textFieldHandler.accept(3, javaText);
+        javaText.getDocument().addDocumentListener(new TextFieldListener(s -> textFieldHandler.accept(3, javaText)));
+        javaNamePanel.add(javaText);
         
         generalSpringLayout.putConstraint(SpringLayout.WEST, modidPanel, 5, SpringLayout.WEST, generalPanel);
         generalSpringLayout.putConstraint(SpringLayout.NORTH, modidPanel, 5, SpringLayout.NORTH, generalPanel);
@@ -170,6 +188,9 @@ public class IntegrateDialog
         generalSpringLayout.putConstraint(SpringLayout.EAST, assetNamePanel, -5, SpringLayout.EAST, generalPanel);
         generalSpringLayout.putConstraint(SpringLayout.WEST, assetNamePanel, 5, SpringLayout.WEST, generalPanel);
         generalSpringLayout.putConstraint(SpringLayout.NORTH, assetNamePanel, 5, SpringLayout.SOUTH, separator);
+        generalSpringLayout.putConstraint(SpringLayout.EAST, javaNamePanel, -5, SpringLayout.EAST, generalPanel);
+        generalSpringLayout.putConstraint(SpringLayout.WEST, javaNamePanel, 5, SpringLayout.WEST, generalPanel);
+        generalSpringLayout.putConstraint(SpringLayout.NORTH, javaNamePanel, 5, SpringLayout.SOUTH, assetNamePanel);
         
         return generalPanel;
 	}
