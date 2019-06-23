@@ -52,17 +52,26 @@ public class IntegrateDialog
         JTabbedPane tabbedPane = new JTabbedPane();
         panel.add(tabbedPane, BorderLayout.CENTER);
         
-        boolean[] dataValid = {false};
+        Boolean[] dataValid = {true};
         tabbedPane.addTab("general", createGeneralPanel(dialog, v -> {
+        	//Check if we are in runtime or cunstruction time
         	if(tabbedPane.getTabCount() > 1) {
-        		tabbedPane.setEnabledAt(1, v);	
+        		if(v) {
+        			tabbedPane.removeTabAt(1);
+        			tabbedPane.addTab("data", createIntegratePanel());
+        		}
+        		tabbedPane.setEnabledAt(1, v);
         	}else{
-        		dataValid[0] = v;
+        		//construction time
+        		dataValid[0] &= v;
         	}
         }));
-        JPanel dataPanel = createIntegratePanel();
-        tabbedPane.addTab("data", dataPanel);
-        tabbedPane.setEnabledAt(1, dataValid[0]);
+        if(dataValid[0]) {
+        	tabbedPane.addTab("data", createIntegratePanel());
+        }else {
+        	tabbedPane.addTab("data", new JPanel());	
+        	tabbedPane.setEnabledAt(1, false);
+        }
         
         dialog.addWindowListener(new WindowAdapter() {
             @Override
@@ -256,7 +265,7 @@ public class IntegrateDialog
         //integrate Button
     	JButton integrateButton = new JButton("Integrate");
     	integrateButton.setMaximumSize(new Dimension(80, 24));
-    	integrateButton.addActionListener(e -> integrator.integrate(textArea.getText()));
+    	integrateButton.addActionListener(e -> integrator.integrate());
         generalPanel.add(integrateButton);
         
         generalSpringLayout.putConstraint(SpringLayout.WEST, scrollpane, 10, SpringLayout.WEST, generalPanel);

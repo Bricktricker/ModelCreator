@@ -1,5 +1,7 @@
 package com.mrcrayfish.modelcreator.integrate;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -21,8 +23,7 @@ public class IntegrateCrafting extends Integrator
 	}
 	
 	@Override
-	public void integrate(String text) {
-		
+	public void integrate() {
 	}
 	
 	private JsonObject generateShapeless() {
