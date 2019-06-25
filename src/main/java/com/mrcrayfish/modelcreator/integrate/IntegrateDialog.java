@@ -249,6 +249,7 @@ public class IntegrateDialog
         tabbedPane.addTab("block states", createPanel(new IntegrateBlockstate()));
         tabbedPane.addTab("model", createPanel(new IntegrateModel(creator.getSidebarPanel())));
         tabbedPane.addTab("textures", createPanel(new IntegrateTextures(creator.getSidebarPanel())));
+        tabbedPane.addTab("Java code", createPanel(new IntegrateCode(creator.getCollisionPanel())));
         
         generalSpringLayout.putConstraint(SpringLayout.WEST, tabbedPane, 5, SpringLayout.WEST, generalPanel);
         generalSpringLayout.putConstraint(SpringLayout.EAST, tabbedPane, -5, SpringLayout.EAST, generalPanel);
