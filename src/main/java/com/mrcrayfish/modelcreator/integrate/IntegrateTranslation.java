@@ -21,10 +21,16 @@ public class IntegrateTranslation extends Integrator
 {
 	private Set<Map.Entry<String, List<String>>> translations;
 	private Iterator<Map.Entry<String, List<String>>> translationItr;
-	Map.Entry<String, List<String>> currentEntry; //cant get current entry fro iterator without moving it
+	private Map.Entry<String, List<String>> currentEntry; //cant get current entry fro iterator without moving it
+	private boolean shouldIntegrate = false;
 
 	@Override
 	public String generate() {
+		if(BlockManager.translation.getAllTranslations().isEmpty()) {
+			shouldIntegrate = false;
+			return "No translations";	
+		}
+		
 		if(translationItr == null)
 			generateTranslations();
 		
@@ -32,6 +38,7 @@ public class IntegrateTranslation extends Integrator
 		String out = languageName + ":\n";
 		out += currentEntry.getValue().stream().collect(Collectors.joining(",\n", "", ""));
 		
+		shouldIntegrate = true;
 		return out;
 	}
 	
@@ -59,7 +66,7 @@ public class IntegrateTranslation extends Integrator
 
 	@Override
 	public void integrate() {
-		if(this.content.equals("All translations integrated!"))
+		if(!shouldIntegrate)
 			return;
 		
 		String outData = currentEntry.getValue().stream().collect(Collectors.joining(",\n\t", "\t", ""));
