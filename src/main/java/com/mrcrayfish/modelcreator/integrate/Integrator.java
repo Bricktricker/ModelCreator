@@ -6,14 +6,21 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import javax.swing.JPanel;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.mrcrayfish.modelcreator.Settings;
 import com.mrcrayfish.modelcreator.util.Util;
 
 public abstract class Integrator
 {
 	protected String content;
+	protected Gson builder;
+	private Runnable updateCallback;
 	
 	public Integrator() {
+		this.builder = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 		this.content = generate();
 	}
 	
@@ -24,6 +31,19 @@ public abstract class Integrator
 	public abstract String generate();
 	
 	public abstract void integrate();
+	
+	public JPanel getAdditionalPanel() {
+		return null;
+	}
+	
+	public void setUpdateListener(Runnable listener) {
+		this.updateCallback = listener;
+	}
+	
+	public void doUpdate() {
+		this.content = generate();
+		this.updateCallback.run();
+	}
 	
 	protected String addModid(String text) {
 		if(text.contains(":")) {

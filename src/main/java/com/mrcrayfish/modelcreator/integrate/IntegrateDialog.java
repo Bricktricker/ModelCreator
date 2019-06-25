@@ -246,6 +246,7 @@ public class IntegrateDialog
         
         tabbedPane.addTab("drops", createPanel(new IntegrateLoot()));
         tabbedPane.addTab("translation", createPanel(new IntegrateTranslation()));
+        tabbedPane.addTab("block states", createPanel(new IntegrateBlockstate()));
         
         generalSpringLayout.putConstraint(SpringLayout.WEST, tabbedPane, 5, SpringLayout.WEST, generalPanel);
         generalSpringLayout.putConstraint(SpringLayout.EAST, tabbedPane, -5, SpringLayout.EAST, generalPanel);
@@ -258,6 +259,11 @@ public class IntegrateDialog
 	private static JPanel createPanel(Integrator integrator) {
 		SpringLayout generalSpringLayout = new SpringLayout();
         JPanel generalPanel = new JPanel(generalSpringLayout);    
+        
+        JPanel extraPanel = integrator.getAdditionalPanel();
+        if(extraPanel != null) {
+        	generalPanel.add(extraPanel);	
+        }
         
         JTextArea textArea = new JTextArea();
         textArea.setText(integrator.getContent());
@@ -272,11 +278,27 @@ public class IntegrateDialog
     		integrator.integrate();
     		textArea.setText(integrator.getContent());
     	});
+    	
+    	integrator.setUpdateListener(() -> {
+    		textArea.setText(integrator.getContent());
+    	}); 
+    	
         generalPanel.add(integrateButton);
         
-        generalSpringLayout.putConstraint(SpringLayout.WEST, scrollpane, 10, SpringLayout.WEST, generalPanel);
-        generalSpringLayout.putConstraint(SpringLayout.EAST, scrollpane, -10, SpringLayout.EAST, generalPanel);
-        generalSpringLayout.putConstraint(SpringLayout.NORTH, scrollpane, 10, SpringLayout.NORTH, generalPanel);
+        if(extraPanel != null) {
+        	generalSpringLayout.putConstraint(SpringLayout.WEST, extraPanel, 10, SpringLayout.WEST, generalPanel);
+            generalSpringLayout.putConstraint(SpringLayout.EAST, extraPanel, -10, SpringLayout.EAST, generalPanel);
+            generalSpringLayout.putConstraint(SpringLayout.NORTH, extraPanel, 10, SpringLayout.NORTH, generalPanel);
+            
+            generalSpringLayout.putConstraint(SpringLayout.WEST, scrollpane, 10, SpringLayout.WEST, generalPanel);
+            generalSpringLayout.putConstraint(SpringLayout.EAST, scrollpane, -10, SpringLayout.EAST, generalPanel);
+            generalSpringLayout.putConstraint(SpringLayout.NORTH, scrollpane, 10, SpringLayout.SOUTH, extraPanel);
+        }else {
+        	generalSpringLayout.putConstraint(SpringLayout.WEST, scrollpane, 10, SpringLayout.WEST, generalPanel);
+            generalSpringLayout.putConstraint(SpringLayout.EAST, scrollpane, -10, SpringLayout.EAST, generalPanel);
+            generalSpringLayout.putConstraint(SpringLayout.NORTH, scrollpane, 10, SpringLayout.NORTH, generalPanel);
+        }
+        
         generalSpringLayout.putConstraint(SpringLayout.WEST, integrateButton, 10, SpringLayout.WEST, generalPanel);
         generalSpringLayout.putConstraint(SpringLayout.EAST, integrateButton, -10, SpringLayout.EAST, generalPanel);
         generalSpringLayout.putConstraint(SpringLayout.SOUTH, scrollpane, -10, SpringLayout.NORTH,  integrateButton);
