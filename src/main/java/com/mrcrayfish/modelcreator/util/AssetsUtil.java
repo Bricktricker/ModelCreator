@@ -22,7 +22,7 @@ public class AssetsUtil
             }
             return builder.length() > 0 ? builder.substring(1, builder.length()) : "";
         }
-        return "blocks";
+        return "block";
     }
 
     public static String getModId(File file)

@@ -170,7 +170,7 @@ public class ProjectManager
     		
     		//TODO: delete texture from temp folder
     		TexturePath texturepath = new TexturePath("modid", directory, mcTexture);
-    		Path textureFile = Files.createTempFile(mcTexture, "");
+    		Path textureFile = Files.createTempFile(mcTexture, ".png");
     		Files.write(textureFile, project.getFileData(mcTexture));
     		TextureManager.addImage(key, texturepath, textureFile.toFile());
     	}

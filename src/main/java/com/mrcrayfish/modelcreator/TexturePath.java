@@ -31,7 +31,7 @@ public class TexturePath
     public TexturePath(File file)
     {
         this.modId = AssetsUtil.getModId(file);
-        this.directory = AssetsUtil.getTextureDirectory(file);
+        this.directory = this.modId.equals("minecraft") ? AssetsUtil.getTextureDirectory(file) : "block";
         this.name = file.getName().substring(0, file.getName().indexOf("."));
     }
     
