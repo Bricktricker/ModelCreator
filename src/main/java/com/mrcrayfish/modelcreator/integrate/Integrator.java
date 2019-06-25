@@ -21,11 +21,14 @@ public abstract class Integrator
 	
 	public Integrator() {
 		this.builder = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-		this.content = generate();
 	}
 	
 	public String getContent() {
 		return content;
+	}
+	
+	public void generateContent() {
+		this.content = generate();
 	}
 	
 	public abstract String generate();

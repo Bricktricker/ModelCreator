@@ -58,7 +58,7 @@ public class IntegrateDialog
         	if(tabbedPane.getTabCount() > 1) {
         		if(v) {
         			tabbedPane.removeTabAt(1);
-        			tabbedPane.addTab("data", createIntegratePanel());
+        			tabbedPane.addTab("data", createIntegratePanel(creator));
         		}
         		tabbedPane.setEnabledAt(1, v);
         	}else{
@@ -67,7 +67,7 @@ public class IntegrateDialog
         	}
         }));
         if(dataValid[0]) {
-        	tabbedPane.addTab("data", createIntegratePanel());
+        	tabbedPane.addTab("data", createIntegratePanel(creator));
         }else {
         	tabbedPane.addTab("data", new JPanel());	
         	tabbedPane.setEnabledAt(1, false);
@@ -234,7 +234,7 @@ public class IntegrateDialog
         return generalPanel;
 	}
 	
-	private static JPanel createIntegratePanel() {
+	private static JPanel createIntegratePanel(ModelCreator creator) {
 		SpringLayout generalSpringLayout = new SpringLayout();
         JPanel generalPanel = new JPanel(generalSpringLayout);
         
@@ -247,6 +247,7 @@ public class IntegrateDialog
         tabbedPane.addTab("drops", createPanel(new IntegrateLoot()));
         tabbedPane.addTab("translation", createPanel(new IntegrateTranslation()));
         tabbedPane.addTab("block states", createPanel(new IntegrateBlockstate()));
+        tabbedPane.addTab("model", createPanel(new IntegrateModel(creator.getSidebarPanel())));
         
         generalSpringLayout.putConstraint(SpringLayout.WEST, tabbedPane, 5, SpringLayout.WEST, generalPanel);
         generalSpringLayout.putConstraint(SpringLayout.EAST, tabbedPane, -5, SpringLayout.EAST, generalPanel);
@@ -257,6 +258,7 @@ public class IntegrateDialog
 	}
 	
 	private static JPanel createPanel(Integrator integrator) {
+		integrator.generateContent();
 		SpringLayout generalSpringLayout = new SpringLayout();
         JPanel generalPanel = new JPanel(generalSpringLayout);    
         

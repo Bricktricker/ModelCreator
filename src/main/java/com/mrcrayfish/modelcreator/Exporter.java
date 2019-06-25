@@ -42,7 +42,7 @@ public abstract class Exporter
         return file;
     }
 
-    protected abstract void write(BufferedWriter writer) throws IOException;
+    public abstract void write(BufferedWriter writer) throws IOException;
 
     public File writeFile(File file)
     {

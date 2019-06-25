@@ -42,7 +42,7 @@ public class ExporterJavaCode extends Exporter
     }
 
     @Override
-    protected void write(BufferedWriter writer) throws IOException
+    public void write(BufferedWriter writer) throws IOException
     {
         if(version == Version.V_1_13)
         {

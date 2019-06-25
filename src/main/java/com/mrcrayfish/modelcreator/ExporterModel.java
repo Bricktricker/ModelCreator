@@ -67,13 +67,21 @@ public class ExporterModel extends Exporter
     }
 
     @Override
-    protected void write(BufferedWriter writer) throws IOException
+    public void write(BufferedWriter writer) throws IOException
     {
         writer.write("{");
         writer.newLine();
 
         writer.write(space(1) + "\"__comment\": \"Model generated using MrCrayfish's Model Creator (https://mrcrayfish.com/tools?id=mc)\",");
         writer.newLine();
+        
+        if(displayProps) {
+            writeDisplayProperties(writer);
+            writer.newLine();
+        }else{
+        	writer.write(space(1) + "\"parent\": \"block/block\",");
+        	writer.newLine();
+        }
 
         if(!((SidebarPanel)manager).getAmbientOcc())
         {
@@ -83,12 +91,6 @@ public class ExporterModel extends Exporter
 
         writeTextures(writer);
         writer.newLine();
-
-        if(displayProps)
-        {
-            writeDisplayProperties(writer);
-            writer.newLine();
-        }
 
         writer.write(space(1) + "\"elements\": [");
 
