@@ -7,8 +7,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mrcrayfish.modelcreator.block.BlockManager;
@@ -16,18 +14,11 @@ import com.mrcrayfish.modelcreator.util.Util;
 
 public class IntegrateCrafting extends Integrator
 {
-
-	public IntegrateCrafting() {
-		JsonObject recipe = BlockManager.crafting.isShapeLess() ? generateShapeless() : generateShaped();
-		Gson g = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-		this.content = g.toJson(recipe);
-	}
 	
 	@Override
 	public String generate() {
 		JsonObject recipe = BlockManager.crafting.isShapeLess() ? generateShapeless() : generateShaped();
-		Gson g = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-		return g.toJson(recipe);
+		return builder.toJson(recipe);
 	}
 	
 	@Override

@@ -3,8 +3,6 @@ package com.mrcrayfish.modelcreator.integrate;
 import java.io.IOException;
 import java.nio.file.Path;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.mrcrayfish.modelcreator.block.BlockManager;
@@ -44,8 +42,7 @@ public class IntegrateLoot extends Integrator
 		pools.add(pool);
 		loot.add("pools", pools);
 		
-		Gson g = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-		return g.toJson(loot);
+		return builder.toJson(loot);
 	}
 	
 	@Override
