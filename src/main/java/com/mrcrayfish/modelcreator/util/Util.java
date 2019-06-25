@@ -354,16 +354,16 @@ public class Util
         return files != null && Arrays.stream(files).anyMatch(File::isDirectory);
     }
     
-    public static void writeCrashLog(Exception e) {
+    public static void writeCrashLog(Throwable e) {
     	DateFormat dateFormat = new SimpleDateFormat("dd_MM_yyyy HH_mm_ss");
     	File file = new File("crash_" + dateFormat.format(new Date()) + ".log");
     	try(PrintStream stream = new PrintStream(file))
     	{
     		String message = e.getMessage();
     		stream.print(message + "\n");
+    		e.printStackTrace(stream);
     		if(e.getCause() != null)
     			stream.print("Cause: \n" + e.getCause().getMessage());
-    		e.printStackTrace(stream);
     	}catch(Exception ex) {
     		ex.printStackTrace();
     	}

@@ -39,7 +39,6 @@ public class IntegrateDialog
 	public static String modid;
 	public static String resourcePath;
 	public static String assetName;
-	public static String javaClass;
 	public static String BlockItem;
 	
 	public static void show(ModelCreator creator) {
@@ -91,7 +90,7 @@ public class IntegrateDialog
 	private static JPanel createGeneralPanel(Component parent, Consumer<Boolean> isValid) {
 		Border invalidBorder = BorderFactory.createMatteBorder(1, 1, 1, 1, Color.red);
 		Border defaultBorder = (new JTextField()).getBorder();
-		boolean[] validPanels = {false, false, false, false}; //modid, resource path, asset name, java class
+		boolean[] validPanels = {false, false, false}; //modid, resource path, asset name
 		
 		//Register input handler
         BiConsumer<Integer, JTextField> textFieldHandler = (id, textField) -> {
@@ -116,20 +115,14 @@ public class IntegrateDialog
         		case 2:
         			assetName = text;
         			break;
-        		case 3:
-        			javaClass = text;
-        			break;
         		}
         		
-        		isValid.accept(validPanels[0] && validPanels[1] && validPanels[2] && validPanels[3]);
+        		isValid.accept(validPanels[0] && validPanels[1] && validPanels[2]);
         	}
         };
 		
 		SpringLayout generalSpringLayout = new SpringLayout();
         JPanel generalPanel = new JPanel(generalSpringLayout);
-        
-        //Needed: modid, item name, java/resource path, notepad.exe path
-        //in general tab: Block Java name, block resource name, modid, resource path
         
         //modid
         JPanel modidPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -172,21 +165,6 @@ public class IntegrateDialog
         assetText.getDocument().addDocumentListener(new TextFieldListener(s -> textFieldHandler.accept(2, assetText)));
         assetNamePanel.add(assetText);
         
-        //java name
-        JPanel javaNamePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        generalPanel.add(javaNamePanel);
-        
-        JLabel javaNameLabel = new JLabel("Java class");
-        javaNamePanel.add(javaNameLabel);
-        
-        JTextField javaText = new JTextField();
-        javaText.setPreferredSize(new Dimension(125, 24));
-        javaText.setText(javaClass);
-        
-        textFieldHandler.accept(3, javaText);
-        javaText.getDocument().addDocumentListener(new TextFieldListener(s -> textFieldHandler.accept(3, javaText)));
-        javaNamePanel.add(javaText);
-        
         //block as item
         JPanel blockItemPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         generalPanel.add(blockItemPanel);
@@ -224,12 +202,9 @@ public class IntegrateDialog
         generalSpringLayout.putConstraint(SpringLayout.EAST, assetNamePanel, -5, SpringLayout.EAST, generalPanel);
         generalSpringLayout.putConstraint(SpringLayout.WEST, assetNamePanel, 5, SpringLayout.WEST, generalPanel);
         generalSpringLayout.putConstraint(SpringLayout.NORTH, assetNamePanel, 5, SpringLayout.SOUTH, separator);
-        generalSpringLayout.putConstraint(SpringLayout.EAST, javaNamePanel, -5, SpringLayout.EAST, generalPanel);
-        generalSpringLayout.putConstraint(SpringLayout.WEST, javaNamePanel, 5, SpringLayout.WEST, generalPanel);
-        generalSpringLayout.putConstraint(SpringLayout.NORTH, javaNamePanel, 5, SpringLayout.SOUTH, assetNamePanel);
         generalSpringLayout.putConstraint(SpringLayout.EAST, blockItemPanel, -5, SpringLayout.EAST, generalPanel);
         generalSpringLayout.putConstraint(SpringLayout.WEST, blockItemPanel, 5, SpringLayout.WEST, generalPanel);
-        generalSpringLayout.putConstraint(SpringLayout.NORTH, blockItemPanel, 5, SpringLayout.SOUTH, javaNamePanel);
+        generalSpringLayout.putConstraint(SpringLayout.NORTH, blockItemPanel, 5, SpringLayout.SOUTH, assetNamePanel);
         
         return generalPanel;
 	}

@@ -153,7 +153,7 @@ public class Settings
 
     public static String getImageEditor()
     {
-        return settings.getProperty(IMAGE_EDITOR, null);
+        return settings.getProperty(IMAGE_EDITOR, "");
     }
 
     public static void setImageEditor(String file)

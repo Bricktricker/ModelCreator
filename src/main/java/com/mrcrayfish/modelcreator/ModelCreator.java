@@ -152,13 +152,22 @@ public class ModelCreator extends JFrame
         pack();
         setVisible(true);
         setLocationRelativeTo(null);
+        
+        SwingUtilities.invokeLater(() -> {
+        	Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+				@Override
+				public void uncaughtException(Thread t, Throwable e) {
+					Util.writeCrashLog(e);
+				}
+			});
+        });
 
         //SwingUtilities.invokeLater(() -> WelcomeDialog.show(ModelCreator.this));
         SwingUtilities.invokeLater(() -> {
         	if(Settings.getExtractedAssets().isEmpty()) {
         		Menu.showExtractAssets(this);
         	}
-        }); 
+        });
 
         createDisplay();
 
