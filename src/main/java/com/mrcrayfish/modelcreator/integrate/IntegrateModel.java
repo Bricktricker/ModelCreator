@@ -19,7 +19,7 @@ public class IntegrateModel extends Integrator
 
 	@Override
 	public String generate() {
-		ExporterModel exporter = new ExporterModel(modelSidebar);
+		ExporterModel exporter = new ExporterModel(modelSidebar, IntegrateDialog.modid);
         exporter.setOptimize(true);
         exporter.setDisplayProps(false);
         exporter.setIncludeNames(true);

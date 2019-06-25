@@ -20,14 +20,16 @@ public class ExporterModel extends Exporter
     private static final String[] DISPLAY_PROPERTY_ORDER = {"gui", "ground", "fixed", "head", "firstperson_righthand", "thirdperson_righthand"};
 
     private Map<String, String> textureMap = new HashMap<>();
+    private String modid;
     private boolean optimize = true;
     private boolean includeNames = true;
     private boolean displayProps = true;
     private boolean includeNonTexturedFaces = false;
 
-    public ExporterModel(ElementManager manager)
+    public ExporterModel(ElementManager manager, String modid)
     {
         super(manager);
+        this.modid = modid;
         compileTextureList();
     }
 
@@ -60,7 +62,16 @@ public class ExporterModel extends Exporter
                 if(face.getTexture() != null && face.isEnabled() && (!optimize || face.isVisible(manager)))
                 {
                     TextureEntry entry = face.getTexture();
+                    TexturePath path = entry.getTexturePath();
+                    
+                    //temporarily overwrite new modid
+                    //TODO: overload toString to take a modid
+                    String oldModid = path.getModId();
+                    if(!oldModid.equals("minecraft")) {
+                    	path.setModId(modid);
+                    }
                     textureMap.put(entry.getKey(), entry.getTexturePath().toString());
+                    path.setModId(oldModid);
                 }
             }
         }
@@ -125,7 +136,7 @@ public class ExporterModel extends Exporter
         if(((SidebarPanel)manager).getParticle() != null)
         {
             TextureEntry entry = ((SidebarPanel)manager).getParticle();
-            writer.write(space(2) + "\"particle\": \"" + entry.getModId() + ":");
+            writer.write(space(2) + "\"particle\": \"" + this.modid + ":");
             if(!entry.getDirectory().isEmpty())
             {
                 writer.write(entry.getDirectory() + "/");

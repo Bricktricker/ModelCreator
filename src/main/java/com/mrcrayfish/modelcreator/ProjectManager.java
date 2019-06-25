@@ -166,11 +166,10 @@ public class ProjectManager
     		JsonObject texture = e.getAsJsonObject();
     		String directory = texture.get("directory").getAsString();
 			String mcTexture = texture.get("texture").getAsString();
-    		String modid = texture.get("modid").getAsString();
     		String key = texture.get("key").getAsString();
     		
     		//TODO: delete texture from temp folder
-    		TexturePath texturepath = new TexturePath(modid, directory, mcTexture);
+    		TexturePath texturepath = new TexturePath("modid", directory, mcTexture);
     		Path textureFile = Files.createTempFile(mcTexture, "");
     		Files.write(textureFile, project.getFileData(mcTexture));
     		TextureManager.addImage(key, texturepath, textureFile.toFile());
@@ -199,7 +198,6 @@ public class ProjectManager
             	JsonObject textureJson = new JsonObject();
         		textureJson.addProperty("directory", entry.getDirectory());
         		textureJson.addProperty("texture", entry.getName());
-        		textureJson.addProperty("modid", entry.getModId());
         		textureJson.addProperty("key", entry.getKey());
         		
         		//Save image in project zip
@@ -253,7 +251,7 @@ public class ProjectManager
 
     private static File getModelFile(ElementManager manager) throws IOException
     {
-        ExporterModel exporter = new ExporterModel(manager);
+        ExporterModel exporter = new ExporterModel(manager, "modid");
         exporter.setOptimize(false);
         exporter.setIncludeNonTexturedFaces(true);
         return exporter.writeFile(File.createTempFile("model.json", ""));

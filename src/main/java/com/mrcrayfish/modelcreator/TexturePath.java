@@ -45,6 +45,11 @@ public class TexturePath
     {
         return modId;
     }
+    
+    public void setModId(String modid)
+    {
+    	this.modId = modid;
+    }
 
     public String getDirectory()
     {

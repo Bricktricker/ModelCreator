@@ -586,6 +586,15 @@ public class Menu extends JMenuBar
 
         JLabel labelExportDir = new JLabel("Destination");
         exportDir.add(labelExportDir);
+        
+        JLabel labelModid = new JLabel("Mod ID");
+        exportDir.add(labelModid);
+        
+        JTextField textFieldModid = new JTextField();
+        textFieldModid.setPreferredSize(new Dimension(100, 24));
+        textFieldModid.setCaretPosition(0);
+        textFieldModid.setText(Settings.getModID());
+        exportDir.add(textFieldModid);
 
         //JComponent optionSeparator = DefaultComponentFactory.getInstance().createSeparator("Export Options");
         JComponent optionSeparator = new JSeparator();
@@ -605,15 +614,16 @@ public class Menu extends JMenuBar
 
 		/* Constraints */
 
-        springLayout.putConstraint(SpringLayout.NORTH, labelName, 3, SpringLayout.NORTH, textFieldName);
-        springLayout.putConstraint(SpringLayout.WEST, labelName, 10, SpringLayout.WEST, exportDir);
-        springLayout.putConstraint(SpringLayout.EAST, labelName, -5, SpringLayout.WEST, textFieldDestination);
         springLayout.putConstraint(SpringLayout.NORTH, textFieldName, 10, SpringLayout.NORTH, exportDir);
         springLayout.putConstraint(SpringLayout.WEST, textFieldName, 0, SpringLayout.WEST, textFieldDestination);
         springLayout.putConstraint(SpringLayout.EAST, textFieldName, 0, SpringLayout.EAST, textFieldDestination);
+        
+        springLayout.putConstraint(SpringLayout.NORTH, labelName, 3, SpringLayout.NORTH, textFieldName);
+        springLayout.putConstraint(SpringLayout.WEST, labelName, 10, SpringLayout.WEST, exportDir);
+        springLayout.putConstraint(SpringLayout.EAST, labelName, -5, SpringLayout.WEST, textFieldDestination);
         springLayout.putConstraint(SpringLayout.WEST, optionSeparator, 10, SpringLayout.WEST, exportDir);
         springLayout.putConstraint(SpringLayout.EAST, optionSeparator, -10, SpringLayout.EAST, exportDir);
-        springLayout.putConstraint(SpringLayout.NORTH, optionSeparator, 10, SpringLayout.SOUTH, textFieldDestination);
+        springLayout.putConstraint(SpringLayout.NORTH, optionSeparator, 10, SpringLayout.SOUTH, textFieldModid);
         springLayout.putConstraint(SpringLayout.NORTH, btnBrowserDir, 0, SpringLayout.NORTH, textFieldDestination);
         springLayout.putConstraint(SpringLayout.EAST, btnBrowserDir, -10, SpringLayout.EAST, exportDir);
         springLayout.putConstraint(SpringLayout.NORTH, textFieldDestination, 10, SpringLayout.SOUTH, textFieldName);
@@ -621,6 +631,12 @@ public class Menu extends JMenuBar
         springLayout.putConstraint(SpringLayout.EAST, textFieldDestination, -10, SpringLayout.WEST, btnBrowserDir);
         springLayout.putConstraint(SpringLayout.NORTH, labelExportDir, 3, SpringLayout.NORTH, textFieldDestination);
         springLayout.putConstraint(SpringLayout.WEST, labelExportDir, 10, SpringLayout.WEST, exportDir);
+       
+        springLayout.putConstraint(SpringLayout.NORTH, labelModid, 10, SpringLayout.SOUTH, labelExportDir);
+        springLayout.putConstraint(SpringLayout.WEST, labelModid, 10, SpringLayout.WEST, exportDir);
+        springLayout.putConstraint(SpringLayout.NORTH, textFieldModid, 10, SpringLayout.SOUTH, labelExportDir);
+        springLayout.putConstraint(SpringLayout.WEST, textFieldModid, 10, SpringLayout.EAST, labelModid);
+        springLayout.putConstraint(SpringLayout.EAST, textFieldModid, -10, SpringLayout.EAST, exportDir);
         springLayout.putConstraint(SpringLayout.NORTH, checkBoxOptimize, 5, SpringLayout.SOUTH, optionSeparator);
         springLayout.putConstraint(SpringLayout.WEST, checkBoxOptimize, 10, SpringLayout.WEST, exportDir);
         springLayout.putConstraint(SpringLayout.NORTH, checkBoxDisplayProps, 0, SpringLayout.SOUTH, checkBoxOptimize);
@@ -654,7 +670,8 @@ public class Menu extends JMenuBar
         btnExport.addActionListener(e ->
         {
             String name = textFieldName.getText().trim();
-            if(!textFieldDestination.getText().isEmpty() && !name.isEmpty())
+            String modid = textFieldModid.getText().trim();
+            if(!textFieldDestination.getText().isEmpty() && !name.isEmpty() && !modid.isEmpty())
             {
                 File destination = new File(textFieldDestination.getText());
                 destination.mkdirs();
@@ -681,7 +698,7 @@ public class Menu extends JMenuBar
 
                 dialog.dispose();
 
-                ExporterModel exporter = new ExporterModel(creator.getSidebarPanel());
+                ExporterModel exporter = new ExporterModel(creator.getSidebarPanel(), modid);
                 exporter.setOptimize(checkBoxOptimize.isSelected());
                 exporter.setDisplayProps(checkBoxDisplayProps.isSelected());
                 exporter.setIncludeNames(checkBoxElementNames.isSelected());
