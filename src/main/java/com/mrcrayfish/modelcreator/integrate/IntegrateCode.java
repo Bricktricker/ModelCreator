@@ -2,6 +2,9 @@ package com.mrcrayfish.modelcreator.integrate;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +46,9 @@ public class IntegrateCode extends Integrator
 
 	@Override
 	public void integrate() {
-		
+		StringSelection stringSelection = new StringSelection(this.content);
+		Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+		clipboard.setContents(stringSelection, null);
 	}
 	
 	@Override
