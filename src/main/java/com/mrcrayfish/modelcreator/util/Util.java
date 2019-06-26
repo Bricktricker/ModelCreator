@@ -355,6 +355,8 @@ public class Util
     }
     
     public static void writeCrashLog(Throwable e) {
+    	e.printStackTrace();
+    	
     	DateFormat dateFormat = new SimpleDateFormat("dd_MM_yyyy HH_mm_ss");
     	File file = new File("crash_" + dateFormat.format(new Date()) + ".log");
     	try(PrintStream stream = new PrintStream(file))
