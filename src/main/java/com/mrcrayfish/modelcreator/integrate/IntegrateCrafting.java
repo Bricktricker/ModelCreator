@@ -2,7 +2,9 @@ package com.mrcrayfish.modelcreator.integrate;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -61,8 +63,8 @@ public class IntegrateCrafting extends Integrator
 		
 		JsonArray pattern = new JsonArray();
 		Map<String, Character> keys = new HashMap<>(); 
+		String[] patternLines = new String[]{"", "", ""};
 		{
-			String[] patternLines = new String[]{"", "", ""};
 			char startChar = 'A';
 			
 			for(int i = 0; i < 9; i++) {
@@ -77,10 +79,39 @@ public class IntegrateCrafting extends Integrator
 					patternLines[i/3] += " ";
 				}
 			}
+		}
+		if(!BlockManager.crafting.isExactly()) {
+			List<String> patternStr = new ArrayList<String>();
+			
+			for(int i = 0; i < 3; i++) {
+				if(!patternLines[i].trim().isEmpty())
+					patternStr.add(patternLines[i]);
+			}
+			
+			//first column empty
+			if(patternStr.stream().allMatch(p -> p.startsWith(" "))) {
+				patternStr = patternStr.stream().map(s -> s.substring(1)).collect(Collectors.toList());
+			}
+			//second column empty
+			if(patternStr.stream().allMatch(p -> p.startsWith(" "))) {
+				patternStr = patternStr.stream().map(s -> s.substring(1)).collect(Collectors.toList());
+			}
+			//second column empty, but item in first
+			if(patternStr.stream().allMatch(p -> p.endsWith(" "))) {
+				patternStr = patternStr.stream().map(s -> s.substring(0, s.length())).collect(Collectors.toList());
+			}
+			//last column empty
+			if(patternStr.stream().allMatch(p -> p.endsWith(" "))) {
+				patternStr = patternStr.stream().map(s -> s.substring(0, s.length())).collect(Collectors.toList());
+			}
+			
+			patternStr.forEach(s -> pattern.add(s));
+		}else{
 			pattern.add(patternLines[0]);
 			pattern.add(patternLines[1]);
 			pattern.add(patternLines[2]);
 		}
+		
 		rootObj.add("pattern", pattern);
 		
 		JsonObject key = new JsonObject();

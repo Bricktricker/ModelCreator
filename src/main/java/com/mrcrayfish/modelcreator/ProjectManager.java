@@ -109,6 +109,8 @@ public class ProjectManager
         	 JsonObject crafting = block.get("crafting").getAsJsonObject();
         	 boolean isShapeless = crafting.get("shapeless").getAsBoolean();
         	 BlockManager.crafting.setShapeLess(isShapeless);
+        	 boolean isExactly = crafting.get("exact").getAsBoolean();
+        	 BlockManager.crafting.setExactly(isExactly);
         	 int numOutput = crafting.get("numOutput").getAsInt();
         	 BlockManager.crafting.setNumOutputItems(numOutput);
         	 JsonArray recipe = crafting.getAsJsonArray("recipe");
@@ -300,6 +302,7 @@ public class ProjectManager
     		if(!BlockManager.crafting.isEmpty()) {
     			JsonObject crafting = new JsonObject();
             	crafting.addProperty("shapeless", BlockManager.crafting.isShapeLess());
+            	crafting.addProperty("exact", BlockManager.crafting.isExactly());
             	crafting.addProperty("numOutput", BlockManager.crafting.getNumOutputItems());
             	JsonArray recipe = new JsonArray();
             	BlockManager.crafting.getCraftItems().forEach(recipe::add);

@@ -28,6 +28,7 @@ import com.mrcrayfish.modelcreator.util.ComponentUtil;
 public class BlockCrafting {
 	
 	private boolean shapeLess;
+	private boolean exactly;
 	private int numOutputItems;
 	private List<String> craftItems;
 	
@@ -54,6 +55,14 @@ public class BlockCrafting {
 		this.shapeLess = shapeLess;
 	}
 
+	public boolean isExactly() {
+		return exactly;
+	}
+
+	public void setExactly(boolean exactly) {
+		this.exactly = exactly;
+	}
+
 	public int getNumOutputItems() {
 		return numOutputItems;
 	}
@@ -74,23 +83,26 @@ public class BlockCrafting {
 		JDialog dialog = new JDialog(creator, "Crafting", Dialog.ModalityType.APPLICATION_MODAL);
 		
 		JPanel panel = new JPanel(new BorderLayout());
-        panel.setPreferredSize(new Dimension(500, 250));
+        panel.setPreferredSize(new Dimension(550, 250));
         dialog.add(panel);
         
         SpringLayout generalSpringLayout = new SpringLayout();
         JPanel generalPanel = new JPanel(generalSpringLayout);
         panel.add(generalPanel);
         
-        final JCheckBox checkBoxShapeless = ComponentUtil.createCheckBox("Shapeless recipe", "", false);
+        final JCheckBox checkBoxShapeless = ComponentUtil.createCheckBox("Shapeless recipe", "", BlockManager.crafting.isShapeLess());
+        final JCheckBox checkBoxExactly = ComponentUtil.createCheckBox("exact recipe", "", BlockManager.crafting.isExactly());
         final SpinnerNumberModel numoutSpinnerNumberModel = new SpinnerNumberModel();
         final List<JComboBox<String>> craftingSlots = new ArrayList<>();
         
-        //shapeless + num output items
-        JPanel outputPanel = new JPanel(new GridLayout(1, 2));
+        //shapeless + exactly + num output items
+        JPanel outputPanel = new JPanel(new GridLayout(1, 3));
         {
         	generalPanel.add(outputPanel);
         	
         	outputPanel.add(checkBoxShapeless);
+        	
+        	outputPanel.add(checkBoxExactly);
             
             JPanel numoutPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
             outputPanel.add(numoutPanel);
@@ -155,6 +167,7 @@ public class BlockCrafting {
         saveButton.addActionListener(e ->
         {
         	boolean isShapeless = checkBoxShapeless.isSelected();
+        	boolean isExact = checkBoxExactly.isSelected();
         	int numOutputItems = (Integer)numoutSpinnerNumberModel.getValue();
         	List<String> recipe = new ArrayList<>();
         	craftingSlots.forEach(s -> {
@@ -163,6 +176,7 @@ public class BlockCrafting {
         	});
         	
         	BlockManager.crafting.setShapeLess(isShapeless);
+        	BlockManager.crafting.setExactly(isExact);
         	BlockManager.crafting.setNumOutputItems(numOutputItems);
         	BlockManager.crafting.setCraftItems(recipe);
         });
