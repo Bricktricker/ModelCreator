@@ -18,7 +18,8 @@ public class IntegrateLoot extends Integrator
 		JsonArray pools = new JsonArray();
 		
 		JsonObject pool = new JsonObject();
-		pool.addProperty("rools", BlockManager.loot.getNumDrops());
+		pool.addProperty("rolls", BlockManager.loot.getNumDrops());
+		pool.addProperty("name", "pool1");
 		
 		JsonArray entries = new JsonArray();
 		JsonObject entry = new JsonObject();
@@ -47,7 +48,7 @@ public class IntegrateLoot extends Integrator
 	
 	@Override
 	public void integrate() {
-		Path craftingPath = getDataFolder().resolve("loot_tables").resolve(IntegrateDialog.assetName + ".json");
+		Path craftingPath = getDataFolder().resolve("loot_tables").resolve("blocks").resolve(IntegrateDialog.assetName + ".json");
 		try{
 			writeToFile(craftingPath, content + "\n");
 		} catch (IOException e) {
