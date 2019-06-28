@@ -122,31 +122,10 @@ public class Util
 
     public static void loadModelFromJar(SidebarManager manager, Class<?> clazz, String name)
     {
-        try
-        {
-            InputStream is = clazz.getClassLoader().getResourceAsStream(name + ".block");
-            File file = File.createTempFile(name + ".block", "");
-            FileOutputStream fos = new FileOutputStream(file);
-
-            byte[] buffer = new byte[1024];
-
-            int len;
-            while((len = is.read(buffer)) > 0)
-            {
-                fos.write(buffer, 0, len);
-            }
-
-            fos.close();
-            is.close();
-
-            ProjectManager.loadProject(manager, file);
-
-            file.delete();
-        }
-        catch(IOException e)
-        {
-            Util.writeCrashLog(e);
-        }
+        
+    	InputStream is = clazz.getClassLoader().getResourceAsStream(name + ".block");
+    	ProjectManager.loadProject(manager, is);
+        
     }
 
     public static void extractMinecraftAssets(String version, Window window)
@@ -356,6 +335,7 @@ public class Util
     
     public static void writeCrashLog(Throwable e) {
     	e.printStackTrace();
+    	JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
     	
     	DateFormat dateFormat = new SimpleDateFormat("dd_MM_yyyy HH_mm_ss");
     	File file = new File("crash_" + dateFormat.format(new Date()) + ".log");
