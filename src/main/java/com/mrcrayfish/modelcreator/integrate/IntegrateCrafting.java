@@ -83,10 +83,16 @@ public class IntegrateCrafting extends Integrator
 		if(!BlockManager.crafting.isExactly()) {
 			List<String> patternStr = new ArrayList<String>();
 			
-			for(int i = 0; i < 3; i++) {
-				if(!patternLines[i].trim().isEmpty())
-					patternStr.add(patternLines[i]);
-			}
+			boolean line1Empty = patternLines[0].trim().isEmpty();
+			boolean line2Empty = patternLines[1].trim().isEmpty();
+			boolean line3Empty = patternLines[2].trim().isEmpty();
+			
+			if(!line1Empty)
+				patternStr.add(patternLines[0]);
+			if(!line2Empty && !line1Empty && !line3Empty)
+				patternStr.add(patternLines[1]);
+			if(!line3Empty)
+				patternStr.add(patternLines[2]);
 			
 			//first column empty
 			if(patternStr.stream().allMatch(p -> p.startsWith(" "))) {
