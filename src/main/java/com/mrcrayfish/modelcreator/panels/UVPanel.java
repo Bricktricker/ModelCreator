@@ -410,10 +410,10 @@ public class UVPanel extends JPanel implements IElementUpdater
             yStartField.setEnabled(true);
             xEndField.setEnabled(true);
             yEndField.setEnabled(true);
-            xStartField.setText(Exporter.FORMAT.format(cube.getSelectedFace().getStartU()));
-            yStartField.setText(Exporter.FORMAT.format(cube.getSelectedFace().getStartV()));
-            xEndField.setText(Exporter.FORMAT.format(cube.getSelectedFace().getEndU()));
-            yEndField.setText(Exporter.FORMAT.format(cube.getSelectedFace().getEndV()));
+            xStartField.setText(ExporterModel.FORMAT.format(cube.getSelectedFace().getStartU()));
+            yStartField.setText(ExporterModel.FORMAT.format(cube.getSelectedFace().getStartV()));
+            xEndField.setText(ExporterModel.FORMAT.format(cube.getSelectedFace().getEndU()));
+            yEndField.setText(ExporterModel.FORMAT.format(cube.getSelectedFace().getEndV()));
         }
         else
         {

@@ -1,6 +1,6 @@
 package com.mrcrayfish.modelcreator.util;
 
-import com.mrcrayfish.modelcreator.Exporter;
+import com.mrcrayfish.modelcreator.ExporterModel;
 
 import java.text.ParseException;
 
@@ -10,7 +10,7 @@ public class Parser
     {
         try
         {
-            return Exporter.FORMAT.parse(text).doubleValue();
+            return ExporterModel.FORMAT.parse(text).doubleValue();
         }
         catch(NumberFormatException | ParseException e)
         {

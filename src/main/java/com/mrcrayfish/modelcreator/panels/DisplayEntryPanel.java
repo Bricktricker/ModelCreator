@@ -1,6 +1,6 @@
 package com.mrcrayfish.modelcreator.panels;
 
-import com.mrcrayfish.modelcreator.Exporter;
+import com.mrcrayfish.modelcreator.ExporterModel;
 import com.mrcrayfish.modelcreator.Icons;
 import com.mrcrayfish.modelcreator.display.DisplayProperties;
 import com.mrcrayfish.modelcreator.util.Parser;
@@ -75,7 +75,7 @@ public class DisplayEntryPanel extends JPanel
         Font defaultFont = new Font("SansSerif", Font.BOLD, 16);
 
         textFieldTranslationX = new JTextField();
-        textFieldTranslationX.setText(Exporter.FORMAT.format(entry.getTranslationX()));
+        textFieldTranslationX.setText(ExporterModel.FORMAT.format(entry.getTranslationX()));
         textFieldTranslationX.setFont(defaultFont);
         textFieldTranslationX.setHorizontalAlignment(SwingConstants.CENTER);
         textFieldTranslationX.addKeyListener(new KeyAdapter()
@@ -91,7 +91,7 @@ public class DisplayEntryPanel extends JPanel
         });
 
         textFieldTranslationY = new JTextField();
-        textFieldTranslationY.setText(Exporter.FORMAT.format(entry.getTranslationY()));
+        textFieldTranslationY.setText(ExporterModel.FORMAT.format(entry.getTranslationY()));
         textFieldTranslationY.setFont(defaultFont);
         textFieldTranslationY.setHorizontalAlignment(SwingConstants.CENTER);
         textFieldTranslationY.addKeyListener(new KeyAdapter()
@@ -107,7 +107,7 @@ public class DisplayEntryPanel extends JPanel
         });
 
         textFieldTranslationZ = new JTextField();
-        textFieldTranslationZ.setText(Exporter.FORMAT.format(entry.getTranslationZ()));
+        textFieldTranslationZ.setText(ExporterModel.FORMAT.format(entry.getTranslationZ()));
         textFieldTranslationZ.setFont(defaultFont);
         textFieldTranslationZ.setHorizontalAlignment(SwingConstants.CENTER);
         textFieldTranslationZ.addKeyListener(new KeyAdapter()
@@ -137,7 +137,7 @@ public class DisplayEntryPanel extends JPanel
             {
                 entry.setTranslationX(entry.getTranslationX() + 1.0);
             }
-            textFieldTranslationX.setText(Exporter.FORMAT.format(entry.getTranslationX()));
+            textFieldTranslationX.setText(ExporterModel.FORMAT.format(entry.getTranslationX()));
         });
         translatePanel.add(btnTransX);
 
@@ -156,7 +156,7 @@ public class DisplayEntryPanel extends JPanel
             {
                 entry.setTranslationY(entry.getTranslationY() + 1.0);
             }
-            textFieldTranslationY.setText(Exporter.FORMAT.format(entry.getTranslationY()));
+            textFieldTranslationY.setText(ExporterModel.FORMAT.format(entry.getTranslationY()));
         });
         translatePanel.add(btnTransY);
 
@@ -175,7 +175,7 @@ public class DisplayEntryPanel extends JPanel
             {
                 entry.setTranslationZ(entry.getTranslationZ() + 1.0);
             }
-            textFieldTranslationZ.setText(Exporter.FORMAT.format(entry.getTranslationZ()));
+            textFieldTranslationZ.setText(ExporterModel.FORMAT.format(entry.getTranslationZ()));
         });
         translatePanel.add(btnTransZ);
 
@@ -198,7 +198,7 @@ public class DisplayEntryPanel extends JPanel
             {
                 entry.setTranslationX(entry.getTranslationX() - 1.0);
             }
-            textFieldTranslationX.setText(Exporter.FORMAT.format(entry.getTranslationX()));
+            textFieldTranslationX.setText(ExporterModel.FORMAT.format(entry.getTranslationX()));
         });
         translatePanel.add(btnTransXNeg);
 
@@ -217,7 +217,7 @@ public class DisplayEntryPanel extends JPanel
             {
                 entry.setTranslationY(entry.getTranslationY() - 1.0);
             }
-            textFieldTranslationY.setText(Exporter.FORMAT.format(entry.getTranslationY()));
+            textFieldTranslationY.setText(ExporterModel.FORMAT.format(entry.getTranslationY()));
         });
         translatePanel.add(btnTransYNeg);
 
@@ -236,7 +236,7 @@ public class DisplayEntryPanel extends JPanel
             {
                 entry.setTranslationZ(entry.getTranslationZ() - 1.0);
             }
-            textFieldTranslationZ.setText(Exporter.FORMAT.format(entry.getTranslationZ()));
+            textFieldTranslationZ.setText(ExporterModel.FORMAT.format(entry.getTranslationZ()));
         });
         translatePanel.add(btnTransZNeg);
         
@@ -246,7 +246,7 @@ public class DisplayEntryPanel extends JPanel
         scalePanel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(221, 221, 228), 0), "<html><b>Scale</b></html>"));
 
         textFieldScaleX = new JTextField();
-        textFieldScaleX.setText(Exporter.FORMAT.format(entry.getScaleX()));
+        textFieldScaleX.setText(ExporterModel.FORMAT.format(entry.getScaleX()));
         textFieldScaleX.setFont(defaultFont);
         textFieldScaleX.setHorizontalAlignment(SwingConstants.CENTER);
         textFieldScaleX.addKeyListener(new KeyAdapter()
@@ -262,7 +262,7 @@ public class DisplayEntryPanel extends JPanel
         });
 
         textFieldScaleY = new JTextField();
-        textFieldScaleY.setText(Exporter.FORMAT.format(entry.getScaleY()));
+        textFieldScaleY.setText(ExporterModel.FORMAT.format(entry.getScaleY()));
         textFieldScaleY.setFont(defaultFont);
         textFieldScaleY.setHorizontalAlignment(SwingConstants.CENTER);
         textFieldScaleY.addKeyListener(new KeyAdapter()
@@ -278,7 +278,7 @@ public class DisplayEntryPanel extends JPanel
         });
 
         textFieldScaleZ = new JTextField();
-        textFieldScaleZ.setText(Exporter.FORMAT.format(entry.getScaleZ()));
+        textFieldScaleZ.setText(ExporterModel.FORMAT.format(entry.getScaleZ()));
         textFieldScaleZ.setFont(defaultFont);
         textFieldScaleZ.setHorizontalAlignment(SwingConstants.CENTER);
         textFieldScaleZ.addKeyListener(new KeyAdapter()
@@ -308,7 +308,7 @@ public class DisplayEntryPanel extends JPanel
             {
                 entry.setScaleX(entry.getScaleX() + 1.0);
             }
-            textFieldScaleX.setText(Exporter.FORMAT.format(entry.getScaleX()));
+            textFieldScaleX.setText(ExporterModel.FORMAT.format(entry.getScaleX()));
         });
         scalePanel.add(btnScaleX);
 
@@ -327,7 +327,7 @@ public class DisplayEntryPanel extends JPanel
             {
                 entry.setScaleY(entry.getScaleY() + 1.0);
             }
-            textFieldScaleY.setText(Exporter.FORMAT.format(entry.getScaleY()));
+            textFieldScaleY.setText(ExporterModel.FORMAT.format(entry.getScaleY()));
         });
         scalePanel.add(btnScaleY);
 
@@ -346,7 +346,7 @@ public class DisplayEntryPanel extends JPanel
             {
                 entry.setScaleZ(entry.getScaleZ() + 1.0);
             }
-            textFieldScaleZ.setText(Exporter.FORMAT.format(entry.getScaleZ()));
+            textFieldScaleZ.setText(ExporterModel.FORMAT.format(entry.getScaleZ()));
         });
         scalePanel.add(btnScaleZ);
         
@@ -369,7 +369,7 @@ public class DisplayEntryPanel extends JPanel
             {
                 entry.setScaleX(entry.getScaleX() - 1.0);
             }
-            textFieldScaleX.setText(Exporter.FORMAT.format(entry.getScaleX()));
+            textFieldScaleX.setText(ExporterModel.FORMAT.format(entry.getScaleX()));
         });
         scalePanel.add(btnScaleXNeg);
 
@@ -388,7 +388,7 @@ public class DisplayEntryPanel extends JPanel
             {
                 entry.setScaleY(entry.getScaleY() - 1.0);
             }
-            textFieldScaleY.setText(Exporter.FORMAT.format(entry.getScaleY()));
+            textFieldScaleY.setText(ExporterModel.FORMAT.format(entry.getScaleY()));
         });
         scalePanel.add(btnScaleYNeg);
 
@@ -407,7 +407,7 @@ public class DisplayEntryPanel extends JPanel
             {
                 entry.setScaleZ(entry.getScaleZ() - 1.0);
             }
-            textFieldScaleZ.setText(Exporter.FORMAT.format(entry.getScaleZ()));
+            textFieldScaleZ.setText(ExporterModel.FORMAT.format(entry.getScaleZ()));
         });
         scalePanel.add(btnScaleZNeg);
         otherPanel.add(scalePanel);
@@ -466,12 +466,12 @@ public class DisplayEntryPanel extends JPanel
         sliderRotationX.setValue((int) entry.getRotationX());
         sliderRotationY.setValue((int) entry.getRotationY());
         sliderRotationZ.setValue((int) entry.getRotationZ());
-        textFieldTranslationX.setText(Exporter.FORMAT.format(entry.getTranslationX()));
-        textFieldTranslationY.setText(Exporter.FORMAT.format(entry.getTranslationY()));
-        textFieldTranslationZ.setText(Exporter.FORMAT.format(entry.getTranslationZ()));
-        textFieldScaleX.setText(Exporter.FORMAT.format(entry.getScaleX()));
-        textFieldScaleY.setText(Exporter.FORMAT.format(entry.getScaleY()));
-        textFieldScaleZ.setText(Exporter.FORMAT.format(entry.getScaleZ()));
+        textFieldTranslationX.setText(ExporterModel.FORMAT.format(entry.getTranslationX()));
+        textFieldTranslationY.setText(ExporterModel.FORMAT.format(entry.getTranslationY()));
+        textFieldTranslationZ.setText(ExporterModel.FORMAT.format(entry.getTranslationZ()));
+        textFieldScaleX.setText(ExporterModel.FORMAT.format(entry.getScaleX()));
+        textFieldScaleY.setText(ExporterModel.FORMAT.format(entry.getScaleY()));
+        textFieldScaleZ.setText(ExporterModel.FORMAT.format(entry.getScaleZ()));
     }
 
     private JSlider createRotationSlider(String labelText, JComponent parent)

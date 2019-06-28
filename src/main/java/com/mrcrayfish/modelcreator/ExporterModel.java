@@ -7,20 +7,38 @@ import com.mrcrayfish.modelcreator.element.ElementManager;
 import com.mrcrayfish.modelcreator.element.Face;
 import com.mrcrayfish.modelcreator.panels.SidebarPanel;
 import com.mrcrayfish.modelcreator.texture.TextureEntry;
+import com.mrcrayfish.modelcreator.util.Util;
 
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ExporterModel extends Exporter
+public class ExporterModel
 {
+	/**
+     * decimalformatter for rounding
+     */
+    public static final DecimalFormat FORMAT = new DecimalFormat("#.###");
+    private static final DecimalFormatSymbols SYMBOLS = new DecimalFormatSymbols();
+    
+    static
+    {
+        SYMBOLS.setDecimalSeparator('.');
+        FORMAT.setDecimalFormatSymbols(SYMBOLS);
+    }
+    
     private static final String[] DISPLAY_PROPERTY_ORDER = {"gui", "ground", "fixed", "head", "firstperson_righthand", "thirdperson_righthand"};
 
     private Map<String, String> textureMap = new HashMap<>();
     private String modid;
+    private ElementManager manager;
     private boolean optimize = true;
     private boolean includeNames = true;
     private boolean displayProps = true;
@@ -28,8 +46,9 @@ public class ExporterModel extends Exporter
 
     public ExporterModel(ElementManager manager, String modid)
     {
-        super(manager);
+        //super(manager);
         this.modid = modid;
+        this.manager = manager;
         compileTextureList();
     }
 
@@ -51,6 +70,24 @@ public class ExporterModel extends Exporter
     public void setIncludeNonTexturedFaces(boolean includeNonTexturedFaces)
     {
         this.includeNonTexturedFaces = includeNonTexturedFaces;
+    }
+    
+    public File writeFile(File file)
+    {
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter(file)))
+        {
+            if(!file.exists())
+            {
+                file.createNewFile();
+            }
+            this.write(writer);
+            return file;
+        }
+        catch(IOException e)
+        {
+            Util.writeCrashLog(e);
+        }
+        return null;
     }
 
     private void compileTextureList()
@@ -77,7 +114,6 @@ public class ExporterModel extends Exporter
         }
     }
 
-    @Override
     public void write(BufferedWriter writer) throws IOException
     {
         writer.write("{");
@@ -332,5 +368,16 @@ public class ExporterModel extends Exporter
             }
         }
         return false;
+    }
+    
+    protected String space(int size)
+    {
+        StringBuilder builder = new StringBuilder();
+        for(int i = 0; i < size; i++)
+        {
+            //TODO add setting to export with tabs instead
+            builder.append("    ");
+        }
+        return builder.toString();
     }
 }

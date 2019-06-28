@@ -164,7 +164,7 @@ public class OriginPanel extends JPanel implements IElementUpdater
                 {
                     selectedElement.addOriginX(1.0);
                 }
-                xOriginField.setText(Exporter.FORMAT.format(selectedElement.getOriginX()));
+                xOriginField.setText(ExporterModel.FORMAT.format(selectedElement.getOriginX()));
                 StateManager.pushStateDelayed(manager, PropertyIdentifiers.ORIGIN_X);
             }
         });
@@ -184,7 +184,7 @@ public class OriginPanel extends JPanel implements IElementUpdater
                 {
                     selectedElement.addOriginY(1.0);
                 }
-                yOriginField.setText(Exporter.FORMAT.format(selectedElement.getOriginY()));
+                yOriginField.setText(ExporterModel.FORMAT.format(selectedElement.getOriginY()));
                 StateManager.pushStateDelayed(manager, PropertyIdentifiers.ORIGIN_Y);
             }
         });
@@ -204,7 +204,7 @@ public class OriginPanel extends JPanel implements IElementUpdater
                 {
                     selectedElement.addOriginZ(1.0);
                 }
-                zOriginField.setText(Exporter.FORMAT.format(selectedElement.getOriginZ()));
+                zOriginField.setText(ExporterModel.FORMAT.format(selectedElement.getOriginZ()));
                 StateManager.pushStateDelayed(manager, PropertyIdentifiers.ORIGIN_Z);
             }
         });
@@ -224,7 +224,7 @@ public class OriginPanel extends JPanel implements IElementUpdater
                 {
                     selectedElement.addOriginX(-1.0);
                 }
-                xOriginField.setText(Exporter.FORMAT.format(selectedElement.getOriginX()));
+                xOriginField.setText(ExporterModel.FORMAT.format(selectedElement.getOriginX()));
                 StateManager.pushStateDelayed(manager, PropertyIdentifiers.ORIGIN_Z);
             }
         });
@@ -244,7 +244,7 @@ public class OriginPanel extends JPanel implements IElementUpdater
                 {
                     selectedElement.addOriginY(-1.0);
                 }
-                yOriginField.setText(Exporter.FORMAT.format(selectedElement.getOriginY()));
+                yOriginField.setText(ExporterModel.FORMAT.format(selectedElement.getOriginY()));
                 StateManager.pushStateDelayed(manager, PropertyIdentifiers.ORIGIN_Y);
             }
         });
@@ -264,7 +264,7 @@ public class OriginPanel extends JPanel implements IElementUpdater
                 {
                     selectedElement.addOriginZ(-1.0);
                 }
-                zOriginField.setText(Exporter.FORMAT.format(selectedElement.getOriginZ()));
+                zOriginField.setText(ExporterModel.FORMAT.format(selectedElement.getOriginZ()));
                 StateManager.pushStateDelayed(manager, PropertyIdentifiers.ORIGIN_Z);
             }
         });
@@ -291,9 +291,9 @@ public class OriginPanel extends JPanel implements IElementUpdater
             xOriginField.setEnabled(true);
             yOriginField.setEnabled(true);
             zOriginField.setEnabled(true);
-            xOriginField.setText(Exporter.FORMAT.format(cube.getOriginX()));
-            yOriginField.setText(Exporter.FORMAT.format(cube.getOriginY()));
-            zOriginField.setText(Exporter.FORMAT.format(cube.getOriginZ()));
+            xOriginField.setText(ExporterModel.FORMAT.format(cube.getOriginX()));
+            yOriginField.setText(ExporterModel.FORMAT.format(cube.getOriginY()));
+            zOriginField.setText(ExporterModel.FORMAT.format(cube.getOriginZ()));
         }
         else
         {

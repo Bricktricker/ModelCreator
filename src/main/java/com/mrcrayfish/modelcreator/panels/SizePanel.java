@@ -306,9 +306,9 @@ public class SizePanel extends JPanel implements IElementUpdater
             xSizeField.setEnabled(true);
             ySizeField.setEnabled(true);
             zSizeField.setEnabled(true);
-            xSizeField.setText(Exporter.FORMAT.format(cube.getWidth()));
-            ySizeField.setText(Exporter.FORMAT.format(cube.getHeight()));
-            zSizeField.setText(Exporter.FORMAT.format(cube.getDepth()));
+            xSizeField.setText(ExporterModel.FORMAT.format(cube.getWidth()));
+            ySizeField.setText(ExporterModel.FORMAT.format(cube.getHeight()));
+            zSizeField.setText(ExporterModel.FORMAT.format(cube.getDepth()));
         }
         else
         {
