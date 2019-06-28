@@ -11,6 +11,7 @@ import com.mrcrayfish.modelcreator.display.DisplayProperties;
 import com.mrcrayfish.modelcreator.element.CombinedState;
 import com.mrcrayfish.modelcreator.element.Face;
 import com.mrcrayfish.modelcreator.integrate.IntegrateDialog;
+import com.mrcrayfish.modelcreator.share.Downloader;
 import com.mrcrayfish.modelcreator.share.Uploader;
 import com.mrcrayfish.modelcreator.util.ComponentUtil;
 import com.mrcrayfish.modelcreator.util.KeyboardUtil;
@@ -250,7 +251,7 @@ public class Menu extends JMenuBar
         	Uploader.upload(creator);
         });
         
-        itemDownload.addActionListener(a -> System.out.println("Download"));
+        itemDownload.addActionListener(a -> Downloader.download(creator));
 
         itemImport.addActionListener(a -> showImportJson(creator));
         

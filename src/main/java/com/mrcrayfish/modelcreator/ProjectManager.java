@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -37,12 +38,22 @@ import java.util.zip.ZipOutputStream;
 public class ProjectManager
 {
 
-    public static void loadProject(SidebarManager manager, File projectFile)
+	public static void loadProject(SidebarManager manager, File projectFile) {
+		try(InputStream is = new FileInputStream(projectFile))
+		{
+			loadProject(manager, is);
+		} catch (IOException e) {
+			Util.writeCrashLog(e);
+		}
+	}
+	
+    public static void loadProject(SidebarManager manager, InputStream is)
     {
         manager.getModelPanel().clearElements();
         manager.getModelPanel().setParticle(null);
+        manager.getCollisionPanel().clearElements();
         
-        try(ZipInputStream zis = new ZipInputStream(new FileInputStream(projectFile)))
+        try(ZipInputStream zis = new ZipInputStream(is))
         {
         	Project project = new Project(zis);
         	loadBlockData(project.getBlockData(), manager.getCollisionPanel());
