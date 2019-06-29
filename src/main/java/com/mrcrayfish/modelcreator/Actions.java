@@ -37,7 +37,7 @@ public class Actions
         StateManager.pushState(manager);
     }
 
-    private static void rotateElement(Element element, boolean clockwise)
+    public static void rotateElement(Element element, boolean clockwise)
     {
         /* Calculates and sets the new starting x and y position of the element */
         double newX;

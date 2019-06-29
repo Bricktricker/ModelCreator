@@ -6,13 +6,12 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 
+import com.mrcrayfish.modelcreator.Actions;
 import com.mrcrayfish.modelcreator.block.BlockManager;
 import com.mrcrayfish.modelcreator.element.Element;
 import com.mrcrayfish.modelcreator.panels.CollisionPanel;
@@ -96,29 +95,24 @@ public class IntegrateCode extends Integrator
 	
 	private String genCollision() {
 		StringBuilder builder = new StringBuilder();
-		List<String> voxelElements = new ArrayList<>();
-		List<String> voxelShapesName = collision.getAllElements().stream().map(cuboid -> {
-			voxelElements.add(genVoxelShape(cuboid));
-			return cuboid.getName().toUpperCase().replaceAll("\\s", "_");
-		}).collect(Collectors.toList());
 		
-		voxelElements.forEach(e -> {
-			builder.append(e);
-			builder.append("\n");
-		});
-		
-		builder.append("private static final VoxelShape SHAPE = VoxelShapes.or(");
-		builder.append(voxelShapesName.stream().collect(Collectors.joining(", ", "", ");")));
-		
+		//iterate over all rotations
+		for(int i = 0; i < 4; i++) {
+			builder.append("private static final VoxelShape SHAPE_");
+			builder.append(i*90);
+			builder.append(" = VoxelShapes.or(");
+			String shape = collision.getAllElements().stream().map(this::genVoxelShape).collect(Collectors.joining(", ", "", ");"));
+			builder.append(shape);
+			builder.append('\n');
+			
+			collision.getAllElements().forEach(e -> Actions.rotateElement(e, true));
+		}
 		return builder.toString();
 	}
 	
 	private String genVoxelShape(Element cuboid) {
 		StringBuilder builder = new StringBuilder();
-		
-		builder.append("private static final VoxelShape ");
-		builder.append(cuboid.getName().toUpperCase().replaceAll("\\s", "_"));
-		builder.append(" = Block.makeCuboidShape(");
+		builder.append("Block.makeCuboidShape(");
 		
 		//startX
 		builder.append(FORMAT.format(cuboid.getStartX()));
@@ -142,7 +136,7 @@ public class IntegrateCode extends Integrator
 		
 		//endZ
 		builder.append(FORMAT.format(cuboid.getStartZ() + cuboid.getDepth()));
-		builder.append("D);");
+		builder.append("D)");
 		
 		return builder.toString();
 	}
