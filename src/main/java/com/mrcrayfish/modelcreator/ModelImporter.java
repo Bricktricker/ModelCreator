@@ -178,9 +178,9 @@ public class ModelImporter
         if(textureFile.exists()) {
         	return TextureManager.addImage(id, texturePath, textureFile);	
         }
-        //non vanilla texture, should be already loaded
+        //non vanilla texture, should be already loaded, if loaded from project
+        //when loading a json file, textures may missing
         TextureEntry entry = TextureManager.getTexture(id);
-        assert(entry != null);
         return entry;
     }
 
