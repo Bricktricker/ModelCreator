@@ -5,9 +5,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.mrcrayfish.modelcreator.util.OperatingSystem;
 import com.mrcrayfish.modelcreator.util.Util;
@@ -68,7 +69,7 @@ public class Settings
     		return new ArrayList<>();
     	}
     	String[] versions = concatedVersions.split("\\|");
-    	return Arrays.asList(versions);
+    	return Stream.of(versions).collect(Collectors.toList());
     }
     
     public static void setExtractedAssets(List<String> versions) {
