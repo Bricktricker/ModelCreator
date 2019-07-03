@@ -1,5 +1,9 @@
 package com.mrcrayfish.modelcreator;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.mrcrayfish.modelcreator.block.BlockManager;
 import com.mrcrayfish.modelcreator.display.DisplayProperties;
 import com.mrcrayfish.modelcreator.element.Element;
@@ -38,7 +42,7 @@ public class ExporterModel
 
     private Map<String, String> textureMap = new HashMap<>();
     private String modid;
-    private ElementManager manager;
+    private ElementManager manager; //TODO: set ad SidebarPanel
     private boolean optimize = true;
     private boolean includeNames = true;
     private boolean displayProps = true;
@@ -46,7 +50,6 @@ public class ExporterModel
 
     public ExporterModel(ElementManager manager, String modid)
     {
-        //super(manager);
         this.modid = modid;
         this.manager = manager;
         compileTextureList();
@@ -105,6 +108,7 @@ public class ExporterModel
                     //TODO: overload toString to take a modid
                     String oldModid = path.getModId();
                     if(!oldModid.equals("minecraft")) {
+                    	assert(oldModid.equals(modid));
                     	path.setModId(modid);
                     }
                     textureMap.put(entry.getKey(), entry.getTexturePath().toString());
@@ -113,7 +117,33 @@ public class ExporterModel
             }
         }
     }
+    
+    /**
+     * Generates model json
+     * @return json string
+     */
+    public String write() {
+    	Gson builder = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+    	JsonObject root = new JsonObject();
+    	
+    	root.addProperty("__comment", "Model generated using MrCrayfish's Model Creator (https://mrcrayfish.com/tools?id=mc)");
+    	
+    	if(displayProps) {
+    		root.add("display", writeDisplayProperties());
+    	}else{
+    		root.addProperty("parent", "block/block");
+    	}
+    	
+    	if(!((SidebarPanel)manager).getAmbientOcc()) {
+    		root.addProperty("ambientocclusion", ((SidebarPanel)manager).getAmbientOcc());
+    	}
+    	
+    	root.add("textures", writeTextures());
+    			
+    	return builder.toJson(root);
+    }
 
+    @Deprecated
     public void write(BufferedWriter writer) throws IOException
     {
         writer.write("{");
@@ -164,7 +194,29 @@ public class ExporterModel
         writer.newLine();
         writer.write("}");
     }
+    
+    private JsonObject writeTextures() {
+    	JsonObject textures = new JsonObject();
+    	
+    	if(((SidebarPanel)manager).getParticle() != null) {
+    		TextureEntry entry = ((SidebarPanel)manager).getParticle();
+    		String particlePath = this.modid + ":";
+    		if(!entry.getDirectory().isEmpty()) {
+    			particlePath += entry.getDirectory() + "/";
+            }
+    		particlePath += entry.getName();
+    		textures.addProperty("particle", particlePath);
+    	}
+    	
+    	textureMap.keySet().forEach(key -> {
+    		String texture = textureMap.get(key);
+    		textures.addProperty(key, texture);
+    	});
+    	
+    	return textures;
+    }
 
+    @Deprecated
     private void writeTextures(BufferedWriter writer) throws IOException
     {
         writer.write(space(1) + "\"textures\": {");
@@ -203,6 +255,40 @@ public class ExporterModel
         }
 
         writer.write(space(1) + "},");
+    }
+    
+    private JsonObject writeElement(Element cuboid) {
+    	JsonObject element = new JsonObject();
+    	
+    	if(includeNames) {
+    		element.addProperty("name", cuboid.getName());
+    	}
+    	
+    	//bounds
+    	JsonArray from = new JsonArray();
+    	from.add(FORMAT.format(cuboid.getStartX()));
+    	from.add(FORMAT.format(cuboid.getStartY()));
+    	from.add(FORMAT.format(cuboid.getStartZ()));
+    	element.add("from", from);
+    	
+    	JsonArray to = new JsonArray();
+    	to.add(FORMAT.format(cuboid.getStartX() + cuboid.getWidth()));
+    	to.add(FORMAT.format(cuboid.getStartY() + cuboid.getHeight()));
+    	to.add(FORMAT.format(cuboid.getStartZ() + cuboid.getDepth()));
+    	element.add("to", to);
+    	
+    	if(!cuboid.isShaded()) {
+    		element.addProperty("shade", cuboid.isShaded());
+    	}
+    	
+    	if(cuboid.getRotation() != 0.0) {
+    		JsonObject rotation = new JsonObject();
+    		//Continue here
+    		element.add("rotation", rotation);
+    	}
+    	
+    	
+    	return element;
     }
 
     private void writeElement(BufferedWriter writer, Element cuboid) throws IOException
@@ -311,7 +397,53 @@ public class ExporterModel
         }
         writer.write(" }");
     }
+    
+    private JsonObject writeDisplayProperties() {
+    	JsonObject display = new JsonObject();
+    	Map<String, DisplayProperties.Entry> entries = BlockManager.displayProperties.getEntries();
+        List<String> ids = new ArrayList<>();
+        for(String id : DISPLAY_PROPERTY_ORDER)
+        {
+            DisplayProperties.Entry entry = entries.get(id);
+            if(entry != null && entry.isEnabled())
+            {
+                ids.add(id);
+            }
+        }
+        
+        ids.forEach(key -> {
+        	JsonObject jsonEntry = new JsonObject();
+        	DisplayProperties.Entry entry = entries.get(key);
+        	
+        	//rotation
+        	JsonArray rotation = new JsonArray();
+        	rotation.add(FORMAT.format(entry.getRotationX()));
+        	rotation.add(FORMAT.format(entry.getRotationY()));
+        	rotation.add(FORMAT.format(entry.getRotationZ()));
+        	jsonEntry.add("rotation", rotation);
+        	
+        	//translation
+        	JsonArray translation = new JsonArray();
+        	translation.add(FORMAT.format(entry.getTranslationX()));
+        	translation.add(FORMAT.format(entry.getTranslationY()));
+        	translation.add(FORMAT.format(entry.getTranslationZ()));
+        	jsonEntry.add("translation", translation);
+        	
+        	//scale
+        	JsonArray scale = new JsonArray();
+        	scale.add(FORMAT.format(entry.getScaleX()));
+        	scale.add(FORMAT.format(entry.getScaleY()));
+        	scale.add(FORMAT.format(entry.getScaleZ()));
+        	jsonEntry.add("scale", scale);
+        	
+        	display.add(key, jsonEntry);
+        });
 
+    	
+    	return display;
+    }
+
+    @Deprecated
     private void writeDisplayProperties(BufferedWriter writer) throws IOException
     {
     	Map<String, DisplayProperties.Entry> entries = BlockManager.displayProperties.getEntries();
@@ -345,6 +477,7 @@ public class ExporterModel
         writer.write(space(1) + "},");
     }
 
+    @Deprecated
     private void writeDisplayEntry(BufferedWriter writer, String id, DisplayProperties.Entry entry) throws IOException
     {
         writer.write(space(2) + "\"" + id + "\": {");
