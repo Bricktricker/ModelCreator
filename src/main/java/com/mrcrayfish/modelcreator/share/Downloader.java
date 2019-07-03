@@ -45,14 +45,14 @@ public class Downloader {
 		}
     	
     	try {
-    	JsonParser parser = new JsonParser();
-        JsonObject parsed = parser.parse(response).getAsJsonObject();
-        String data = parsed.get("data").getAsString();
-        Decoder decoder = Base64.getDecoder();
-        byte[] rawData = decoder.decode(data);
-        ByteArrayInputStream is = new ByteArrayInputStream(rawData);
-        ProjectManager.loadProject(creator.getSidebarManager(), is);
-    	}catch(Exception e) {
+	    	JsonParser parser = new JsonParser();
+	        JsonObject parsed = parser.parse(response).getAsJsonObject();
+	        String data = parsed.get("data").getAsString();
+	        Decoder decoder = Base64.getDecoder();
+	        byte[] rawData = decoder.decode(data);
+	        ByteArrayInputStream is = new ByteArrayInputStream(rawData);
+	        ProjectManager.loadProject(creator.getSidebarManager(), is);
+	    }catch(Exception e) {
     		Util.writeCrashLog(e);
     	}
 	}
