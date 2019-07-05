@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 public class ExporterModel
 {
@@ -75,19 +76,17 @@ public class ExporterModel
         this.includeNonTexturedFaces = includeNonTexturedFaces;
     }
     
-    public File writeFile(File file)
-    {
+    public File writeFile(File file) {
         try(BufferedWriter writer = new BufferedWriter(new FileWriter(file)))
         {
-            if(!file.exists())
-            {
+            if(!file.exists()) {
                 file.createNewFile();
             }
-            this.write(writer);
+            
+            writer.write(this.write());
             return file;
         }
-        catch(IOException e)
-        {
+        catch(IOException e) {
             Util.writeCrashLog(e);
         }
         return null;
@@ -139,7 +138,11 @@ public class ExporterModel
     	}
     	
     	root.add("textures", writeTextures());
-    			
+    	
+    	JsonArray elements = new JsonArray();
+    	manager.getAllElements().stream().filter(e -> canWriteElement(e)).map(e -> writeElement(e)).forEach(elements::add);
+    	root.add("elements", elements);
+    	
     	return builder.toJson(root);
     }
 
@@ -266,15 +269,15 @@ public class ExporterModel
     	
     	//bounds
     	JsonArray from = new JsonArray();
-    	from.add(FORMAT.format(cuboid.getStartX()));
-    	from.add(FORMAT.format(cuboid.getStartY()));
-    	from.add(FORMAT.format(cuboid.getStartZ()));
+    	from.add(cuboid.getStartX());
+    	from.add(cuboid.getStartY());
+    	from.add(cuboid.getStartZ());
     	element.add("from", from);
     	
     	JsonArray to = new JsonArray();
-    	to.add(FORMAT.format(cuboid.getStartX() + cuboid.getWidth()));
-    	to.add(FORMAT.format(cuboid.getStartY() + cuboid.getHeight()));
-    	to.add(FORMAT.format(cuboid.getStartZ() + cuboid.getDepth()));
+    	to.add(cuboid.getStartX() + cuboid.getWidth());
+    	to.add(cuboid.getStartY() + cuboid.getHeight());
+    	to.add(cuboid.getStartZ() + cuboid.getDepth());
     	element.add("to", to);
     	
     	if(!cuboid.isShaded()) {
@@ -283,14 +286,61 @@ public class ExporterModel
     	
     	if(cuboid.getRotation() != 0.0) {
     		JsonObject rotation = new JsonObject();
-    		//Continue here
+    		
+    		//Origin
+    		JsonArray origin = new JsonArray();
+    		origin.add(cuboid.getOriginX());
+    		origin.add(cuboid.getOriginY());
+    		origin.add(cuboid.getOriginZ());
+    		rotation.add("origin", origin);
+    		
+    		//axis
+    		rotation.addProperty("axis", Element.parseAxis(cuboid.getRotationAxis()));
+
+    		//angle
+    		rotation.addProperty("angle", cuboid.getRotation());
+    		
     		element.add("rotation", rotation);
     	}
     	
+    	//faces
+    	JsonObject faces = new JsonObject();
+    	Stream.of(cuboid.getAllFaces()).filter(face -> face.isEnabled() && (includeNonTexturedFaces || face.getTexture() != null) && (!optimize || face.isVisible(manager)))
+    	.forEach(face -> {
+    		JsonObject jsonFace = new JsonObject();
+    		
+    		if(face.getTexture() != null) {
+    			jsonFace.addProperty("texture", face.getTexture().getKey());
+    			
+    			JsonArray uv = new JsonArray();
+    			uv.add(face.getStartU());
+    			uv.add(face.getStartV());
+    			uv.add(face.getEndU());
+    			uv.add(face.getEndV());
+    			jsonFace.add("uv", uv);
+    			
+    			if(face.getRotation() > 0) {
+    				jsonFace.addProperty("rotation", face.getRotation() * 90);
+    			}
+    			
+    			if(face.isCullfaced()) {
+    				jsonFace.addProperty("cullface", Face.getFaceName(face.getSide()));
+    			}
+    			
+    			if(face.isTintIndexEnabled() && face.getTintIndex() >= 0) {
+    				jsonFace.addProperty("tintindex", face.getTintIndex());
+    			}
+    		}
+    		
+    		faces.add(Face.getFaceName(face.getSide()), jsonFace);
+    	});
+    	
+    	element.add("faces", faces);
     	
     	return element;
     }
 
+    @Deprecated
     private void writeElement(BufferedWriter writer, Element cuboid) throws IOException
     {
         writer.newLine();
@@ -318,6 +368,7 @@ public class ExporterModel
         writer.write(space(2) + "}");
     }
 
+    @Deprecated
     private void writeBounds(BufferedWriter writer, Element cuboid) throws IOException
     {
         writer.write(space(3) + "\"from\": [ " + FORMAT.format(cuboid.getStartX()) + ", " + FORMAT.format(cuboid.getStartY()) + ", " + FORMAT.format(cuboid.getStartZ()) + " ], ");
@@ -325,11 +376,13 @@ public class ExporterModel
         writer.write(space(3) + "\"to\": [ " + FORMAT.format(cuboid.getStartX() + cuboid.getWidth()) + ", " + FORMAT.format(cuboid.getStartY() + cuboid.getHeight()) + ", " + FORMAT.format(cuboid.getStartZ() + cuboid.getDepth()) + " ], ");
     }
 
+    @Deprecated
     private void writeShade(BufferedWriter writer, Element cuboid) throws IOException
     {
         writer.write(space(3) + "\"shade\": " + cuboid.isShaded() + ",");
     }
 
+    @Deprecated
     private void writeRotation(BufferedWriter writer, Element cuboid) throws IOException
     {
         writer.write(space(3) + "\"rotation\": { ");
@@ -343,6 +396,7 @@ public class ExporterModel
         writer.write(" },");
     }
 
+    @Deprecated
     private void writeFaces(BufferedWriter writer, Element cuboid) throws IOException
     {
         writer.write(space(3) + "\"faces\": {");
@@ -375,6 +429,7 @@ public class ExporterModel
         writer.write(space(3) + "}");
     }
 
+    @Deprecated
     private void writeFace(BufferedWriter writer, Face face) throws IOException
     {
         writer.write(space(4) + "\"" + Face.getFaceName(face.getSide()) + "\": { ");
@@ -417,23 +472,23 @@ public class ExporterModel
         	
         	//rotation
         	JsonArray rotation = new JsonArray();
-        	rotation.add(FORMAT.format(entry.getRotationX()));
-        	rotation.add(FORMAT.format(entry.getRotationY()));
-        	rotation.add(FORMAT.format(entry.getRotationZ()));
+        	rotation.add(entry.getRotationX());
+        	rotation.add(entry.getRotationY());
+        	rotation.add(entry.getRotationZ());
         	jsonEntry.add("rotation", rotation);
         	
         	//translation
         	JsonArray translation = new JsonArray();
-        	translation.add(FORMAT.format(entry.getTranslationX()));
-        	translation.add(FORMAT.format(entry.getTranslationY()));
-        	translation.add(FORMAT.format(entry.getTranslationZ()));
+        	translation.add(entry.getTranslationX());
+        	translation.add(entry.getTranslationY());
+        	translation.add(entry.getTranslationZ());
         	jsonEntry.add("translation", translation);
         	
         	//scale
         	JsonArray scale = new JsonArray();
-        	scale.add(FORMAT.format(entry.getScaleX()));
-        	scale.add(FORMAT.format(entry.getScaleY()));
-        	scale.add(FORMAT.format(entry.getScaleZ()));
+        	scale.add(entry.getScaleX());
+        	scale.add(entry.getScaleY());
+        	scale.add(entry.getScaleZ());
         	jsonEntry.add("scale", scale);
         	
         	display.add(key, jsonEntry);
@@ -503,6 +558,7 @@ public class ExporterModel
         return false;
     }
     
+    @Deprecated
     protected String space(int size)
     {
         StringBuilder builder = new StringBuilder();

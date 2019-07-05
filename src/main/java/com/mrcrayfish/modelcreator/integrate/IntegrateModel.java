@@ -1,8 +1,6 @@
 package com.mrcrayfish.modelcreator.integrate;
 
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.StringWriter;
 import java.nio.file.Path;
 
 import com.mrcrayfish.modelcreator.ExporterModel;
@@ -24,17 +22,7 @@ public class IntegrateModel extends Integrator
         exporter.setDisplayProps(false);
         exporter.setIncludeNames(true);
 		
-        StringWriter stringWriter = new StringWriter();
-        try(BufferedWriter writer = new BufferedWriter(stringWriter))
-        {
-        	exporter.write(writer);
-        	writer.flush();
-        	return stringWriter.toString();
-        } catch (IOException e) {
-        	//there should not happen an IO exception when writing to a StringWriter
-		}
-        
-		return "";
+        return exporter.write();
 	}
 
 	@Override
