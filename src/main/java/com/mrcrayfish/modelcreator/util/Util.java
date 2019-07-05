@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -159,13 +160,13 @@ public class Util
     		
     		return null;
     	};
-    	extractZipFiles(jar, conditions, window, destination);
-    	//TODO: These are also saved, when the extraction aborts.
-    	Settings.addExtractedAsset(version);
-    	Settings.saveSettings();
+    	extractZipFiles(jar, conditions, window, destination, suc -> {
+    		Settings.addExtractedAsset(version);
+        	Settings.saveSettings();
+    	});
     }
 
-    private static void extractZipFiles(File zipFile, Function<ZipEntry, String> conditions, Window window, File extractionFolder)
+    private static void extractZipFiles(File zipFile, Function<ZipEntry, String> conditions, Window window, File extractionFolder, Consumer<Boolean> finishCallback)
     {
         final boolean[] cancelled = {false};
 
@@ -218,6 +219,7 @@ public class Util
                 {
                     if(cancelled[0])
                     {
+                    	finishCallback.accept(false);
                         return;
                     }
                     if(conditions.apply(ze) == null)
@@ -241,6 +243,7 @@ public class Util
 
             if(cancelled[0])
             {
+            	finishCallback.accept(false);
                 return;
             }
 
@@ -250,6 +253,7 @@ public class Util
                 {
                     if(cancelled[0])
                     {
+                    	finishCallback.accept(false);
                         return;
                     }
 
@@ -280,6 +284,8 @@ public class Util
             {
                 Util.writeCrashLog(e);
             }
+            
+            finishCallback.accept(true);
         }).start();
 
         dialog.setVisible(true);
