@@ -7,7 +7,6 @@ import com.google.gson.JsonObject;
 import com.mrcrayfish.modelcreator.block.BlockManager;
 import com.mrcrayfish.modelcreator.display.DisplayProperties;
 import com.mrcrayfish.modelcreator.element.Element;
-import com.mrcrayfish.modelcreator.element.ElementManager;
 import com.mrcrayfish.modelcreator.element.Face;
 import com.mrcrayfish.modelcreator.panels.SidebarPanel;
 import com.mrcrayfish.modelcreator.texture.TextureEntry;
@@ -43,13 +42,13 @@ public class ExporterModel
 
     private Map<String, String> textureMap = new HashMap<>();
     private String modid;
-    private ElementManager manager; //TODO: set ad SidebarPanel
+    private SidebarPanel manager;
     private boolean optimize = true;
     private boolean includeNames = true;
     private boolean displayProps = true;
     private boolean includeNonTexturedFaces = false;
 
-    public ExporterModel(ElementManager manager, String modid)
+    public ExporterModel(SidebarPanel manager, String modid)
     {
         this.modid = modid;
         this.manager = manager;
@@ -133,8 +132,8 @@ public class ExporterModel
     		root.addProperty("parent", "block/block");
     	}
     	
-    	if(!((SidebarPanel)manager).getAmbientOcc()) {
-    		root.addProperty("ambientocclusion", ((SidebarPanel)manager).getAmbientOcc());
+    	if(!manager.getAmbientOcc()) {
+    		root.addProperty("ambientocclusion", manager.getAmbientOcc());
     	}
     	
     	root.add("textures", writeTextures());
@@ -149,8 +148,8 @@ public class ExporterModel
     private JsonObject writeTextures() {
     	JsonObject textures = new JsonObject();
     	
-    	if(((SidebarPanel)manager).getParticle() != null) {
-    		TextureEntry entry = ((SidebarPanel)manager).getParticle();
+    	if(manager.getParticle() != null) {
+    		TextureEntry entry = manager.getParticle();
     		String particlePath = this.modid + ":";
     		if(!entry.getDirectory().isEmpty()) {
     			particlePath += entry.getDirectory() + "/";

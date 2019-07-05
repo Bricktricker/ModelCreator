@@ -11,6 +11,7 @@ import com.mrcrayfish.modelcreator.element.ElementCellEntry;
 import com.mrcrayfish.modelcreator.element.ElementManager;
 import com.mrcrayfish.modelcreator.element.Face;
 import com.mrcrayfish.modelcreator.panels.CollisionPanel;
+import com.mrcrayfish.modelcreator.panels.SidebarPanel;
 import com.mrcrayfish.modelcreator.texture.TextureEntry;
 import com.mrcrayfish.modelcreator.util.Util;
 
@@ -262,7 +263,7 @@ public class ProjectManager
         return textureEntries;
     }
 
-    private static File getModelFile(ElementManager manager) throws IOException
+    private static File getModelFile(SidebarPanel manager) throws IOException
     {
         ExporterModel exporter = new ExporterModel(manager, "modid");
         exporter.setOptimize(false);
