@@ -161,9 +161,11 @@ public class Util
     		return null;
     	};
     	extractZipFiles(jar, conditions, window, destination, suc -> {
-    		Settings.addExtractedAsset(version);
-        	Settings.saveSettings();
-    	});
+    		if(suc) {
+			Settings.addExtractedAsset(version);
+        		Settings.saveSettings();
+		}   
+	});
     }
 
     private static void extractZipFiles(File zipFile, Function<ZipEntry, String> conditions, Window window, File extractionFolder, Consumer<Boolean> finishCallback)
