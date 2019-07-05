@@ -626,7 +626,7 @@ public class Menu extends JMenuBar
         JCheckBox checkBoxOptimize = ComponentUtil.createCheckBox("Optimize Model", "Removes unnecessary faces that can't been seen in the model", true);
         exportDir.add(checkBoxOptimize);
 
-        JCheckBox checkBoxDisplayProps = ComponentUtil.createCheckBox("Include Display Properties", "Adds the display definitions (first-person, third-person, etc) to the model file", true);
+        JCheckBox checkBoxDisplayProps = ComponentUtil.createCheckBox("Include Display Properties", "Adds the display definitions (first-person, third-person, etc) to the model file", false);
         exportDir.add(checkBoxDisplayProps);
 
         JCheckBox checkBoxElementNames = ComponentUtil.createCheckBox("Include Element Names", "The name of each element will be added to it's entry in the json model elements array. Useful for identifying elements, and when importing back into Model Creator, it will use those names", true);
