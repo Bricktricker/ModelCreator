@@ -60,14 +60,15 @@ public class BlockNotes
         generalSpringLayout.putConstraint(SpringLayout.WEST, scrollpane, 10, SpringLayout.WEST, generalPanel);
         generalSpringLayout.putConstraint(SpringLayout.EAST, scrollpane, -10, SpringLayout.EAST, generalPanel);
         generalSpringLayout.putConstraint(SpringLayout.NORTH, scrollpane, 10, SpringLayout.NORTH, generalPanel);
+        generalSpringLayout.putConstraint(SpringLayout.SOUTH, scrollpane, -10, SpringLayout.NORTH, saveButton);
         generalSpringLayout.putConstraint(SpringLayout.WEST, saveButton, 5, SpringLayout.WEST, generalPanel);
         generalSpringLayout.putConstraint(SpringLayout.EAST, saveButton, -5, SpringLayout.EAST, generalPanel);
-        generalSpringLayout.putConstraint(SpringLayout.NORTH, saveButton, 10, SpringLayout.SOUTH, scrollpane);
+        generalSpringLayout.putConstraint(SpringLayout.SOUTH, saveButton, -10, SpringLayout.SOUTH, generalPanel);
         
         dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         dialog.requestFocus();
         dialog.pack();
-        dialog.setResizable(false);
+        dialog.setResizable(true);
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
 	}

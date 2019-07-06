@@ -65,7 +65,7 @@ public class BlockTranslation
 		JDialog dialog = new JDialog(creator, "Translation", Dialog.ModalityType.APPLICATION_MODAL);
 		
 		JPanel panel = new JPanel(new BorderLayout());
-        panel.setPreferredSize(new Dimension(500, 250));
+        panel.setPreferredSize(new Dimension(500, 175));
         dialog.add(panel);
         
         SpringLayout generalSpringLayout = new SpringLayout();
