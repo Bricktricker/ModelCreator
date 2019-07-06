@@ -79,11 +79,11 @@ public class ModelImporter
                 		return;
                 	}
                 }
-                File file = new File(AssetsUtil.getModelPath(parent));
+                File file = AssetsUtil.getModelPath(parent).toFile();
                 if(!file.exists())
                 {
                     parent = parent.substring(parent.lastIndexOf('/') + 1, parent.length());
-                    file = new File(AssetsUtil.getModelPath(parent));
+                    file = AssetsUtil.getModelPath(parent).toFile();
                 }
 
                 if(file.exists())
@@ -174,7 +174,7 @@ public class ModelImporter
     private TextureEntry loadTexture(String id, String texture)
     {
         TexturePath texturePath = new TexturePath(texture);
-        File textureFile = new File(AssetsUtil.getTexturePath(texturePath.getPath()));
+        File textureFile = AssetsUtil.getTexturePath(texturePath.getPath()).toFile();
         if(textureFile.exists()) {
         	return TextureManager.addImage(id, texturePath, textureFile);	
         }

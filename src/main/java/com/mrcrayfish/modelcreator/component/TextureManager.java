@@ -203,7 +203,7 @@ public class TextureManager extends JDialog
         chooser.setDialogTitle("Select a Texture");
         chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         chooser.setApproveButtonText("Select");
-        chooser.setCurrentDirectory(new File(AssetsUtil.getAssetFolder(), "textures"));
+        chooser.setCurrentDirectory(AssetsUtil.getAssetFolder().resolve("textures").toFile());
         
         FileNameExtensionFilter filter = new FileNameExtensionFilter("PNG Images", "png");
         chooser.setFileFilter(filter);

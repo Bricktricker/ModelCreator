@@ -1,6 +1,8 @@
 package com.mrcrayfish.modelcreator.util;
 
 import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import com.mrcrayfish.modelcreator.Settings;
 
@@ -28,7 +30,7 @@ public class AssetsUtil
     public static String getModId(File file)
     {
         String texturePath = file.getAbsolutePath();
-        String assetPath = (new File(AssetsUtil.getAssetFolder())).getAbsolutePath();
+        String assetPath = getAssetFolder().toAbsolutePath().toString();
     	if(texturePath.startsWith(assetPath)) {
     		return "minecraft";
     	}
@@ -38,15 +40,15 @@ public class AssetsUtil
     	return "modid";
     }
     
-    public static String getAssetFolder() {
-    	return "resources/" + Settings.getUsedMcVersion();
+    public static Path getAssetFolder() {
+    	return Paths.get("resources", Settings.getUsedMcVersion());
     }
     
-    public static String getModelPath(String model) {
-    	return getAssetFolder() + "/models/" + model + ".json";
+    public static Path getModelPath(String model) {
+    	return getAssetFolder().resolve("models").resolve(model + ".json");
     }
     
-    public static String getTexturePath(String texture) {
-    	return getAssetFolder() + "/textures/" + texture;
+    public static Path getTexturePath(String texture) {
+    	return getAssetFolder().resolve("textures").resolve(texture);
     }
 }
