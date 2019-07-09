@@ -8,6 +8,9 @@ public class Icons
     public static Icon new_;
     public static Icon import_;
     public static Icon export;
+    public static Icon share;
+    public static Icon upload;
+    public static Icon download;
     public static Icon texture;
     public static Icon clear_texture;
     public static Icon copy;
@@ -49,6 +52,9 @@ public class Icons
         new_ = new ImageIcon(loader.getResource("icons/new.png"));
         import_ = new ImageIcon(loader.getResource("icons/import.png"));
         export = new ImageIcon(loader.getResource("icons/export.png"));
+        share = new ImageIcon(loader.getResource("icons/share.png"));
+        upload = new ImageIcon(loader.getResource("icons/upload.png"));
+        download = new ImageIcon(loader.getResource("icons/download.png"));
         texture = new ImageIcon(loader.getResource("icons/texture.png"));
         clear_texture = new ImageIcon(loader.getResource("icons/clear_texture.png"));
         copy = new ImageIcon(loader.getResource("icons/copy.png"));

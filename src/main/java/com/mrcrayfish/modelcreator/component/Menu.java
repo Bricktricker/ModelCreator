@@ -102,9 +102,10 @@ public class Menu extends JMenuBar
             itemIntegrate = createMenuItem("Integrate Project...", "Integrate the project into the mod environment", -1, Icons.extract);
             
             menuShare = new JMenu("Share");
+            menuShare.setIcon(Icons.share);
             {
-            	itemUpload = createMenuItem("Upload", "Uploads project to share it with others", KeyEvent.VK_U, Icons.arrow_up);
-            	itemDownload = createMenuItem("Download", "Download project from others", KeyEvent.VK_D, Icons.arrow_down);
+            	itemUpload = createMenuItem("Upload", "Uploads project to share it with others", KeyEvent.VK_U, Icons.upload);
+            	itemDownload = createMenuItem("Download", "Download project from others", KeyEvent.VK_D, Icons.download);
             }
             
             itemImport = createMenuItem("Import JSON...", "Import Model from JSON", KeyEvent.VK_I, Icons.import_);
