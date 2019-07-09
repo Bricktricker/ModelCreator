@@ -1,12 +1,12 @@
 package com.mrcrayfish.modelcreator.util;
 
 import com.mrcrayfish.modelcreator.Icons;
-import com.mrcrayfish.modelcreator.Processor;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import java.awt.*;
 import java.io.File;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public class ComponentUtil
@@ -34,7 +34,7 @@ public class ComponentUtil
         return checkBox;
     }
 
-    public static JPanel createDirectorySelector(String label, Component parent, String defaultDir, Processor<File> processor)
+    public static JPanel createDirectorySelector(String label, Component parent, String defaultDir, Predicate<File> processor)
     {
         SpringLayout layout = new SpringLayout();
         JPanel panel = new JPanel(layout);
@@ -66,7 +66,7 @@ public class ComponentUtil
                 {
                     if(processor != null)
                     {
-                        if(processor.run(file))
+                        if(processor.test(file))
                         {
                             return;
                         }
@@ -91,7 +91,7 @@ public class ComponentUtil
         return panel;
     }
 
-    public static JPanel createFileSelector(String label, Component parent, String defaultDir, FileFilter filter, Processor<File> processor)
+    public static JPanel createFileSelector(String label, Component parent, String defaultDir, FileFilter filter, Predicate<File> processor)
     {
         SpringLayout layout = new SpringLayout();
         JPanel panel = new JPanel(layout);
@@ -127,7 +127,7 @@ public class ComponentUtil
                 {
                     if(processor != null)
                     {
-                        if(processor.run(file))
+                        if(processor.test(file))
                         {
                             return;
                         }

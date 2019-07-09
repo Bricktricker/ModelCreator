@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 import java.awt.*;
 
 public class Menu extends JMenuBar
@@ -980,7 +981,7 @@ public class Menu extends JMenuBar
         dialog.setVisible(true);
     }
 
-    public static JPanel createColorSelector(Window parent, String labelText, int startColor, Processor<Integer> processor)
+    public static JPanel createColorSelector(Window parent, String labelText, int startColor, Predicate<Integer> processor)
     {
         SpringLayout layout = new SpringLayout();
         JPanel panel = new JPanel(layout);
@@ -1001,7 +1002,7 @@ public class Menu extends JMenuBar
         button.addActionListener(e ->
         {
             int color = selectColor(parent, startColor);
-            if(processor.run(color))
+            if(processor.test(color))
             {
                 colorPanel.setBackground(new Color(color));
             }
@@ -1048,7 +1049,7 @@ public class Menu extends JMenuBar
         return colorChooser.getColor().getRGB();
     }
 
-    private static Processor<Integer> createFaceColorProcessor(int side)
+    private static Predicate<Integer> createFaceColorProcessor(int side)
     {
         return integer ->
         {
