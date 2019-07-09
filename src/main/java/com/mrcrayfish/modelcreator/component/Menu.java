@@ -951,7 +951,13 @@ public class Menu extends JMenuBar
         btnExtract.setPreferredSize(new Dimension(80, 24));
         btnExtract.addActionListener(e ->
         {
-            Util.extractMinecraftAssets((String) comboBoxMinecraftVersions.getSelectedItem(), dialog);
+        	String version = (String) comboBoxMinecraftVersions.getSelectedItem();
+        	File jar = new File(Util.getMinecraftDirectory(), "versions/" + version + "/" + version + ".jar");
+        	if(jar == null || !jar.exists()) {
+        		JOptionPane.showMessageDialog(null, "Could not find version jar!", "Error", JOptionPane.ERROR_MESSAGE);
+        		return;
+        	}
+            Util.extractMinecraftAssets(version, dialog);
             dialog.dispose();
         });
         panel.add(btnExtract);
