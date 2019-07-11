@@ -20,6 +20,7 @@ public class Resources
 	public static List<LangPair> languages;
 	public static List<String> items;
 	public static List<String> creativeTabs;
+	public static List<String> blocks;
 	
 	public static class LangPair {
 		public String key;
@@ -113,6 +114,18 @@ public class Resources
 				creativeTabs.add(i.getAsString());
 			});
 			creativeTabs = Collections.unmodifiableList(creativeTabs);
+		}
+		
+		//Blocks
+		{
+			InputStream stream = classLoader.getResourceAsStream("res/Blocks.json");
+			BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+			JsonParser parser = new JsonParser();
+			JsonElement jsonElement = parser.parse(reader);
+			JsonArray blocksJsonArray = jsonElement.getAsJsonArray();
+			blocks = new ArrayList<>();
+			blocksJsonArray.forEach(b -> blocks.add(b.getAsString()));
+			blocks = Collections.unmodifiableList(blocks);
 		}
 	}
 }
