@@ -21,6 +21,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.SpringLayout;
+import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 
 import com.google.gson.JsonElement;
@@ -30,30 +31,59 @@ import com.mrcrayfish.modelcreator.ModelCreator;
 import com.mrcrayfish.modelcreator.Settings;
 import com.mrcrayfish.modelcreator.block.BlockManager;
 import com.mrcrayfish.modelcreator.util.StreamUtils;
+import com.mrcrayfish.modelcreator.util.Util;
 
 public class Uploader {
 
 	private static final String UPLOAD_URL = "https://hastebin.com/documents";
 	
 	public static void upload(ModelCreator creator) {
-		File projectFile = new File(Settings.getProjectsDir(), BlockManager.projectName + ".block");
-		if(!projectFile.exists())
-			return;
-		
-		String response;
-		try {
-			byte[] data = getProjectBytes(projectFile);
-			String str = new String(data);
-			response = doUpload(str.getBytes(StandardCharsets.UTF_8));
-		}catch(IOException e) {
-			e.printStackTrace();
-			return;
-		}
-		
-		JsonParser parser = new JsonParser();
-        JsonElement parsed = parser.parse(response);
-		String key = parsed.getAsJsonObject().get("key").getAsString();
-		showUploaded(creator, key);
+		final JDialog dialog = new JDialog(creator, "Uploading...", Dialog.ModalityType.APPLICATION_MODAL);
+        dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        
+        SpringLayout layout = new SpringLayout();
+        JPanel panel = new JPanel(layout);
+        panel.setPreferredSize(new Dimension(120, 70));
+        dialog.add(panel);
+        
+        JLabel label = new JLabel("Uploading...");
+        panel.add(label);
+        
+        layout.putConstraint(SpringLayout.NORTH, label, 10, SpringLayout.NORTH, panel);
+        layout.putConstraint(SpringLayout.EAST, label, 10, SpringLayout.EAST, panel);
+        layout.putConstraint(SpringLayout.SOUTH, label, 10, SpringLayout.SOUTH, panel);
+        layout.putConstraint(SpringLayout.WEST, label, 10, SpringLayout.WEST, panel);
+        
+        dialog.pack();
+        dialog.setResizable(false);
+        dialog.setLocationRelativeTo(null);
+        
+        new Thread(() -> {
+        	File projectFile = new File(Settings.getProjectsDir(), BlockManager.projectName + ".block");
+    		if(!projectFile.exists())
+    			return;
+    		
+    		String response = null;
+    		try {
+    			byte[] data = getProjectBytes(projectFile);
+    			String str = new String(data);
+    			response = doUpload(str.getBytes(StandardCharsets.UTF_8));
+    		}catch(IOException e) {
+    			Util.writeCrashLog(e);
+    			return;
+    		}
+    		
+    		JsonParser parser = new JsonParser();
+            JsonElement parsed = parser.parse(response);
+    		String key = parsed.getAsJsonObject().get("key").getAsString();
+    		
+    		SwingUtilities.invokeLater(() -> {
+    			dialog.dispose();
+    			showUploaded(creator, key);
+    		});
+        }).start();
+        
+        dialog.setVisible(true);
 	}
 	
 	private static String doUpload(byte[] data) throws IOException {
