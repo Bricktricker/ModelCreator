@@ -12,6 +12,7 @@ import java.util.Base64;
 import java.util.Base64.Decoder;
 
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -29,32 +30,35 @@ public class Downloader {
     		return;
     	}
     	
-    	String response;
-    	try {
-			InputStream is = new BufferedInputStream(openStream(key));
-			response = StreamUtils.convertToString(is);
-		} catch (MalformedURLException e) {
-			//invalid key
-			JOptionPane.showMessageDialog(null, "Invalid key", "Error", JOptionPane.ERROR_MESSAGE);
-			return;
-		} catch (IOException e) {
-			//error while downloading
-			JOptionPane.showMessageDialog(null, "Error while downloading project:\n" + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-			Util.writeCrashLog(e);
-			return;
-		}
-    	
-    	try {
-	    	JsonParser parser = new JsonParser();
-	        JsonObject parsed = parser.parse(response).getAsJsonObject();
-	        String data = parsed.get("data").getAsString();
-	        Decoder decoder = Base64.getDecoder();
-	        byte[] rawData = decoder.decode(data);
-	        ByteArrayInputStream is = new ByteArrayInputStream(rawData);
-	        ProjectManager.loadProject(creator.getSidebarManager(), is);
-	    }catch(Exception e) {
-    		Util.writeCrashLog(e);
-    	}
+    	new Thread(() -> {
+    		String response;
+        	try {
+    			InputStream is = new BufferedInputStream(openStream(key));
+    			response = StreamUtils.convertToString(is);
+    		} catch (MalformedURLException e) {
+    			//invalid key
+    			SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null, "Invalid key", "Error", JOptionPane.ERROR_MESSAGE)); 
+    			return;
+    		} catch (IOException e) {
+    			//error while downloading
+    			Util.writeCrashLog(e);
+    			return;
+    		}
+        	
+        	try {
+    	    	JsonParser parser = new JsonParser();
+    	        JsonObject parsed = parser.parse(response).getAsJsonObject();
+    	        String data = parsed.get("data").getAsString();
+    	        Decoder decoder = Base64.getDecoder();
+    	        byte[] rawData = decoder.decode(data);
+    	        ByteArrayInputStream is = new ByteArrayInputStream(rawData);
+    	        
+    	        //Execute on GUI thread, we need to update the GUI
+    	        SwingUtilities.invokeLater(() -> ProjectManager.loadProject(creator.getSidebarManager(), is));
+    	    }catch(Exception e) {
+        		Util.writeCrashLog(e);
+        	}
+    	}).start();
 	}
 	
 	private static InputStream openStream(String key) throws IOException {
