@@ -343,7 +343,9 @@ public class Util
     
     public static void writeCrashLog(Throwable e) {
     	e.printStackTrace();
+    	try {
     	JOptionPane.showMessageDialog(null, "Error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    	}catch(Exception ex) {}
     	
     	DateFormat dateFormat = new SimpleDateFormat("dd_MM_yyyy HH_mm_ss");
     	File file = new File("crash_" + dateFormat.format(new Date()) + ".log");
