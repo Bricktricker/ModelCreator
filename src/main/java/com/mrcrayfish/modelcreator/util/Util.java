@@ -126,7 +126,6 @@ public class Util
         
     	InputStream is = clazz.getClassLoader().getResourceAsStream(name + ".block");
     	ProjectManager.loadProject(manager, is);
-        
     }
 
     public static void extractMinecraftAssets(String version, Window window)
@@ -136,7 +135,12 @@ public class Util
     		System.err.println("Could not create folders");
     		return;
     	}
-    	File jar = new File(getMinecraftDirectory(), "versions/" + version + "/" + version + ".jar");
+    	File mcDir = getMinecraftDirectory();
+    	if(mcDir == null || !mcDir.exists()) {
+    		JOptionPane.showMessageDialog(window, "Could not find MC folder", "MC not found", JOptionPane.ERROR_MESSAGE);
+    		return;
+    	}
+    	File jar = mcDir.toPath().resolve("versions").resolve(version).resolve(version + ".jar").toFile();
     	Function<ZipEntry, String> conditions = zipEntry -> {
     		String entryName = zipEntry.getName();
     		boolean isAssetRoot = entryName.endsWith("mcassetsroot");
@@ -162,10 +166,10 @@ public class Util
     	};
     	extractZipFiles(jar, conditions, window, destination, suc -> {
     		if(suc) {
-			Settings.addExtractedAsset(version);
+    			Settings.addExtractedAsset(version);
         		Settings.saveSettings();
-		}   
-	});
+    		}   
+    	});
     }
 
     private static void extractZipFiles(File zipFile, Function<ZipEntry, String> conditions, Window window, File extractionFolder, Consumer<Boolean> finishCallback)
