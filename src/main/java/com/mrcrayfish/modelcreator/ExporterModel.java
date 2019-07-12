@@ -102,15 +102,8 @@ public class ExporterModel
                     TextureEntry entry = face.getTexture();
                     TexturePath path = entry.getTexturePath();
                     
-                    //temporarily overwrite new modid
-                    //TODO: overload toString to take a modid
-                    String oldModid = path.getModId();
-                    if(!oldModid.equals("minecraft")) {
-                    	assert(oldModid.equals(modid));
-                    	path.setModId(modid);
-                    }
-                    textureMap.put(entry.getKey(), entry.getTexturePath().toString());
-                    path.setModId(oldModid);
+                    String modid = path.getModId().equals("minecraft") ? "minecraft" : this.modid;
+                    textureMap.put(entry.getKey(), entry.getTexturePath().toString(modid));
                 }
             }
         }
@@ -150,7 +143,7 @@ public class ExporterModel
     	
     	if(manager.getParticle() != null) {
     		TextureEntry entry = manager.getParticle();
-    		String particlePath = this.modid + ":";
+    		String particlePath = entry.getModId() + ":";
     		if(!entry.getDirectory().isEmpty()) {
     			particlePath += entry.getDirectory() + "/";
             }

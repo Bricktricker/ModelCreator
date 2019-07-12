@@ -250,7 +250,9 @@ public class Menu extends JMenuBar
         
         itemUpload.addActionListener(a -> {
         	saveProject(creator);
-        	Uploader.upload(creator);
+        	if(BlockManager.projectName != null && !BlockManager.projectName.isEmpty()) {
+        		Uploader.upload(creator);	
+        	}
         });
         
         itemDownload.addActionListener(a -> Downloader.download(creator));
@@ -472,13 +474,11 @@ public class Menu extends JMenuBar
     {
     	if(BlockManager.projectName.isEmpty()) {
     		String name = JOptionPane.showInputDialog("Enter project name");
-        	if(name == null || name.isEmpty()) {
-        		JOptionPane.showMessageDialog(null, "Invalid project name", "Error", JOptionPane.ERROR_MESSAGE);
+        	if(name == null)
         		return;
-        	}
         	
         	//check for valid filename
-        	if(name.matches(".*[/`\\?\\*\\<>|\":\\.\\s].*")) {
+        	if(name.isEmpty() || name.matches(".*[/`\\?\\*\\<>|\":\\.\\s].*")) {
         		JOptionPane.showMessageDialog(null, "Invalid project name", "Error", JOptionPane.ERROR_MESSAGE);
         		return;
         	}
@@ -572,12 +572,9 @@ public class Menu extends JMenuBar
         textFieldDestination.setPreferredSize(new Dimension(100, 24));
 
         String exportJsonDir = Settings.getJSONDir();
-        if(exportJsonDir != null)
-        {
+        if(exportJsonDir != null){
             textFieldDestination.setText(exportJsonDir);
-        }
-        else
-        {
+        }else{
             String userHome = System.getProperty("user.home", ".");
             textFieldDestination.setText(userHome);
         }
@@ -621,7 +618,6 @@ public class Menu extends JMenuBar
         textFieldModid.setText(Settings.getModID());
         exportDir.add(textFieldModid);
 
-        //JComponent optionSeparator = DefaultComponentFactory.getInstance().createSeparator("Export Options");
         JComponent optionSeparator = new JSeparator();
         exportDir.add(optionSeparator);
 
@@ -691,7 +687,7 @@ public class Menu extends JMenuBar
         });
         buttons.add(btnCancel);
 
-        JButton btnExport = new JButton("Export");
+        final JButton btnExport = new JButton("Export");
         btnExport.addActionListener(e ->
         {
             String name = textFieldName.getText().trim();
@@ -749,8 +745,10 @@ public class Menu extends JMenuBar
                         }
                     }
                 }
+            }else{
+            	JOptionPane.showMessageDialog(creator, "Not all required fields set!", "Cant export", JOptionPane.ERROR_MESSAGE);
             }
-        });
+        });      
         buttons.add(btnExport);
 
         panel.add(buttons, BorderLayout.SOUTH);

@@ -31,13 +31,13 @@ public class TexturePath
 
     public TexturePath(File file)
     {
-        this.modId = AssetsUtil.getModId(file);
+        this.modId = AssetsUtil.getModId(file); //Either "minecraft" or "modid"
         this.directory = this.modId.equals("minecraft") ? AssetsUtil.getTextureDirectory(file) : "block";
         this.name = file.getName().substring(0, file.getName().indexOf("."));
     }
     
     public TexturePath(String modid, String directory, String name) {
-    	this.modId = modid;
+    	this.modId = modid; //allways "modid"
     	this.directory = directory;
     	this.name = name;
     }
@@ -70,6 +70,10 @@ public class TexturePath
     public String toString()
     {
         return modId + ":" + directory + "/" + name;
+    }
+    
+    public String toString(String modid) {
+    	return modid + ":" + directory + "/" + name;
     }
 
     public String toRelativePath()
