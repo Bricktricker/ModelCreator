@@ -165,7 +165,7 @@ public class OriginPanel extends JPanel implements IElementUpdater
                     selectedElement.addOriginX(1.0);
                 }
                 xOriginField.setText(ExporterModel.FORMAT.format(selectedElement.getOriginX()));
-                StateManager.pushStateDelayed(manager, PropertyIdentifiers.ORIGIN_X);
+                StateManager.pushStateDelayed(manager, PropertyIdentifier.ORIGIN_X);
             }
         });
 
@@ -185,7 +185,7 @@ public class OriginPanel extends JPanel implements IElementUpdater
                     selectedElement.addOriginY(1.0);
                 }
                 yOriginField.setText(ExporterModel.FORMAT.format(selectedElement.getOriginY()));
-                StateManager.pushStateDelayed(manager, PropertyIdentifiers.ORIGIN_Y);
+                StateManager.pushStateDelayed(manager, PropertyIdentifier.ORIGIN_Y);
             }
         });
 
@@ -205,7 +205,7 @@ public class OriginPanel extends JPanel implements IElementUpdater
                     selectedElement.addOriginZ(1.0);
                 }
                 zOriginField.setText(ExporterModel.FORMAT.format(selectedElement.getOriginZ()));
-                StateManager.pushStateDelayed(manager, PropertyIdentifiers.ORIGIN_Z);
+                StateManager.pushStateDelayed(manager, PropertyIdentifier.ORIGIN_Z);
             }
         });
 
@@ -225,7 +225,7 @@ public class OriginPanel extends JPanel implements IElementUpdater
                     selectedElement.addOriginX(-1.0);
                 }
                 xOriginField.setText(ExporterModel.FORMAT.format(selectedElement.getOriginX()));
-                StateManager.pushStateDelayed(manager, PropertyIdentifiers.ORIGIN_Z);
+                StateManager.pushStateDelayed(manager, PropertyIdentifier.ORIGIN_Z);
             }
         });
 
@@ -245,7 +245,7 @@ public class OriginPanel extends JPanel implements IElementUpdater
                     selectedElement.addOriginY(-1.0);
                 }
                 yOriginField.setText(ExporterModel.FORMAT.format(selectedElement.getOriginY()));
-                StateManager.pushStateDelayed(manager, PropertyIdentifiers.ORIGIN_Y);
+                StateManager.pushStateDelayed(manager, PropertyIdentifier.ORIGIN_Y);
             }
         });
 
@@ -265,7 +265,7 @@ public class OriginPanel extends JPanel implements IElementUpdater
                     selectedElement.addOriginZ(-1.0);
                 }
                 zOriginField.setText(ExporterModel.FORMAT.format(selectedElement.getOriginZ()));
-                StateManager.pushStateDelayed(manager, PropertyIdentifiers.ORIGIN_Z);
+                StateManager.pushStateDelayed(manager, PropertyIdentifier.ORIGIN_Z);
             }
         });
     }

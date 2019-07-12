@@ -226,7 +226,7 @@ public class UVPanel extends JPanel implements IElementUpdater
                 }
                 selectedElement.updateEndUVs();
                 manager.updateValues();
-                StateManager.pushStateDelayed(manager, PropertyIdentifiers.START_U);
+                StateManager.pushStateDelayed(manager, PropertyIdentifier.START_U);
             }
         });
 
@@ -248,7 +248,7 @@ public class UVPanel extends JPanel implements IElementUpdater
                 }
                 selectedElement.updateEndUVs();
                 manager.updateValues();
-                StateManager.pushStateDelayed(manager, PropertyIdentifiers.START_V);
+                StateManager.pushStateDelayed(manager, PropertyIdentifier.START_V);
             }
         });
 
@@ -270,7 +270,7 @@ public class UVPanel extends JPanel implements IElementUpdater
                 }
                 selectedElement.updateEndUVs();
                 manager.updateValues();
-                StateManager.pushStateDelayed(manager, PropertyIdentifiers.START_U);
+                StateManager.pushStateDelayed(manager, PropertyIdentifier.START_U);
             }
         });
 
@@ -292,7 +292,7 @@ public class UVPanel extends JPanel implements IElementUpdater
                 }
                 selectedElement.updateEndUVs();
                 manager.updateValues();
-                StateManager.pushStateDelayed(manager, PropertyIdentifiers.START_V);
+                StateManager.pushStateDelayed(manager, PropertyIdentifier.START_V);
             }
         });
 
@@ -314,7 +314,7 @@ public class UVPanel extends JPanel implements IElementUpdater
                 }
                 selectedElement.updateStartUVs();
                 manager.updateValues();
-                StateManager.pushStateDelayed(manager, PropertyIdentifiers.END_U);
+                StateManager.pushStateDelayed(manager, PropertyIdentifier.END_U);
             }
         });
 
@@ -336,7 +336,7 @@ public class UVPanel extends JPanel implements IElementUpdater
                 }
                 selectedElement.updateStartUVs();
                 manager.updateValues();
-                StateManager.pushStateDelayed(manager, PropertyIdentifiers.END_V);
+                StateManager.pushStateDelayed(manager, PropertyIdentifier.END_V);
             }
         });
 
@@ -358,7 +358,7 @@ public class UVPanel extends JPanel implements IElementUpdater
                 }
                 selectedElement.updateStartUVs();
                 manager.updateValues();
-                StateManager.pushStateDelayed(manager, PropertyIdentifiers.END_U);
+                StateManager.pushStateDelayed(manager, PropertyIdentifier.END_U);
             }
         });
 
@@ -380,7 +380,7 @@ public class UVPanel extends JPanel implements IElementUpdater
                 }
                 selectedElement.updateStartUVs();
                 manager.updateValues();
-                StateManager.pushStateDelayed(manager, PropertyIdentifiers.END_V);
+                StateManager.pushStateDelayed(manager, PropertyIdentifier.END_V);
             }
         });
     }

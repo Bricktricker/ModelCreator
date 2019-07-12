@@ -175,7 +175,7 @@ public class SizePanel extends JPanel implements IElementUpdater
                 }
                 selectedElement.updateEndUVs();
                 manager.updateValues();
-                StateManager.pushStateDelayed(manager, PropertyIdentifiers.SIZE_X);
+                StateManager.pushStateDelayed(manager, PropertyIdentifier.SIZE_X);
             }
         });
 
@@ -196,7 +196,7 @@ public class SizePanel extends JPanel implements IElementUpdater
                 }
                 selectedElement.updateEndUVs();
                 manager.updateValues();
-                StateManager.pushStateDelayed(manager, PropertyIdentifiers.SIZE_Y);
+                StateManager.pushStateDelayed(manager, PropertyIdentifier.SIZE_Y);
             }
         });
 
@@ -217,7 +217,7 @@ public class SizePanel extends JPanel implements IElementUpdater
                 }
                 selectedElement.updateEndUVs();
                 manager.updateValues();
-                StateManager.pushStateDelayed(manager, PropertyIdentifiers.SIZE_Z);
+                StateManager.pushStateDelayed(manager, PropertyIdentifier.SIZE_Z);
             }
         });
 
@@ -238,7 +238,7 @@ public class SizePanel extends JPanel implements IElementUpdater
                 }
                 selectedElement.updateEndUVs();
                 manager.updateValues();
-                StateManager.pushStateDelayed(manager, PropertyIdentifiers.SIZE_X);
+                StateManager.pushStateDelayed(manager, PropertyIdentifier.SIZE_X);
             }
         });
 
@@ -259,7 +259,7 @@ public class SizePanel extends JPanel implements IElementUpdater
                 }
                 selectedElement.updateEndUVs();
                 manager.updateValues();
-                StateManager.pushStateDelayed(manager, PropertyIdentifiers.SIZE_Y);
+                StateManager.pushStateDelayed(manager, PropertyIdentifier.SIZE_Y);
             }
         });
 
@@ -280,7 +280,7 @@ public class SizePanel extends JPanel implements IElementUpdater
                 }
                 selectedElement.updateEndUVs();
                 manager.updateValues();
-                StateManager.pushStateDelayed(manager, PropertyIdentifiers.SIZE_Z);
+                StateManager.pushStateDelayed(manager, PropertyIdentifier.SIZE_Z);
             }
         });
     }

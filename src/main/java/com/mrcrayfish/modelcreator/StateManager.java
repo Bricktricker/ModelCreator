@@ -15,7 +15,7 @@ public class StateManager
     /* Undo/Redo Stack */
     private static Stack<ElementManagerState> states = new Stack<>();
     private static int tailIndex = -1;
-    private static int lastId = -1;
+    private static PropertyIdentifier lastId = PropertyIdentifier.UNDEFINED;
     private static Timer timer;
 
     public static void pushState(ElementManager manager)
@@ -106,7 +106,7 @@ public class StateManager
         return tailIndex;
     }
 
-    public static void pushStateDelayed(ElementManager manager, int id)
+    public static void pushStateDelayed(ElementManager manager, PropertyIdentifier id)
     {
         if(lastId != id)
         {
