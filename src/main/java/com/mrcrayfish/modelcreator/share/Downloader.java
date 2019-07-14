@@ -1,5 +1,7 @@
 package com.mrcrayfish.modelcreator.share;
 
+import java.awt.Dialog;
+import java.awt.Dimension;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -11,8 +13,13 @@ import java.net.URLConnection;
 import java.util.Base64;
 import java.util.Base64.Decoder;
 
+import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SpringLayout;
 import javax.swing.SwingUtilities;
+import javax.swing.WindowConstants;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -29,6 +36,26 @@ public class Downloader {
     		JOptionPane.showMessageDialog(null, "Invalid upload key", "Error", JOptionPane.ERROR_MESSAGE);
     		return;
     	}
+    	
+    	final JDialog dialog = new JDialog(creator, "Downloading...", Dialog.ModalityType.APPLICATION_MODAL);
+        dialog.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        
+        SpringLayout layout = new SpringLayout();
+        JPanel panel = new JPanel(layout);
+        panel.setPreferredSize(new Dimension(120, 70));
+        dialog.add(panel);
+        
+        JLabel label = new JLabel("Downloading...");
+        panel.add(label);
+        
+        layout.putConstraint(SpringLayout.NORTH, label, 10, SpringLayout.NORTH, panel);
+        layout.putConstraint(SpringLayout.EAST, label, 10, SpringLayout.EAST, panel);
+        layout.putConstraint(SpringLayout.SOUTH, label, 10, SpringLayout.SOUTH, panel);
+        layout.putConstraint(SpringLayout.WEST, label, 10, SpringLayout.WEST, panel);
+        
+        dialog.pack();
+        dialog.setResizable(false);
+        dialog.setLocationRelativeTo(null);
     	
     	new Thread(() -> {
     		String response;
@@ -53,12 +80,16 @@ public class Downloader {
     	        byte[] rawData = decoder.decode(data);
     	        ByteArrayInputStream is = new ByteArrayInputStream(rawData);
     	        
-    	        //Execute on GUI thread, we need to update the GUI
-    	        SwingUtilities.invokeLater(() -> ProjectManager.loadProject(creator.getSidebarManager(), is));
+    	        SwingUtilities.invokeLater(() -> {
+    	        	dialog.dispose();
+    	        	ProjectManager.loadProject(creator.getSidebarManager(), is);
+    	        });
     	    }catch(Exception e) {
         		Util.writeCrashLog(e);
         	}
     	}).start();
+    	
+    	dialog.setVisible(true);
 	}
 	
 	private static InputStream openStream(String key) throws IOException {
