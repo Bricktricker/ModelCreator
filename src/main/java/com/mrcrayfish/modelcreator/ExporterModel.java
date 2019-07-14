@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 public class ExporterModel
@@ -135,7 +137,18 @@ public class ExporterModel
     	manager.getAllElements().stream().filter(e -> canWriteElement(e)).map(e -> writeElement(e)).forEach(elements::add);
     	root.add("elements", elements);
     	
-    	return builder.toJson(root);
+    	String modelJson = builder.toJson(root);
+    	
+    	Pattern doubleArrayPattern = Pattern.compile("\\[(\\s+[+-]?\\d*\\.?\\d+,?)+\\s+\\]"); //Matches json pretty printed array with double values
+    	Matcher matcher = doubleArrayPattern.matcher(modelJson);
+
+    	while(matcher.find()) {
+    		String text = matcher.group();
+    		String modText = text.replaceAll("\\s+", " ");
+    		modelJson = modelJson.replace(text, modText);
+    	}
+    	
+    	return modelJson;
     }
     
     private JsonObject writeTextures() {
