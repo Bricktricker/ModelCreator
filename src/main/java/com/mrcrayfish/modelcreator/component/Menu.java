@@ -697,7 +697,11 @@ public class Menu extends JMenuBar
                 File destination = new File(textFieldDestination.getText());
                 destination.mkdirs();
 
-                File modelFile = new File(destination, textFieldName.getText() + ".json");
+                String fileName = textFieldName.getText();
+                if(!fileName.endsWith(".json")) {
+                	fileName += ".json";
+                }
+                File modelFile = new File(destination, fileName);
                 if(modelFile.exists())
                 {
                     int returnVal = JOptionPane.showConfirmDialog(dialog, "A file for that name already exists in the directory. Are you sure you want to override it?", "Warning", JOptionPane.YES_NO_OPTION);
@@ -731,6 +735,7 @@ public class Menu extends JMenuBar
                 else
                 {
                     Settings.setJSONDir(textFieldDestination.getText());
+                    Settings.saveSettings();
                     int returnVal = JOptionPane.showOptionDialog(dialog, "Model exported successfully!", "Success", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new Object[]{"Open Folder", "Close"}, "Close");
                     if(returnVal == 0)
                     {
