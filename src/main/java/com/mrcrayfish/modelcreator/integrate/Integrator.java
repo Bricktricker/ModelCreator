@@ -39,6 +39,10 @@ public abstract class Integrator
 		return null;
 	}
 	
+	public String getButtonText() {
+		return "Integrate";
+	}
+	
 	public void setUpdateListener(Runnable listener) {
 		this.updateCallback = listener;
 	}

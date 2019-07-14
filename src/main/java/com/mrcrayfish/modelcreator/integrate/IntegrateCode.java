@@ -68,15 +68,20 @@ public class IntegrateCode extends Integrator
 		return codeSelectPanel;
 	}
 	
+	@Override
+	public String getButtonText() {
+		return "Copy to Clipboard";
+	}
+	
 	private String genProperties() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Block.Properties.create(Material.");
 		builder.append(BlockManager.properties.getMaterial());
 		builder.append(").hardnessAndResistance(");
 		builder.append(BlockManager.properties.getHardness());
-		builder.append(", ");
+		builder.append("F, ");
 		builder.append(BlockManager.properties.getResistance());
-		builder.append(")");
+		builder.append("F)");
 		
 		if(BlockManager.properties.getLightLevel() > 0) {
 			builder.append(".lightValue(");

@@ -251,7 +251,7 @@ public class IntegrateDialog
         generalPanel.add(scrollpane);
         
         //integrate Button
-    	JButton integrateButton = new JButton("Integrate");
+    	JButton integrateButton = new JButton(integrator.getButtonText());
     	integrateButton.setMaximumSize(new Dimension(80, 24));
     	integrateButton.addActionListener(e -> {
     		integrator.integrate();

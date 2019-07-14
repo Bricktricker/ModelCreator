@@ -360,6 +360,8 @@ public class Util
     		e.printStackTrace(stream);
     		if(e.getCause() != null)
     			stream.print("Cause: \n" + e.getCause().getMessage());
+    		
+    		stream.print("PWD: " + System.getProperty("user.dir"));
     	}catch(Exception ex) {
     		ex.printStackTrace();
     	}
