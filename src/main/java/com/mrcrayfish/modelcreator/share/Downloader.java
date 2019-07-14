@@ -93,7 +93,7 @@ public class Downloader {
 	}
 	
 	private static InputStream openStream(String key) throws IOException {
-		URL url = new URL("https://hastebin.com/documents/" + key);
+		URL url = new URL(Uploader.SHARE_URL + "/" + key);
 		URLConnection con = url.openConnection();
 		HttpURLConnection http = (HttpURLConnection)con;
 		http.setRequestMethod("GET");

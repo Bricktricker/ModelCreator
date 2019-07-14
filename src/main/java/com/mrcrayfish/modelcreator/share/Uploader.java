@@ -35,7 +35,7 @@ import com.mrcrayfish.modelcreator.util.Util;
 
 public class Uploader {
 
-	private static final String UPLOAD_URL = "https://hastebin.com/documents";
+	public static final String SHARE_URL = "https://pastie.io/documents";
 	
 	public static void upload(ModelCreator creator) {
 		final JDialog dialog = new JDialog(creator, "Uploading...", Dialog.ModalityType.APPLICATION_MODAL);
@@ -87,7 +87,7 @@ public class Uploader {
 	}
 	
 	private static String doUpload(byte[] data) throws IOException {
-		URL url = new URL(UPLOAD_URL);
+		URL url = new URL(SHARE_URL);
 		URLConnection con = url.openConnection();
 		HttpURLConnection http = (HttpURLConnection)con;
 		http.setRequestMethod("POST");
