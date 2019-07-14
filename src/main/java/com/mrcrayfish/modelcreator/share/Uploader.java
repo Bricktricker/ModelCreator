@@ -18,6 +18,7 @@ import java.util.Base64;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.SpringLayout;
@@ -64,12 +65,20 @@ public class Uploader {
     			return;
     		
     		String response = null;
+    		String base64Project = null;
     		try {
     			byte[] data = getProjectBytes(projectFile);
-    			String str = new String(data);
-    			response = doUpload(str.getBytes(StandardCharsets.UTF_8));
+    			base64Project = new String(data);	
     		}catch(IOException e) {
     			Util.writeCrashLog(e);
+    			return;
+    		}
+    		try {
+    			response = doUpload(base64Project.getBytes(StandardCharsets.UTF_8));
+    		}catch(IOException e) {
+    			//error while uploading
+    			String errorMsg = "Failed to upload project:" + e.getMessage();
+    			SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null, errorMsg, "Upload failed", JOptionPane.ERROR_MESSAGE));
     			return;
     		}
     		

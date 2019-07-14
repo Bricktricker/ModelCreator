@@ -68,7 +68,8 @@ public class Downloader {
     			return;
     		} catch (IOException e) {
     			//error while downloading
-    			Util.writeCrashLog(e);
+    			String errorMsg = "Failed to download project:" + e.getMessage();
+    			SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(null, errorMsg, "Download failed", JOptionPane.ERROR_MESSAGE));
     			return;
     		}
         	
