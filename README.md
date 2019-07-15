@@ -8,6 +8,6 @@ A program to create JSON models for blocks
 - changed GitHub url
 - changed asset extraction folder
 - added Block menu, to set block specific settings
-- added project upload/download to hastebin
+- added project upload/download to pastie.io
 - added Collision panel on the right, to create collision box
 - added wiki links for hardness and resistance
