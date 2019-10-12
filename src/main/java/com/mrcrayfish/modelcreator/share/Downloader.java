@@ -74,8 +74,7 @@ public class Downloader {
     		}
         	
         	try {
-    	    	JsonParser parser = new JsonParser();
-    	        JsonObject parsed = parser.parse(response).getAsJsonObject();
+    	        JsonObject parsed = JsonParser.parseString(response).getAsJsonObject();
     	        String data = parsed.get("data").getAsString();
     	        Decoder decoder = Base64.getDecoder();
     	        byte[] rawData = decoder.decode(data);

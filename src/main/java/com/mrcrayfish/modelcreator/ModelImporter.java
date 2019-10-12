@@ -59,8 +59,7 @@ public class ModelImporter
         manager.setParticle(null);
         BlockManager.displayProperties = DisplayProperties.MODEL_CREATOR_BLOCK;
 
-        JsonParser parser = new JsonParser();
-        JsonElement read = parser.parse(this.modelData);
+        JsonElement read = JsonParser.parseString(this.modelData);
         readComponents(read);
     }
     
@@ -132,11 +131,9 @@ public class ModelImporter
     private void readExternalModel(File file) throws IOException {
     	try(FileReader fr = new FileReader(file))
     	{
-    		BufferedReader reader = new BufferedReader(fr);
-            
-            JsonParser parser = new JsonParser();
-            JsonElement read = parser.parse(reader);
-            
+    		BufferedReader reader = new BufferedReader(fr);           
+            JsonElement read =  JsonParser.parseReader(reader);
+
             readComponents(read);
             reader.close();
     	}

@@ -82,8 +82,7 @@ public class Uploader {
     			return;
     		}
     		
-    		JsonParser parser = new JsonParser();
-            JsonElement parsed = parser.parse(response);
+            JsonElement parsed = JsonParser.parseString(response);
     		String key = parsed.getAsJsonObject().get("key").getAsString();
     		
     		SwingUtilities.invokeLater(() -> {

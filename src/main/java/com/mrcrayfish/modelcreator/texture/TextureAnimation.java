@@ -181,8 +181,7 @@ public class TextureAnimation
             {
                 TextureAnimation anim = null;
                 JsonObject animationObj = null;
-                JsonParser parser = new JsonParser();
-                JsonElement read = parser.parse(new FileReader(file));
+                JsonElement read = JsonParser.parseReader(new FileReader(file));
 
                 if(read.isJsonObject())
                 {

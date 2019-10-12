@@ -9,7 +9,6 @@ import java.util.Collections;
 import java.util.List;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -44,9 +43,7 @@ public class Resources
 		{
 			InputStream stream = classLoader.getResourceAsStream("res/Materials.json");
 			BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-			JsonParser parser = new JsonParser();
-			JsonElement jsonElement = parser.parse(reader);
-			JsonArray materialJsonArray = jsonElement.getAsJsonArray();
+			JsonArray materialJsonArray = JsonParser.parseReader(reader).getAsJsonArray();
 			materials = new ArrayList<>();
 			materialJsonArray.forEach(v -> {
 				materials.add(v.getAsString());
@@ -59,9 +56,7 @@ public class Resources
 		{
 			InputStream stream = classLoader.getResourceAsStream("res/SoundTypes.json");
 			BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-			JsonParser parser = new JsonParser();
-			JsonElement jsonElement = parser.parse(reader);
-			JsonArray soundJsonArray = jsonElement.getAsJsonArray();
+			JsonArray soundJsonArray = JsonParser.parseReader(reader).getAsJsonArray();
 			soundTypes = new ArrayList<>();
 			soundJsonArray.forEach(v -> {
 				soundTypes.add(v.getAsString());
@@ -74,9 +69,7 @@ public class Resources
 		{
 			InputStream stream = classLoader.getResourceAsStream("res/Languages.json");
 			BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-			JsonParser parser = new JsonParser();
-			JsonElement jsonElement = parser.parse(reader);
-			JsonArray langJsonArray = jsonElement.getAsJsonArray();
+			JsonArray langJsonArray = JsonParser.parseReader(reader).getAsJsonArray();
 			languages = new ArrayList<>();
 			langJsonArray.forEach(v -> {
 				JsonObject langObject = v.getAsJsonObject();
@@ -91,9 +84,7 @@ public class Resources
 		{
 			InputStream stream = classLoader.getResourceAsStream("res/Items.json");
 			BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-			JsonParser parser = new JsonParser();
-			JsonElement jsonElement = parser.parse(reader);
-			JsonArray itemJsonArray = jsonElement.getAsJsonArray();
+			JsonArray itemJsonArray = JsonParser.parseReader(reader).getAsJsonArray();
 			items = new ArrayList<>();
 			itemJsonArray.forEach(i -> {
 				items.add("minecraft:" + i.getAsString());
@@ -106,9 +97,7 @@ public class Resources
 		{
 			InputStream stream = classLoader.getResourceAsStream("res/CreativeTabs.json");
 			BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-			JsonParser parser = new JsonParser();
-			JsonElement jsonElement = parser.parse(reader);
-			JsonArray creativeJsonArray = jsonElement.getAsJsonArray();
+			JsonArray creativeJsonArray = JsonParser.parseReader(reader).getAsJsonArray();
 			creativeTabs = new ArrayList<>();
 			creativeJsonArray.forEach(i -> {
 				creativeTabs.add(i.getAsString());
@@ -120,9 +109,7 @@ public class Resources
 		{
 			InputStream stream = classLoader.getResourceAsStream("res/Blocks.json");
 			BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-			JsonParser parser = new JsonParser();
-			JsonElement jsonElement = parser.parse(reader);
-			JsonArray blocksJsonArray = jsonElement.getAsJsonArray();
+			JsonArray blocksJsonArray = JsonParser.parseReader(reader).getAsJsonArray();
 			blocks = new ArrayList<>();
 			blocksJsonArray.forEach(b -> blocks.add(b.getAsString()));
 			blocks = Collections.unmodifiableList(blocks);

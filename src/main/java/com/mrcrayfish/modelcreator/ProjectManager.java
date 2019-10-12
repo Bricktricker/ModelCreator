@@ -78,24 +78,23 @@ public class ProjectManager
     	if(blockData == null || blockData.isEmpty())
     		return;
     	
-    	JsonParser parser = new JsonParser();
-         JsonElement parsed = parser.parse(blockData);
+    	JsonElement parsed = JsonParser.parseString(blockData);
+    	
+    	if(!parsed.isJsonObject()) {
+    		System.err.println("Project file is corrupted");
+    		return;
+    	}
          
-         if(!parsed.isJsonObject()) {
-        	 System.err.println("Project file is corrupted");
-        	 return;
-         }
-         
-         JsonObject block = parsed.getAsJsonObject();
-        
-         //Properties
-         JsonObject properties = block.get("properties").getAsJsonObject();
-         BlockManager.properties.setHardness(properties.get("hardness").getAsFloat());
-         BlockManager.properties.setResistance(properties.get("resistance").getAsFloat());
-         BlockManager.properties.setLightLevel(properties.get("lightLevel").getAsInt());
-         if(properties.has("material")) {
-        	 BlockManager.properties.setMaterial(properties.get("material").getAsString());
-         }
+    	JsonObject block = parsed.getAsJsonObject();
+    	
+    	//Properties
+    	JsonObject properties = block.get("properties").getAsJsonObject();
+    	BlockManager.properties.setHardness(properties.get("hardness").getAsFloat());
+    	BlockManager.properties.setResistance(properties.get("resistance").getAsFloat());
+    	BlockManager.properties.setLightLevel(properties.get("lightLevel").getAsInt());
+    	if(properties.has("material")) {
+    		BlockManager.properties.setMaterial(properties.get("material").getAsString());
+    	}
          if(properties.has("sound")) {
         	 BlockManager.properties.setSound(properties.get("sound").getAsString());
          }
@@ -172,8 +171,7 @@ public class ProjectManager
     	if(texturesData == null || texturesData.isEmpty())
     		return;
     	
-    	JsonParser parser = new JsonParser();
-    	JsonElement parsed = parser.parse(texturesData);
+    	JsonElement parsed = JsonParser.parseString(texturesData);
     	
     	JsonArray textures = parsed.getAsJsonArray();
     	for(JsonElement e : textures) {

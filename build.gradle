@@ -10,7 +10,7 @@ repositories {
 }
 
 dependencies {
-	compile 'com.google.code.gson:gson:2.8.5'
+	compile 'com.google.code.gson:gson:2.8.6'
 	compile 'org.slick2d:slick2d-core:1.0.2'
 	compile 'com.jtattoo:JTattoo:1.6.11'
 	
